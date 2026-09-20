@@ -1,0 +1,13 @@
+{
+  "name": "techbrief",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/core.test.mjs",
+    "start": "node scripts/serve.mjs"
+  }
+}

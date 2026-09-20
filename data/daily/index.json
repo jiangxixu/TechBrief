@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "latest": "2026-09-20",
+  "days": [
+    {
+      "date": "2026-09-20",
+      "count": 5,
+      "title": "AI 研发、机器人世界模型与 Agent 系统"
+    }
+  ]
+}

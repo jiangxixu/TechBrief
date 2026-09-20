@@ -1,0 +1,170 @@
+[
+  {
+    "id": "t-fast-slow",
+    "title": "快慢脑",
+    "subtitle": "任务推理与实时执行",
+    "category": "Agent",
+    "date": "2026-09-20",
+    "summary": "“快慢脑”在不同研究中指不同的分工：认知过程中的自动与反思，或机器人中的高层决策与快速执行。",
+    "tags": [
+      "快慢脑",
+      "双过程",
+      "Agent",
+      "轨迹规划"
+    ],
+    "sections": [
+      {
+        "title": "两个语境要分清",
+        "text": "GUI Agent 的双过程研究讨论推理配置与界面影响。机器人架构里的快慢分层则通常按职责与响应时间区分任务推理、规划和控制，二者不能直接画等号。"
+      },
+      {
+        "title": "无人机中的一个工程例子",
+        "text": "高层模型解释“去检查那个区域”，任务模块给出目标，局部规划器结合障碍物生成轨迹，控制器跟踪轨迹。这是说明分层职责的设计示例，不是某篇论文已经完成的集成结果。"
+      },
+      {
+        "title": "阅读时问什么",
+        "text": "慢层多久更新一次？快层的输入输出是什么？两层怎样交换信息？通信延迟或推理超时后系统怎样运行？"
+      }
+    ],
+    "sources": [
+      {
+        "name": "GUI 双过程研究",
+        "url": "https://arxiv.org/abs/2609.19843"
+      },
+      {
+        "name": "EGO-Planner",
+        "url": "https://arxiv.org/abs/2008.08835"
+      }
+    ],
+    "relatedIds": [
+      "p-dual-process",
+      "p-ego-planner"
+    ]
+  },
+  {
+    "id": "t-world-model",
+    "title": "World Model",
+    "subtitle": "从动作预测未来状态",
+    "category": "机器人 / 具身",
+    "date": "2026-09-20",
+    "summary": "世界模型学习当前状态、动作和后续变化的关系，可用于预测、规划或生成策略训练数据。",
+    "tags": [
+      "World Model",
+      "世界模型",
+      "VLA",
+      "具身智能"
+    ],
+    "sections": [
+      {
+        "title": "先明确预测对象",
+        "text": "有的模型预测图像或潜在表示，有的预测位置、速度、接触等物理状态。判断方法时先看它的输入、输出与监督信号。"
+      },
+      {
+        "title": "与 VLA 如何配合",
+        "text": "以 WorldContact 为例，世界模型生成物体状态轨迹，再渲染成观测，与动作配对用于微调 VLA。世界模型与执行策略承担不同职责。"
+      },
+      {
+        "title": "读实验的重点",
+        "text": "分别检查状态预测误差、生成速度和真实任务成功率。状态 rollout 提速不等于整条数据生产流程同倍提速。"
+      }
+    ],
+    "sources": [
+      {
+        "name": "WorldContact",
+        "url": "https://arxiv.org/abs/2609.19600"
+      }
+    ],
+    "relatedIds": [
+      "p-worldcontact"
+    ]
+  },
+  {
+    "id": "t-uav",
+    "title": "UAV Agent",
+    "subtitle": "连接推理、规划与飞控",
+    "category": "无人机",
+    "date": "2026-09-20",
+    "summary": "从任务意图走到无人机动作，需要厘清模型推理、状态估计、轨迹规划与控制各自负责什么。",
+    "tags": [
+      "无人机",
+      "PX4",
+      "EGO-Planner",
+      "Multi-UAV"
+    ],
+    "sections": [
+      {
+        "title": "先画清楚模块职责",
+        "text": "视觉与惯性定位提供状态，任务模块确定目标，局部规划器生成轨迹，控制模块执行跟踪。语言模型可放在任务理解与工具调用层；具体接线方式取决于实际项目。"
+      },
+      {
+        "title": "多机还有额外的问题",
+        "text": "任务分给哪架飞机、传输什么信息、计算放在哪里，以及各机轨迹如何协调，属于不同但相互影响的决策。"
+      },
+      {
+        "title": "一个可操作的阅读顺序",
+        "text": "先读 EGO-Planner 理解局部轨迹，再读 Agentic UAVs 看任务推理与工具，最后看多机网络的任务分配和通信优化。"
+      }
+    ],
+    "sources": [
+      {
+        "name": "EGO-Planner",
+        "url": "https://arxiv.org/abs/2008.08835"
+      },
+      {
+        "name": "Agentic UAVs",
+        "url": "https://arxiv.org/abs/2509.13352"
+      },
+      {
+        "name": "多无人机协同计算",
+        "url": "https://arxiv.org/abs/2609.14476"
+      }
+    ],
+    "relatedIds": [
+      "p-ego-planner",
+      "p-agentic-uavs",
+      "p-multi-uav"
+    ]
+  },
+  {
+    "id": "t-rag",
+    "title": "RAG 与 Agent 工程",
+    "subtitle": "从资料检索到任务执行",
+    "category": "AI / 大模型",
+    "date": "2026-09-20",
+    "summary": "RAG 为生成提供外部资料，Agent 组织模型和工具完成任务。二者可以组合，也需要分别评价。",
+    "tags": [
+      "RAG",
+      "Agent Infra",
+      "检索增强",
+      "知识库"
+    ],
+    "sections": [
+      {
+        "title": "把数据流跑通",
+        "text": "文档解析后切分成片段，为片段建立检索索引；收到问题后检索相关片段，把资料和问题交给模型，并返回可核对的引用。"
+      },
+      {
+        "title": "把性能拆开量",
+        "text": "记录文档读取、检索、模型生成与工具调用的耗时。并发时还要关注 CPU、内存和磁盘，而不是只看模型每秒生成多少字。"
+      },
+      {
+        "title": "下一步练习",
+        "text": "选十个有标准来源的问题，同时记录检索是否命中、回答是否有依据、总耗时和人工核对结果，再决定优化方向。"
+      }
+    ],
+    "sources": [
+      {
+        "name": "RAG 原论文",
+        "url": "https://arxiv.org/abs/2005.11401"
+      },
+      {
+        "name": "Agent 资源与性能研究",
+        "url": "https://arxiv.org/abs/2609.19947"
+      }
+    ],
+    "relatedIds": [
+      "p-rag",
+      "p-agent-infra"
+    ]
+  }
+]

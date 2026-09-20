@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {beijingDate,filterItems,searchScore,safeUrl,escapeHtml,validDate,routeFromHash,validateBackup} from '../core.js';
+import {validateDaily} from './validate.mjs';
+const story={id:'news-a',type:'news',title:'WorldContact 世界模型',summary:'机器人训练数据',category:'机器人 / 具身',tags:['VLA'],sources:[{name:'arXiv',url:'https://arxiv.org/abs/2609.19600'}],published:'2026-09-17',date:'2026-09-20',why:'扩展数据',relevance:'机器人训练',caveat:'限定任务'};
+test('Beijing date crosses UTC day boundary and rejects invalid dates',()=>{assert.equal(beijingDate(new Date('2026-09-20T17:00:00Z')),'2026-09-21');assert.equal(validDate('2026-02-30'),false);});
+test('Global search handles English spacing, aliases, AND terms and a typo',()=>{assert.ok(searchScore(story,'World Model'));assert.ok(searchScore(story,'WorldContat'));assert.ok(searchScore(story,'WorldContact VLA'));assert.equal(searchScore(story,'WorldContact PX4'),0);});
+test('Recent window uses original source date rather than edition date',()=>{assert.equal(filterItems([story],{days:3,now:'2026-09-20'}).length,0);assert.equal(filterItems([story],{days:7,now:'2026-09-20'}).length,1);assert.equal(filterItems([story],{category:'无人机'}).length,0);});
+test('Untrusted text and URLs cannot become active HTML or script URLs',()=>{assert.equal(safeUrl('javascript:alert(1)'),'');assert.equal(safeUrl('data:text/html,test'),'');assert.equal(escapeHtml('<img src=x onerror="x">'),'&lt;img src=x onerror=&quot;x&quot;&gt;');});
+test('Hash routing preserves encoded terms and safely falls back',()=>{assert.equal(routeFromHash('#search?q=World+Model').params.get('q'),'World Model');assert.equal(routeFromHash('#unknown').view,'today');});
+test('Backup parser rejects foreign structures and sanitizes note keys',()=>{assert.throws(()=>validateBackup({saved:[]}));const v=validateBackup(JSON.parse('{"version":1,"saved":["news-a",12],"notes":{"news-a":"hello","__proto__":"bad"}}'));assert.deepEqual(v.saved,['news-a']);assert.deepEqual(v.notes,{'news-a':'hello'});});
+test('Publishing rejects duplicate IDs and future-dated sources',()=>{const day={schemaVersion:1,date:'2026-09-20',timezone:'Asia/Shanghai',generatedBy:'ChatGPT',news:[story]};validateDaily(day,'2026-09-20.json');assert.throws(()=>validateDaily({...day,news:[story,story]},'2026-09-20.json'),/duplicate/);assert.throws(()=>validateDaily({...day,news:[{...story,published:'2026-09-21'}]},'2026-09-20.json'),/later/);});

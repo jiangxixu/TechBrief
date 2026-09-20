@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-20",
+  "timezone": "Asia/Shanghai",
+  "generatedBy": "ChatGPT",
+  "title": "AI 研发、机器人世界模型与 Agent 系统",
+  "editorialNote": "网站首期，依据一手来源重新核验整理，不是早先聊天原文的逐字存档。原先提及但未查到原论文的 Agentic AI Networking 条目未收录，改为可核验的多无人机研究。",
+  "news": [
+    {
+      "id": "n-20260920-worldcontact",
+      "title": "WorldContact：用接触物理扩展机器人训练数据",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "WorldContact: A Contact-Centric World Model for Scalable Robot Learning",
+      "summary": "WorldContact 预测可变形物体在动作作用下的物理状态，再将轨迹渲染为训练数据。作者在 16 种购物袋任务中评估，并用扩展数据微调视觉语言动作策略。",
+      "why": "它为机器人学习提供了一条数据扩展路径：先学习动作如何改变物体，再生成可供策略训练的交互经验。",
+      "relevance": "阅读世界模型与 VLA 时，可以分别追踪状态预测、图像渲染和策略训练三个环节，判断收益究竟来自哪里。",
+      "caveat": "论文报告单张 H100 上状态 rollout 约 10 倍加速，不含渲染和磁盘 I/O；真实提袋测试为 13/20 对比 19/20 次成功，不能推广到所有机器人任务。",
+      "tags": [
+        "World Model",
+        "VLA",
+        "具身智能",
+        "接触物理"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.19600"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.19600v1/teaser.png",
+        "alt": "WorldContact 从物理轨迹到世界模型、VLA 微调与真实机器人部署的流程",
+        "credit": "Caoliwen Wang 等，WorldContact 图 1（CC BY 4.0，原图）",
+        "sourceUrl": "https://arxiv.org/html/2609.19600v1"
+      },
+      "relatedIds": [
+        "p-worldcontact",
+        "t-world-model"
+      ]
+    },
+    {
+      "id": "n-20260920-anthropic",
+      "title": "Anthropic 公布 AI 参与研发的内部度量",
+      "category": "科技产业",
+      "kind": "官方研究",
+      "published": "2026-09-17",
+      "summary": "Anthropic 发布研发自动化、Agent 监督和算力分配三类指标。其 2026 年 8 月内部快照中，Claude 主导约 26% 的 AI 研发工作，达到协作级别及以上的比例超过 90%。",
+      "why": "衡量 Agent 的价值开始从单次回答能力，转向它在真实工作流程中承担了多少任务。",
+      "relevance": "做 Agent 项目时，除了模型准确率，也可以记录任务完成度、人工介入次数和端到端耗时。",
+      "caveat": "这些是公司自报的内部工作统计，主导任务仍有人类监督；作者明确称测量范围内没有完全自主的研发工作。这不是“AI 已经独立开发下一代模型”的证据。",
+      "tags": [
+        "Agent",
+        "Anthropic",
+        "AI 研发",
+        "评估"
+      ],
+      "sources": [
+        {
+          "name": "Anthropic 官方原文",
+          "url": "https://www.anthropic.com/institute/measuring-pace-of-ai-development"
+        }
+      ]
+    },
+    {
+      "id": "n-20260920-dual-process",
+      "title": "GUI Agent：更长的推理，会改变它受界面影响的方式",
+      "category": "Agent",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "A Dual-Process Perspective on Nudge Susceptibility in LLM-Based GUI Agents",
+      "summary": "研究用双过程理论分析界面对 Agent 决策的影响。在六个模型、21,600 次购物模拟中，更强推理降低了默认选项的影响，却增加了部分社会影响提示的作用。",
+      "why": "推理更多不代表决策在所有条件下都更稳健，评估还需要考虑界面呈现和选择环境。",
+      "relevance": "适合用于区分认知层面的快慢思考，与机器人系统中按响应频率分层的快慢脑架构。",
+      "caveat": "这是受控购物模拟中的行为研究，不是机器人控制架构。arXiv 提交日期为 2026-09-17，作者注明稿件完成于 2025 年 11 月。",
+      "tags": [
+        "快慢脑",
+        "双过程",
+        "GUI Agent",
+        "评估"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.19843"
+        }
+      ],
+      "relatedIds": [
+        "p-dual-process",
+        "t-fast-slow"
+      ]
+    },
+    {
+      "id": "n-20260920-agent-infra",
+      "title": "Agent 性能瓶颈：更快的模型，不一定带来更快的任务",
+      "category": "Agent",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "Not All AI Agents Are Equal: Characterizing Resource and Performance Dynamics",
+      "summary": "论文分析 RAG 问答、网页搜索和代码任务中的资源行为。并发请求会暴露不同的 CPU、磁盘 I/O 和内存瓶颈，模型响应变快或增加核心数并不总能缩短整体耗时。",
+      "why": "优化 Agent 需要测量整个执行链，模型调用、工具和运行环境都可能决定最终速度。",
+      "relevance": "你的 RAG 项目可以分别记录检索、读取文档、工具执行和模型生成的耗时，先找瓶颈，再决定优化哪个环节。",
+      "caveat": "作者测试中，资源感知的工具准入与 CPU 分配使 CPU 敏感任务延迟改善约 5.4 倍，多任务平均延迟降低约 32%；结果取决于其工作负载与环境。",
+      "tags": [
+        "Agent",
+        "RAG",
+        "CPU",
+        "Agent Infra",
+        "系统性能"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.19947"
+        }
+      ],
+      "relatedIds": [
+        "p-agent-infra",
+        "t-rag"
+      ]
+    },
+    {
+      "id": "n-20260920-multi-uav",
+      "title": "多无人机边缘计算：联合考虑任务迁移、通信和轨迹",
+      "category": "无人机",
+      "kind": "近期论文",
+      "published": "2026-09-13",
+      "paperTitle": "Collaborative Computation and Migration in Multi-UAV Networks with Semantic Communication",
+      "summary": "研究将语义通信、计算任务卸载、任务迁移和无人机轨迹联合优化。方法用异构图注意力表示网络关系，再通过多智能体强化学习协调资源。",
+      "why": "多机协作既包含飞行规划，也包含通信和计算资源管理；任务价值、时延与能耗需要共同考虑。",
+      "relevance": "可作为理解多无人机任务分配的研究线索。与 EGO-Planner、PX4 对接属于后续工程设想，本文不等于现成飞行部署方案。",
+      "caveat": "这是 9 月 13 日提交的近期研究补充，不是当天新发表。这里只依据原摘要概括问题与方法，未宣称已经完成真实多机部署。",
+      "tags": [
+        "无人机",
+        "Multi-UAV",
+        "MARL",
+        "语义通信",
+        "任务分配"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.14476"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.14476v1/system_model.png",
+        "alt": "语义通信多无人机边缘计算系统模型",
+        "credit": "Bin Li 等，原论文图 1",
+        "sourceUrl": "https://arxiv.org/html/2609.14476v1"
+      },
+      "relatedIds": [
+        "p-multi-uav",
+        "t-uav"
+      ]
+    }
+  ]
+}
