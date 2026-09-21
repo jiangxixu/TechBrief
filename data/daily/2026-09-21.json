@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-21",
+  "timezone": "Asia/Shanghai",
+  "generatedBy": "ChatGPT",
+  "title": "Agent Harness、机器人记忆与无人机自主回收",
+  "editorialNote": "今天是周一，最近一个 arXiv 工作日批次为 9 月 18 日；本期选取其中 5 篇于 9 月 17 日提交的论文，均为近期预印本，尚不等同于已完成同行评审。",
+  "news": [
+    {
+      "id": "n-20260921-coding-agent-harness",
+      "title": "Coding Agent 的能力不只取决于模型：Harness 设计会改变准确率与成本",
+      "category": "Agent",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "An Empirical Study of Harness Design for Coding Agents",
+      "authors": [
+        "Run-Ze Fan",
+        "Zihao Zhang",
+        "Simin Ma",
+        "Yebowen Hu",
+        "Shouju Wang",
+        "Kaiqiang Song",
+        "Fei Liu",
+        "Hamed Zamani",
+        "Xiaoyang Wang"
+      ],
+      "summary": "研究固定 Coding Agent 的执行循环，只改变规划、动作空间和上下文管理，在 4 个模型、SWE-Bench Verified 与 Terminal-Bench 2.1 上比较 176 组设置。结果显示：上下文越紧张，压缩管理越重要；先删除陈旧工具输出、再按需总结的分阶段策略整体效率最好；显式规划对较弱模型主要提高成功机会，对较强模型更多是减少重复验证和成本；预定义工具更适合 Bash 能力较弱的模型，而 Bash 熟练模型使用纯 Bash 接口反而可能更便宜。",
+      "why": "这项工作把“模型能力”和“Agent 运行框架能力”拆开了。做 Agent 时，计划、工具接口和上下文压缩不是外围小功能，它们会直接改变任务成功率、轨迹长度和费用。",
+      "relevance": "对你的 RAG 与 Agent 学习，最实用的做法是分别记录模型、规划器、工具接口、上下文策略和预算，再做消融实验；不要只换模型后比较最终答案。论文也对应 Agent Infra、评测和系统工程等更有长期技术深度的方向。",
+      "caveat": "结果来自 4 个模型和两个编码基准，不能直接推广到所有 Agent。论文比较的是作者实现的具体 Harness 组件；“规划有效”并不意味着任何计划提示词都会有效。",
+      "tags": [
+        "Coding Agent",
+        "Agent Harness",
+        "上下文管理",
+        "SWE-Bench",
+        "Agent Infra"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.20804"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.20804v1/fig_graphical_abstract.png",
+        "alt": "Coding Agent Harness 中规划、动作空间和上下文管理的拆解示意图",
+        "credit": "Run-Ze Fan 等，原论文图 1",
+        "sourceUrl": "https://arxiv.org/html/2609.20804v1"
+      }
+    },
+    {
+      "id": "n-20260921-safeharness",
+      "title": "SafeHarness：让机器人 Coding Agent 把避障约束真正写进执行过程",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulation",
+      "authors": [
+        "Bingxin Xu",
+        "Yuzhang Shang",
+        "Zhen Dong",
+        "Emilio Ferrara"
+      ],
+      "summary": "论文考察让语言模型编写机器人控制程序时，任务完成与避障安全能否同时满足。作者发现，Agent 即使在推理中识别了障碍、提示词也明确禁止碰撞，仍常为完成任务而撞上障碍。SafeHarness 将操作拆成自由空间路线和接触阶段：先用边界框与航点规划、验证并在必要时重规划路线，再根据邻近障碍选择抓取或放置的接触位置。SafeLIBERO 上任务成功率为 71.9%，避碰率为 87.5%。",
+      "why": "它说明“模型知道安全规则”不等于“执行系统会遵守安全规则”。安全约束需要进入规划、验证、重规划和动作授权，而不能只写在 Prompt 中。",
+      "relevance": "这与无人机系统的工程分层高度相似：LLM 可以理解任务，但障碍检查、路径可行性和最终动作授权应由明确的规划器与安全门负责。你以后做 LLM + EGO-Planner + PX4，可把这篇作为“高层语义不能替代确定性安全约束”的案例。",
+      "caveat": "实验基于 SafeLIBERO 操作基准；71.9% 的任务成功率仍意味着明显失败空间。论文结果不能直接证明该方法适用于人员附近的真实机器人或无人机，也不能把基准中的避碰率理解为形式化安全保证。",
+      "tags": [
+        "机器人",
+        "Coding Agent",
+        "安全约束",
+        "路径规划",
+        "具身智能"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.20822"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.20822v1/teaser_safeharness_cropped.png",
+        "alt": "SafeHarness 将障碍感知路线规划与接触执行加入机器人 Coding Agent",
+        "credit": "Bingxin Xu 等，原论文图 1",
+        "sourceUrl": "https://arxiv.org/html/2609.20822v1"
+      }
+    },
+    {
+      "id": "n-20260921-workspace-models",
+      "title": "Workspace Models：把 VLM 的长期记忆筛选压缩到训练阶段",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision",
+      "authors": [
+        "Nitish Dashora",
+        "Douglas Chen",
+        "Idan Shenfeld",
+        "John Marangola",
+        "Pulkit Agrawal",
+        "Max Simchowitz"
+      ],
+      "summary": "长时机器人任务需要记住早先发生的事件，但把完整历史交给策略容易引入无关相关性，部署时反复调用 VLM 又慢且昂贵。该方法在训练阶段让 VLM 标注当前决策所需的历史图像区域，再用集合重建损失把这些显著信息蒸馏进轻量的 workspace token。部署时策略直接读取该潜在记忆，不再需要在线 VLM 推理。作者在仿真与真实硬件的计数、空间回忆和测试时适应任务中报告了低延迟且优于所比较基线的表现。",
+      "why": "这是“训练时用大模型当老师，部署时用小记忆模块执行”的典型路线，回应了机器人系统中算力、延迟和长时记忆之间的矛盾。",
+      "relevance": "它适合放进你的快慢脑知识图：VLM 在训练阶段提供慢而强的显著性监督，部署阶段由轻量记忆编码器和动作策略快速运行。阅读时重点区分训练时教师、部署时记忆状态和最终动作策略。",
+      "caveat": "论文是 CoRL 2026 预印本；摘要没有给出可跨任务概括的单一提升数字。作者也明确把基于关键图像块的实现视为初步实例，尚不能证明该记忆形式适用于所有长时机器人任务。",
+      "tags": [
+        "机器人记忆",
+        "VLM",
+        "显著性监督",
+        "知识蒸馏",
+        "快慢脑"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.20820"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.20820v1/newsysfig_crop_drawio_cropped_compressed.png",
+        "alt": "Workspace Model 将 VLM 标注的显著历史信息蒸馏为轻量记忆 token 的训练流程",
+        "credit": "Nitish Dashora 等，原论文图 3（CC BY 4.0）",
+        "sourceUrl": "https://arxiv.org/html/2609.20820v1"
+      }
+    },
+    {
+      "id": "n-20260921-skipvla",
+      "title": "SkipVLA：自由空间交给经典规划，接触操作才调用 VLA",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "SkipVLA: Skipping VLA Steps with Classical Planning for Fast Robot Manipulation",
+      "authors": [
+        "Kaivalya Agrawal",
+        "Md Ashiqur Rahman",
+        "Raymond A. Yeh",
+        "Zachary Kingston"
+      ],
+      "summary": "SkipVLA 将机器人操作按物理性质分工：抓取、放置等接触丰富阶段由 VLA 处理，简单的自由空间移动由经典运动规划器完成。系统复用冻结 VLA 的视觉语言特征预测规划目标位姿，无需新增示范数据。作者在 13 个 LIBERO 仿真任务、3 个真实 6 自由度机械臂任务和 3 种 VLA 上评估，报告最高 2.5 倍任务加速、59.6% 延迟下降，并在 Jetson Thor 上减少超过 52% 的计算能耗，同时保持相同任务成功率。",
+      "why": "它没有试图让一个大模型包办所有控制，而是把语义强但昂贵的 VLA 用在困难阶段，把几何明确的运动交给成熟规划器。这是比端到端全程推理更现实的部署思路。",
+      "relevance": "对你的无人机与具身方向，可类比为：VLM/LLM 负责理解目标或选择关键阶段，EGO-Planner 等规划器负责快速生成无碰轨迹，PX4 负责低层稳定控制。真正值得学习的是模块交接条件、目标位姿表示和失败恢复。",
+      "caveat": "最高 2.5 倍是作者特定任务、VLA、规划器与硬件组合下的结果；论文仍为投稿预印本。机械臂自由空间运动与无人机动态避障并不等价，不能直接照搬性能结论。",
+      "tags": [
+        "VLA",
+        "运动规划",
+        "机器人",
+        "边缘部署",
+        "快慢脑"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.20648"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.20648v1/assets/rw_method.png",
+        "alt": "SkipVLA 在真实抓放任务中由运动规划器与 VLA 交替控制的流程",
+        "credit": "Kaivalya Agrawal 等，原论文图 1",
+        "sourceUrl": "https://arxiv.org/html/2609.20648v1"
+      }
+    },
+    {
+      "id": "n-20260921-rtk-vision-uav-recovery",
+      "title": "RTK + 视觉 + PPO：微型无人机自主回收到飞行中的母机",
+      "category": "无人机",
+      "kind": "论文",
+      "published": "2026-09-17",
+      "paperTitle": "RTK-Vision PPO for Autonomous Micro UAV Recovery on an Airborne Carrier",
+      "authors": [
+        "Aashish Sahu",
+        "R Prasanth Kumar"
+      ],
+      "summary": "论文展示母机携带子机升空、子机空中起飞执行任务、返回母机当前位置、重新对接并随母机下降的完整循环。远距离会合使用双方 RTK-GNSS 与母机持续广播的状态，近距离同时保留 RTK，并加入下视相机的标志物相对定位。PPO 只负责末端回收阶段的三轴相对速度指令，PX4 继续负责低层稳定，独立确定性安全门决定是否允许下降。仿真中 PPO 在 2,000 个随机测试回合成功率为 99.55%，调优 PD 基线为 78.4%；14 次户外完整任务成功 13 次。",
+      "why": "这是一份清楚的实机分层案例：学习策略没有直接控制电机，也没有取代 PX4；全局定位、近距视觉、强化学习导航、低层飞控和安全门各负其责。",
+      "relevance": "与你正在学习的 PX4、机载计算机和视觉定位直接相关。建议重点看数据流：RTK/视觉观测进入策略，策略输出速度参考，PX4 跟踪参考，安全门可否决危险下降。它能帮助你理解为什么具身或无人机系统通常采用分层而不是让大模型直接控姿态。",
+      "caveat": "真实户外实验只有 14 次，样本仍小；99.55% 是带随机化的 MuJoCo 末端阶段结果，不是 2,000 次实飞。系统使用 RTK 和人工标志物，不能代表无 GNSS、无标志环境中的通用自主回收。",
+      "tags": [
+        "无人机",
+        "PX4",
+        "RTK-GNSS",
+        "强化学习",
+        "PPO",
+        "Sim-to-Real"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.20629"
+        }
+      ],
+      "image": {
+        "url": "https://arxiv.org/html/2609.20629v1/fig_1.png",
+        "alt": "微型子无人机停靠在飞行母机回收平台上的实验系统",
+        "credit": "Aashish Sahu、R Prasanth Kumar，原论文图 1",
+        "sourceUrl": "https://arxiv.org/html/2609.20629v1"
+      }
+    }
+  ]
+}
