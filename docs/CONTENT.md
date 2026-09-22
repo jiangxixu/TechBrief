@@ -4,7 +4,7 @@
 
 ## 内容原则
 
-- 内容由 ChatGPT 搜索、核验和撰写。网站与 GitHub Actions 不调用模型 API，不需要 DeepSeek 或 OpenAI API Key。
+- 日报由 GitHub Actions 通过 OpenAI 兼容的 Responses API 自动生成。API Key、Base URL 和模型名只保存在 GitHub Actions Secrets 中，不写入代码、构建产物或网站前端。
 - 优先最近 24 小时的 AI、Agent、机器人、无人机、计算机科研与科技产业进展。重要内容不足时可补充近期内容并标注原始发布日期；可信材料不足时少于 5 条也可以。
 - 先读取现有日报，避免重复。引用一手原论文、官方公告或项目仓库，核对标题、日期和数字。不能从摘要推断实机部署；观点写在 why/relevance，证据限制写在 caveat。
 - 图片仅在找到可靠原始图片地址时添加，包含图片出处与作者说明；没有可靠图片就省略 image。
@@ -46,12 +46,22 @@
 
 ## 提交流程
 
-1. 读取本文件与 `data/daily/index.json`，检查当天文件是否已存在；存在时跳过，不覆盖。
+1. 每天北京时间 08:00 由 `.github/workflows/daily-ai-news.yml` 启动；脚本检查当天文件是否已存在，默认存在时跳过、不覆盖。
 2. 阅读近期日报原文件，查重并核验新的来源。
 3. 创建日报，必要时添加已核验的论文记录至 `data/papers.json`。保留已有记录，不为了扩大数量虚构论文或补填未知信息。
 4. 本地可用时运行 `node scripts/add-daily.mjs /absolute/path/to/new-edition.json`，然后 `npm test && npm run build`。
 5. GitHub 连接器发布时，使用 `create_file` 创建当天文件即可。提交到 main 会触发构建；构建会扫描所有日报并在发布产物里重新生成两个索引。不要为了手工改索引而覆盖原来的日报。
 6. 检查提交及 Actions 状态。部署失败时明确说明“内容已提交、网站尚未部署”，不能说网站已更新。页面发布地址应从部署结果获得。
+
+## 自动生成配置
+
+仓库 `Settings → Secrets and variables → Actions` 中必须存在前两个 Repository secrets；第三个为可选配置：
+
+- `OPENAI_API_KEY`：OpenAI 官方或兼容中转服务提供的密钥。
+- `OPENAI_BASE_URL`：API 基础地址，例如以 `/v1` 结尾；脚本会自动拼接 `/responses`。
+- `OPENAI_MODEL`（可选）：中转服务实际支持的模型 ID；未配置时默认使用 `gpt-5.6-sol`。
+
+生成脚本会要求模型联网检索一手来源、输出结构化 JSON，再运行仓库现有校验与构建。当天文件已存在时不会覆盖；如确需重建，可在 Actions 手动运行工作流并勾选 `force_regenerate`。第三方中转服务能够看到传给它的密钥和请求内容，不应把 OpenAI 官方密钥交给不可信的中转站。
 
 ## 索引与专题
 

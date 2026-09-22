@@ -1,7 +1,12 @@
 {
   "schemaVersion": 1,
-  "latest": "2026-09-20",
+  "latest": "2026-09-21",
   "days": [
+    {
+      "date": "2026-09-21",
+      "count": 5,
+      "title": "Agent Harness、机器人记忆与无人机自主回收"
+    },
     {
       "date": "2026-09-20",
       "count": 5,

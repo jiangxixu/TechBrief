@@ -6,6 +6,7 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "generate:daily": "node scripts/generate-daily.mjs",
     "validate": "node scripts/validate.mjs",
     "test": "node --test scripts/core.test.mjs",
     "start": "node scripts/serve.mjs"
