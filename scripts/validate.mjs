@@ -26,11 +26,39 @@ export function validateDaily(day,filename){
  const seen=new Set();
  for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}
 }
+function arxivId(item){
+ const source=(item.sources||[]).find(s=>{try{return new URL(s.url).hostname==='arxiv.org';}catch{return false;}});
+ if(!source)return '';
+ try{return new URL(source.url).pathname.replace(/^\/(?:abs|pdf|html)\//,'').replace(/\.pdf$/,'').replace(/v\d+$/,'');}catch{return '';}
+}
+function paperFromNews(news){
+ return {
+  id:`p-daily-${news.id.replace(/^n-/,'')}`,
+  title:news.title,
+  category:news.category,
+  published:news.published,
+  paperTitle:news.paperTitle||news.title,
+  authors:news.authors||[],
+  venue:news.venue||'arXiv 预印本',
+  summary:news.summary,
+  why:news.why,
+  relevance:news.relevance,
+  caveat:news.caveat,
+  tags:news.tags,
+  sources:news.sources,
+  ...(news.image?{image:news.image}:{}),
+  relatedIds:[news.id]
+ };
+}
 export async function readContent(){
  const files=(await readdir(resolve(root,'data/daily'))).filter(f=>/^\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort().reverse();
  const days=[];for(const f of files){const d=await json('data/daily/'+f);validateDaily(d,f);days.push(d);}
- const papers=await json('data/papers.json'),topics=await json('data/topics.json');must(Array.isArray(papers)&&Array.isArray(topics),'papers and topics must be arrays');
+ const curatedPapers=await json('data/papers.json'),topics=await json('data/topics.json');must(Array.isArray(curatedPapers)&&Array.isArray(topics),'papers and topics must be arrays');
  const news=days.flatMap(d=>d.news.map(n=>({...n,type:'news',date:d.date})));
+ const representedNews=new Set(curatedPapers.flatMap(p=>p.relatedIds||[]));
+ const representedArxiv=new Set(curatedPapers.map(arxivId).filter(Boolean));
+ const dailyPapers=news.filter(n=>{const id=arxivId(n);return id&&!representedNews.has(n.id)&&!representedArxiv.has(id);}).map(paperFromNews);
+ const papers=[...dailyPapers,...curatedPapers];
  for(const p of papers){validateItem(p,p.id);must(validDate(p.published)&&text(p.paperTitle),'paper title and date required');}
  for(const t of topics){validateItem(t,t.id);must(validDate(t.date),'topic date required');}
  const typedPapers=papers.map(p=>({...p,type:'paper',date:p.published})),typedTopics=topics.map(t=>({...t,type:'topic'}));

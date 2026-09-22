@@ -1,4 +1,4 @@
-export const VIEWS = ['today','latest','history','papers','topics','saved','search'];
+export const VIEWS = ['today','history','papers','saved','search'];
 export const CATEGORIES = ['AI / 大模型','Agent','机器人 / 具身','无人机','科技产业'];
 export function beijingDate(now = new Date()) {
   return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
