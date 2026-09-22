@@ -107,6 +107,27 @@ function parseJson(text) {
   }
 }
 
+function assertFreshEdition(edition, date, allowedSourceUrls = null) {
+  const editionTime = Date.parse(`${date}T00:00:00Z`);
+  const recent = edition.news.filter((item) => {
+    const ageDays = (editionTime - Date.parse(`${item.published}T00:00:00Z`)) / 86_400_000;
+    return ageDays >= 0 && ageDays <= 14;
+  });
+  if (recent.length < 4) {
+    throw new Error(`Freshness check failed: only ${recent.length}/5 items are from the last 14 days`);
+  }
+  if (/无法.{0,6}(联网|核验)|禁止联网|不应视为今日|历史进展/.test(edition.editorialNote || '')) {
+    throw new Error('Freshness check failed: the model reported that current information was unavailable');
+  }
+  if (allowedSourceUrls) {
+    for (const item of edition.news) {
+      if (!(item.sources || []).some((source) => allowedSourceUrls.has(source.url))) {
+        throw new Error(`Source-grounding check failed for ${item.id}`);
+      }
+    }
+  }
+}
+
 function decodeXml(value) {
   return value
     .replaceAll('&amp;', '&')
@@ -204,9 +225,44 @@ try {
 } catch (error) {
   console.warn(`Primary-source fetch failed: ${error.message}`);
 }
-const instructions = `你是 TechBrief 的事实核查编辑。当前简报日期为 ${date}（Asia/Shanghai）。\n\n请先使用联网搜索，再生成恰好 5 条中文科技简报，覆盖 AI/大模型、Agent、机器人/具身智能、无人机、计算机科研或科技产业中最值得关注的最新进展。\n\n硬性要求：\n1. 只写能够由一手来源核验的事实，优先官方公告、原始论文、官方仓库；每条至少一个真实可访问的 HTTPS 一手来源。\n2. published 必须是来源实际公开日期，不能晚于 ${date}；若最近 24 小时不足 5 条，可使用最近 7 天的重要内容并在 editorialNote 说明。\n3. 不得把预印本写成已通过同行评审，不得把仿真结果写成实机结果，不得根据摘要补造数字。\n4. summary 写事实；why 写重要性；relevance 明确写对学习或研究的启发；caveat 写证据边界。\n5. 不添加无法核验的图片，不输出 image 字段。\n6. ID 格式为 n-${date.replaceAll('-', '')}-英文短名，且全小写。\n7. 避免与下列近期标题重复：${JSON.stringify(oldTitles)}。\n8. 仅输出符合给定 JSON Schema 的对象，不要输出 Markdown 或额外说明。`;
+const instructions = `你是 TechBrief 的事实核查编辑。当前简报日期为 ${date}（Asia/Shanghai）。\n\n请使用联网搜索，并参考下方已从 arXiv 实时抓取的一手来源候选，生成恰好 5 条中文科技简报，覆盖 AI/大模型、Agent、机器人/具身智能、无人机或计算机科研中最值得关注的最新进展。\n\n硬性要求：\n1. 只写能够由一手来源核验的事实，优先官方公告、原始论文、官方仓库；每条至少一个真实可访问的 HTTPS 一手来源。\n2. published 必须是来源实际公开日期，不能晚于 ${date}；至少 4 条必须来自最近 14 天。\n3. 不得把预印本写成已通过同行评审，不得把仿真结果写成实机结果，不得根据摘要补造数字。\n4. summary 写事实；why 写重要性；relevance 明确写对学习或研究的启发；caveat 写证据边界。\n5. 不添加无法核验的图片，不输出 image 字段。\n6. ID 格式为 n-${date.replaceAll('-', '')}-英文短名，且全小写。\n7. 避免与下列近期标题重复：${JSON.stringify(oldTitles)}。\n8. 不得用旧知识填充数量；如果搜索不可用，必须从下面的实时来源候选中选择。\n9. 仅输出符合给定 JSON Schema 的对象，不要输出 Markdown 或额外说明。\n\n实时 arXiv 一手来源候选：${JSON.stringify(sourcePool)}`;
+
+const sourceUrls = new Set(sourcePool.map((item) => item.url));
+const template = {
+  schemaVersion: 1,
+  date,
+  timezone: 'Asia/Shanghai',
+  generatedBy: 'ChatGPT',
+  title: '当天主题概括',
+  editorialNote: '来源范围及日期说明',
+  news: [{
+    id: `n-${date.replaceAll('-', '')}-english-slug`,
+    title: '中文标题',
+    category: 'AI / 大模型',
+    kind: '论文',
+    published: date,
+    summary: '核心事实',
+    why: '为什么重要',
+    relevance: '对学习或研究的启发',
+    caveat: '证据边界',
+    tags: ['标签'],
+    sources: [{ name: 'arXiv 原论文', url: 'https://arxiv.org/abs/...' }]
+  }]
+};
+
+async function generateCompatibilityEdition() {
+  if (sourcePool.length < 5) throw new Error('Fewer than 5 current primary sources were available');
+  console.warn('Generating in source-grounded compatibility mode.');
+  const compatibilityPrompt = `${instructions.replace('请使用联网搜索，并参考', '请只依据')}\n\n你必须从候选中选择恰好 5 条，不得加入候选之外的事实、数字或链接。sources.url 必须逐字复制对应候选的 url。\n输出结构示例：${JSON.stringify(template)}`;
+  const result = await callResponsesApi(config, { model: config.model, input: compatibilityPrompt });
+  const parsed = parseJson(extractOutputText(result));
+  validateDaily(parsed, filename);
+  assertFreshEdition(parsed, date, sourceUrls);
+  return parsed;
+}
 
 let payload;
+let edition;
 try {
   payload = await callResponsesApi(config, {
     model: config.model,
@@ -225,42 +281,17 @@ try {
     max_output_tokens: 12000
   });
   console.log('Generated with Responses API web search and JSON Schema.');
+  edition = parseJson(extractOutputText(payload));
+  validateDaily(edition, filename);
+  assertFreshEdition(edition, date);
 } catch (error) {
-  if (![400, 422].includes(error.status)) throw error;
-  if (sourcePool.length < 5) {
-    throw new Error(`The API rejected advanced parameters and fewer than 5 primary sources were available. ${error.message}`);
-  }
-  console.warn('The API rejected advanced parameters; retrying in source-grounded compatibility mode.');
-  const template = {
-    schemaVersion: 1,
-    date,
-    timezone: 'Asia/Shanghai',
-    generatedBy: 'ChatGPT',
-    title: '当天主题概括',
-    editorialNote: '来源范围及日期说明',
-    news: [{
-      id: `n-${date.replaceAll('-', '')}-english-slug`,
-      title: '中文标题',
-      category: 'AI / 大模型',
-      kind: '论文',
-      published: date,
-      summary: '核心事实',
-      why: '为什么重要',
-      relevance: '对学习或研究的启发',
-      caveat: '证据边界',
-      tags: ['标签'],
-      sources: [{ name: 'arXiv 原论文', url: 'https://arxiv.org/abs/...' }]
-    }]
-  };
-  const compatibilityPrompt = `${instructions.replace('请先使用联网搜索', '请只依据下方提供的一手来源候选')}\n\n你必须从候选中选择恰好 5 条，不得加入候选之外的事实、数字或链接。sources.url 必须逐字复制对应候选的 url。\n输出结构示例：${JSON.stringify(template)}\n\n一手来源候选：${JSON.stringify(sourcePool)}`;
-  payload = await callResponsesApi(config, {
-    model: config.model,
-    input: compatibilityPrompt
-  });
+  if (error.status && ![400, 422].includes(error.status)) throw error;
+  console.warn(`Advanced generation was rejected by the API or quality gate: ${error.message}`);
+  edition = await generateCompatibilityEdition();
   console.log('Generated in source-grounded compatibility mode.');
 }
 
-const edition = parseJson(extractOutputText(payload));
 validateDaily(edition, filename);
+assertFreshEdition(edition, date);
 await writeFile(outputPath, `${JSON.stringify(edition, null, 2)}\n`, 'utf8');
 console.log(`Generated and validated ${filename} with ${edition.news.length} items.`);
