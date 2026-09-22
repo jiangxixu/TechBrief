@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "title": "今日科研推荐",
+  "sections": [
+    {
+      "title": "AI Agent",
+      "focus": "从模型调用走向具备工具、记忆、规划和执行能力的智能系统",
+      "keywords": ["Agent", "RAG", "MCP", "Memory", "Runtime"]
+    },
+    {
+      "title": "具身智能",
+      "focus": "VLA、World Model 和机器人策略学习",
+      "keywords": ["VLA", "World Model", "Robot Learning"]
+    },
+    {
+      "title": "无人机智能",
+      "focus": "LLM/VLM 与 PX4、规划、控制系统结合",
+      "keywords": ["PX4", "VINS", "EGO-Planner", "Multi-UAV"]
+    }
+  ],
+  "dailyRecommendation": {
+    "rule": "根据当天日报、论文和知识标签生成关联推荐",
+    "display": ["论文", "知识", "学习路线"]
+  }
+}
