@@ -1,0 +1,38 @@
+{
+  "knowledge": [
+    {
+      "id": "knowledge-fast-slow-brain",
+      "title": "快慢脑架构",
+      "type": "concept",
+      "summary": "将高层理解推理与低层实时执行分开，是当前 Agent 和具身智能系统常见的分层思想。",
+      "sections": [
+        {
+          "title": "核心思想",
+          "content": "慢层负责任务理解、规划和长期决策；快层负责轨迹生成、动作执行和实时控制。"
+        },
+        {
+          "title": "无人机映射",
+          "content": "LLM/VLM 可以负责任务规划，局部规划器负责轨迹生成，PX4 控制器负责姿态和飞行稳定。"
+        }
+      ],
+      "related": ["NebulaVLA", "VLM-MPPI", "PX4"]
+    },
+    {
+      "id": "knowledge-vla",
+      "title": "VLA（Vision-Language-Action）",
+      "type": "concept",
+      "summary": "连接视觉理解、语言指令和机器人动作的具身智能模型路线。",
+      "sections": [
+        {
+          "title": "基本流程",
+          "content": "视觉输入和语言任务经过模型理解后，生成机器人动作或高层行为。"
+        },
+        {
+          "title": "工程趋势",
+          "content": "越来越多系统采用 VLA 负责高层行为选择，再结合传统规划和控制模块执行。"
+        }
+      ],
+      "related": ["World Model", "快慢脑", "Robot Controller"]
+    }
+  ]
+}
