@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TechBrief 知识库</title>
+<style>body{font-family:system-ui,'Microsoft YaHei';max-width:900px;margin:40px auto;padding:0 20px;line-height:1.8;color:#0f172a}article{border:1px solid #ddd;border-radius:16px;padding:20px;margin:16px 0}h1{font-size:32px}h2{color:#2563eb}</style>
+</head>
+<body>
+<h1>TechBrief 知识库</h1>
+<p>概念、架构和研究路线的长期整理入口。</p>
+<div id="list"></div>
+<script>
+fetch('data/knowledge.json').then(r=>r.json()).then(data=>{
+ document.getElementById('list').innerHTML=data.knowledge.map(k=>`<article><h2>${k.title}</h2><p>${k.summary}</p>${k.sections.map(s=>`<h3>${s.title}</h3><p>${s.content}</p>`).join('')}</article>`).join('');
+});
+</script>
+</body>
+</html>
