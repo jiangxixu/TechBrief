@@ -40,11 +40,11 @@ function paperFromNews(news){
   paperTitle:news.paperTitle||news.title,
   authors:news.authors||[],
   venue:news.venue||'arXiv 预印本',
-  summary:news.summary,
-  why:news.why,
-  relevance:news.relevance,
-  caveat:news.caveat,
-  tags:news.tags,
+  summary:news.summary||'该论文来自过去30天科技简报的历史记录。',
+  why:news.why||'该内容曾被收录进科技简报，保留在论文库中便于后续检索和阅读。',
+  relevance:news.relevance||'可通过原论文进一步核对方法、实验与结论。',
+  caveat:news.caveat||'历史对话未保留完整分析，具体结论以原论文为准。',
+  tags:news.tags?.length?news.tags:['历史论文'],
   sources:news.sources,
   ...(news.image?{image:news.image}:{}),
   relatedIds:[news.id]
@@ -53,8 +53,12 @@ function paperFromNews(news){
 export async function readContent(){
  const files=(await readdir(resolve(root,'data/daily'))).filter(f=>/^\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort().reverse();
  const days=[];for(const f of files){const d=await json('data/daily/'+f);validateDaily(d,f);days.push(d);}
- const curatedPapers=await json('data/papers.json'),topics=await json('data/topics.json');must(Array.isArray(curatedPapers)&&Array.isArray(topics),'papers and topics must be arrays');
- const news=days.flatMap(d=>d.news.map(n=>({...n,type:'news',date:d.date})));
+ const curatedPapers=await json('data/papers.json'),topics=await json('data/topics.json'),history=await json('data/history.json');must(Array.isArray(curatedPapers)&&Array.isArray(topics)&&Array.isArray(history),'papers, topics and history must be arrays');
+ for(const item of history){must(item&&/^h-[a-z0-9-]+$/.test(item.id),'history: invalid id');must(text(item.title),'history: missing title');must(CATEGORIES.includes(item.category),'history: unknown category');must(validDate(item.date),'history: invalid date');must(Array.isArray(item.sources)&&item.sources.every(s=>text(s.name)&&safeUrl(s.url)),'history: invalid sources');}
+ const dailyNews=days.flatMap(d=>d.news.map(n=>({...n,type:'news',date:d.date})));
+ const recovered=history.map(n=>({...n,kind:'历史简报',published:n.published||n.date,summary:n.summary||'',why:n.why||'',relevance:n.relevance||'',caveat:n.caveat||'',tags:n.tags||[],type:'news',archived:true}));
+ const news=[],seenTitles=new Set(),seenSources=new Set();
+ for(const item of [...dailyNews,...recovered]){const titleKey=item.title.normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u3400-\u9fff]+/g,'');const sourceKeys=(item.sources||[]).map(s=>s.url.replace(/v\d+(?=$|[?#])/,'').replace(/[?#].*$/,''));if(seenTitles.has(titleKey)||sourceKeys.some(k=>seenSources.has(k)))continue;news.push(item);seenTitles.add(titleKey);sourceKeys.forEach(k=>seenSources.add(k));}
  const representedNews=new Set(curatedPapers.flatMap(p=>p.relatedIds||[]));
  const representedArxiv=new Set(curatedPapers.map(arxivId).filter(Boolean));
  const dailyPapers=news.filter(n=>{const id=arxivId(n);return id&&!representedNews.has(n.id)&&!representedArxiv.has(id);}).map(paperFromNews);

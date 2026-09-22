@@ -1,0 +1,1132 @@
+[
+  {
+    "id": "h-20260919-1",
+    "title": "Figure Helix 2.5 推进人形机器人控制",
+    "category": "机器人 / 具身",
+    "date": "2026-09-19",
+    "sources": []
+  },
+  {
+    "id": "h-20260919-2",
+    "title": "SafeHarness：把避障约束写进机器人 Coding Agent",
+    "category": "机器人 / 具身",
+    "date": "2026-09-19",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.20822"
+      }
+    ]
+  },
+  {
+    "id": "h-20260919-3",
+    "title": "Workspace Models：用显著性监督构建轻量机器人记忆",
+    "category": "机器人 / 具身",
+    "date": "2026-09-19",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.20820"
+      }
+    ]
+  },
+  {
+    "id": "h-20260919-4",
+    "title": "dQwen3.5：大语言模型架构研究",
+    "category": "AI / 大模型",
+    "date": "2026-09-19",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.20751"
+      }
+    ]
+  },
+  {
+    "id": "h-20260919-5",
+    "title": "华为云发布 Agentic Cloud 能力",
+    "category": "Agent",
+    "date": "2026-09-19",
+    "sources": []
+  },
+  {
+    "id": "h-20260918-1",
+    "title": "VLM-MPPI：用自然语言约束多样化空中导航轨迹",
+    "category": "无人机",
+    "date": "2026-09-18",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.18451"
+      }
+    ]
+  },
+  {
+    "id": "h-20260918-2",
+    "title": "AeroWeaver：无人机自主系统研究",
+    "category": "无人机",
+    "date": "2026-09-18",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.18520"
+      }
+    ]
+  },
+  {
+    "id": "h-20260918-3",
+    "title": "GPT-Policy：语言模型生成机器人策略",
+    "category": "机器人 / 具身",
+    "date": "2026-09-18",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.19138"
+      }
+    ]
+  },
+  {
+    "id": "h-20260918-4",
+    "title": "Edge0：边缘侧具身智能模型",
+    "category": "机器人 / 具身",
+    "date": "2026-09-18",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.18063"
+      }
+    ]
+  },
+  {
+    "id": "h-20260918-5",
+    "title": "Nokia × Microsoft：Agent 进入真实电信网络运维",
+    "category": "Agent",
+    "date": "2026-09-18",
+    "sources": []
+  },
+  {
+    "id": "h-20260916-1",
+    "title": "富士通发布 Aurora：企业 IT 支持开始 Agent 化",
+    "category": "Agent",
+    "date": "2026-09-16",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://global.fujitsu/en-global/newsroom/europe/2026/15-09"
+      }
+    ]
+  },
+  {
+    "id": "h-20260916-2",
+    "title": "Siemens × Salesforce：Agent 读取 Teamcenter 数字孪生",
+    "category": "Agent",
+    "date": "2026-09-16",
+    "sources": []
+  },
+  {
+    "id": "h-20260916-3",
+    "title": "英国研究7万英尺自主高空无人机作为5G/6G基站",
+    "category": "无人机",
+    "date": "2026-09-16",
+    "sources": []
+  },
+  {
+    "id": "h-20260916-4",
+    "title": "Toward Self-Adaptive Physical AI",
+    "category": "机器人 / 具身",
+    "date": "2026-09-16",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.13436"
+      }
+    ]
+  },
+  {
+    "id": "h-20260916-5",
+    "title": "The Router Within：模型内部路由研究",
+    "category": "AI / 大模型",
+    "date": "2026-09-16",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.15982"
+      }
+    ]
+  },
+  {
+    "id": "h-20260915-1",
+    "title": "小马智行发布第四代 L4 Robotruck",
+    "category": "科技产业",
+    "date": "2026-09-15",
+    "sources": []
+  },
+  {
+    "id": "h-20260915-2",
+    "title": "Motus2：融合 Policy、World Model 与 Value Model",
+    "category": "机器人 / 具身",
+    "date": "2026-09-15",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.30237"
+      }
+    ]
+  },
+  {
+    "id": "h-20260915-3",
+    "title": "AWS 提出生产级 Multi-Agent 原则",
+    "category": "Agent",
+    "date": "2026-09-15",
+    "sources": []
+  },
+  {
+    "id": "h-20260915-4",
+    "title": "Perplexity 使用 GPT-6 Astra 操作完整软件系统",
+    "category": "Agent",
+    "date": "2026-09-15",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://openai.com/index/perplexity-improving-accuracy-with-astra/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260915-5",
+    "title": "AWS 开源 Unified Knowledge Graph RAG",
+    "category": "Agent",
+    "date": "2026-09-15",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://github.com/awslabs/unified-kg-rag-on-aws"
+      }
+    ]
+  },
+  {
+    "id": "h-20260914-1",
+    "title": "现代汽车把数据飞轮与 VLA 推进自动驾驶主线",
+    "category": "科技产业",
+    "date": "2026-09-14",
+    "sources": []
+  },
+  {
+    "id": "h-20260914-2",
+    "title": "Scaling Automatic Research Agents via World Models",
+    "category": "Agent",
+    "date": "2026-09-14",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.12564"
+      }
+    ]
+  },
+  {
+    "id": "h-20260914-3",
+    "title": "Thinking with Looped Flows：让小模型通过循环继续推理",
+    "category": "AI / 大模型",
+    "date": "2026-09-14",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.11801"
+      }
+    ]
+  },
+  {
+    "id": "h-20260914-4",
+    "title": "Skild S1：机器人通过 Prompt 学习新任务",
+    "category": "机器人 / 具身",
+    "date": "2026-09-14",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://www.skild.ai/blogs/s1"
+      }
+    ]
+  },
+  {
+    "id": "h-20260914-5",
+    "title": "EVPeriscope：用无人机螺旋桨信号辅助定位",
+    "category": "无人机",
+    "date": "2026-09-14",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.11920"
+      }
+    ]
+  },
+  {
+    "id": "h-20260913-1",
+    "title": "JAL × Donecle 推进自动无人机飞机巡检",
+    "category": "无人机",
+    "date": "2026-09-13",
+    "sources": []
+  },
+  {
+    "id": "h-20260913-2",
+    "title": "Salesforce Long-Horizon Runtime 支持长期 Agent",
+    "category": "Agent",
+    "date": "2026-09-13",
+    "sources": []
+  },
+  {
+    "id": "h-20260913-3",
+    "title": "T1：通过强化学习训练 Terminal Agent",
+    "category": "Agent",
+    "date": "2026-09-13",
+    "sources": []
+  },
+  {
+    "id": "h-20260913-4",
+    "title": "Programmable World Model：保持可操作的世界状态",
+    "category": "机器人 / 具身",
+    "date": "2026-09-13",
+    "sources": []
+  },
+  {
+    "id": "h-20260913-5",
+    "title": "Qualcomm × Amazon 扩展 AI 推理基础设施",
+    "category": "科技产业",
+    "date": "2026-09-13",
+    "sources": []
+  },
+  {
+    "id": "h-20260912-1",
+    "title": "FANUC × Google AI Welding Agent",
+    "category": "机器人 / 具身",
+    "date": "2026-09-12",
+    "sources": []
+  },
+  {
+    "id": "h-20260912-2",
+    "title": "OpenAI Agents API 更新",
+    "category": "Agent",
+    "date": "2026-09-12",
+    "sources": []
+  },
+  {
+    "id": "h-20260912-3",
+    "title": "Anthropic 发布 AI 威胁报告",
+    "category": "AI / 大模型",
+    "date": "2026-09-12",
+    "sources": []
+  },
+  {
+    "id": "h-20260912-4",
+    "title": "GE-Act 2.0：World-Action Model",
+    "category": "机器人 / 具身",
+    "date": "2026-09-12",
+    "sources": []
+  },
+  {
+    "id": "h-20260912-5",
+    "title": "Mercury 2.5：扩散式大语言模型",
+    "category": "AI / 大模型",
+    "date": "2026-09-12",
+    "sources": []
+  },
+  {
+    "id": "h-20260911-1",
+    "title": "ACSL × PFN：生成式 AI 自动规划无人机航路",
+    "category": "无人机",
+    "date": "2026-09-11",
+    "sources": []
+  },
+  {
+    "id": "h-20260911-2",
+    "title": "Show-Harness：VLM 通过语义动作接口控制机器人",
+    "category": "机器人 / 具身",
+    "date": "2026-09-11",
+    "sources": []
+  },
+  {
+    "id": "h-20260911-3",
+    "title": "Subagents vs Agent Skills：两种 Agent 分工方式",
+    "category": "Agent",
+    "date": "2026-09-11",
+    "sources": []
+  },
+  {
+    "id": "h-20260911-4",
+    "title": "Salesforce Enterprise AI Harness",
+    "category": "Agent",
+    "date": "2026-09-11",
+    "sources": []
+  },
+  {
+    "id": "h-20260911-5",
+    "title": "NVIDIA × d-Matrix 推进 Prefill/Decode 解耦推理",
+    "category": "科技产业",
+    "date": "2026-09-11",
+    "sources": []
+  },
+  {
+    "id": "h-20260910-1",
+    "title": "General Robotics 发布 GRID",
+    "category": "机器人 / 具身",
+    "date": "2026-09-10",
+    "sources": []
+  },
+  {
+    "id": "h-20260910-2",
+    "title": "日立建机推进 Physical AI 挖掘机",
+    "category": "机器人 / 具身",
+    "date": "2026-09-10",
+    "sources": []
+  },
+  {
+    "id": "h-20260910-3",
+    "title": "京东公布 Physical AI 采购计划",
+    "category": "科技产业",
+    "date": "2026-09-10",
+    "sources": []
+  },
+  {
+    "id": "h-20260910-4",
+    "title": "Samsung × Mistral 合作",
+    "category": "科技产业",
+    "date": "2026-09-10",
+    "sources": []
+  },
+  {
+    "id": "h-20260910-5",
+    "title": "MobileVLA-R1 2.0：移动机器人视觉语言动作推理",
+    "category": "机器人 / 具身",
+    "date": "2026-09-10",
+    "sources": []
+  },
+  {
+    "id": "h-20260909-1",
+    "title": "Meta Muse 模型发布",
+    "category": "AI / 大模型",
+    "date": "2026-09-09",
+    "sources": []
+  },
+  {
+    "id": "h-20260909-2",
+    "title": "XPENG IRON 人形机器人进展",
+    "category": "机器人 / 具身",
+    "date": "2026-09-09",
+    "sources": []
+  },
+  {
+    "id": "h-20260909-3",
+    "title": "AWS Agent Evaluation 接入 GitHub Actions",
+    "category": "Agent",
+    "date": "2026-09-09",
+    "sources": []
+  },
+  {
+    "id": "h-20260909-4",
+    "title": "TacPAC：机器人触觉研究",
+    "category": "机器人 / 具身",
+    "date": "2026-09-09",
+    "sources": []
+  },
+  {
+    "id": "h-20260909-5",
+    "title": "TU Dresden Air-Take-Off 无人机研究",
+    "category": "无人机",
+    "date": "2026-09-09",
+    "sources": []
+  },
+  {
+    "id": "h-20260908-1",
+    "title": "GitHub Agentic Workflows v0.88.4",
+    "category": "Agent",
+    "date": "2026-09-08",
+    "sources": []
+  },
+  {
+    "id": "h-20260908-2",
+    "title": "NEURA × SECO 推进机器人计算平台",
+    "category": "科技产业",
+    "date": "2026-09-08",
+    "sources": []
+  },
+  {
+    "id": "h-20260908-3",
+    "title": "VLA-Precision：提高视觉语言动作控制精度",
+    "category": "机器人 / 具身",
+    "date": "2026-09-08",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.04355"
+      }
+    ]
+  },
+  {
+    "id": "h-20260908-4",
+    "title": "KVMem：为 Agent 提供持久键值记忆",
+    "category": "Agent",
+    "date": "2026-09-08",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.04852"
+      }
+    ]
+  },
+  {
+    "id": "h-20260908-5",
+    "title": "Hermeus × Anduril：Lattice 接入高速飞行平台",
+    "category": "无人机",
+    "date": "2026-09-08",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://www.hermeus.com/article/anduril-lattice"
+      }
+    ]
+  },
+  {
+    "id": "h-20260907-1",
+    "title": "OpenAI 自动化研究实习生系统",
+    "category": "Agent",
+    "date": "2026-09-07",
+    "sources": []
+  },
+  {
+    "id": "h-20260907-2",
+    "title": "NVIDIA PAIR 机器人研究",
+    "category": "机器人 / 具身",
+    "date": "2026-09-07",
+    "sources": []
+  },
+  {
+    "id": "h-20260907-3",
+    "title": "FWBC-VLA：视觉语言动作模型",
+    "category": "机器人 / 具身",
+    "date": "2026-09-07",
+    "sources": []
+  },
+  {
+    "id": "h-20260907-4",
+    "title": "R2S-Eval：机器人系统评测",
+    "category": "机器人 / 具身",
+    "date": "2026-09-07",
+    "sources": []
+  },
+  {
+    "id": "h-20260907-5",
+    "title": "6D-DWA：六自由度无人机局部规划",
+    "category": "无人机",
+    "date": "2026-09-07",
+    "sources": []
+  },
+  {
+    "id": "h-20260906-1",
+    "title": "HydraFusion：多传感器融合项目",
+    "category": "机器人 / 具身",
+    "date": "2026-09-06",
+    "sources": []
+  },
+  {
+    "id": "h-20260906-2",
+    "title": "Iwa Robotics 机器人平台进展",
+    "category": "机器人 / 具身",
+    "date": "2026-09-06",
+    "sources": []
+  },
+  {
+    "id": "h-20260906-3",
+    "title": "WISE：具身智能研究",
+    "category": "机器人 / 具身",
+    "date": "2026-09-06",
+    "sources": []
+  },
+  {
+    "id": "h-20260906-4",
+    "title": "AGC-VLN：视觉语言导航研究",
+    "category": "机器人 / 具身",
+    "date": "2026-09-06",
+    "sources": []
+  },
+  {
+    "id": "h-20260906-5",
+    "title": "TRaIL-Odom：机器人里程计研究",
+    "category": "机器人 / 具身",
+    "date": "2026-09-06",
+    "sources": []
+  },
+  {
+    "id": "h-20260905-1",
+    "title": "Claude 参与费马大定理机器验证",
+    "category": "AI / 大模型",
+    "date": "2026-09-05",
+    "sources": []
+  },
+  {
+    "id": "h-20260905-2",
+    "title": "GPT-6 Astra 模型进展",
+    "category": "AI / 大模型",
+    "date": "2026-09-05",
+    "sources": []
+  },
+  {
+    "id": "h-20260905-3",
+    "title": "Figure 扩充机器人 GPU 训练基础设施",
+    "category": "科技产业",
+    "date": "2026-09-05",
+    "sources": []
+  },
+  {
+    "id": "h-20260905-4",
+    "title": "On-the-Fly3R：在线3D重建与一致性验证",
+    "category": "机器人 / 具身",
+    "date": "2026-09-05",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.00923"
+      }
+    ]
+  },
+  {
+    "id": "h-20260905-5",
+    "title": "PART：1.1M参数雷达运动目标检测",
+    "category": "机器人 / 具身",
+    "date": "2026-09-05",
+    "sources": []
+  },
+  {
+    "id": "h-20260904-1",
+    "title": "OpenAI Daybreak for Frontline Defenders",
+    "category": "Agent",
+    "date": "2026-09-04",
+    "sources": []
+  },
+  {
+    "id": "h-20260904-2",
+    "title": "K2 Horizon 模型发布",
+    "category": "AI / 大模型",
+    "date": "2026-09-04",
+    "sources": []
+  },
+  {
+    "id": "h-20260904-3",
+    "title": "FANUC 推进 Physical AI",
+    "category": "机器人 / 具身",
+    "date": "2026-09-04",
+    "sources": []
+  },
+  {
+    "id": "h-20260904-4",
+    "title": "WM-LOCO：用世界模型辅助机器人运动控制",
+    "category": "机器人 / 具身",
+    "date": "2026-09-04",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.02542"
+      }
+    ]
+  },
+  {
+    "id": "h-20260904-5",
+    "title": "DroneCATS-Agent：多模态大模型直接决策无人机动作",
+    "category": "无人机",
+    "date": "2026-09-04",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.01404"
+      }
+    ]
+  },
+  {
+    "id": "h-20260903-1",
+    "title": "Gemini 3.8 Flash 发布",
+    "category": "AI / 大模型",
+    "date": "2026-09-03",
+    "sources": []
+  },
+  {
+    "id": "h-20260903-2",
+    "title": "Facet-0：新型 AI 模型研究",
+    "category": "AI / 大模型",
+    "date": "2026-09-03",
+    "sources": []
+  },
+  {
+    "id": "h-20260903-3",
+    "title": "EmbodiedSkills：可验证、可恢复的机器人技能执行",
+    "category": "机器人 / 具身",
+    "date": "2026-09-03",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2609.01281"
+      }
+    ]
+  },
+  {
+    "id": "h-20260903-4",
+    "title": "Atlas 人形机器人新进展",
+    "category": "机器人 / 具身",
+    "date": "2026-09-03",
+    "sources": []
+  },
+  {
+    "id": "h-20260903-5",
+    "title": "Elroy Air Chaparral 无人货运飞机进展",
+    "category": "无人机",
+    "date": "2026-09-03",
+    "sources": []
+  },
+  {
+    "id": "h-20260902-1",
+    "title": "Astra：新一代 AI 系统进展",
+    "category": "AI / 大模型",
+    "date": "2026-09-02",
+    "sources": []
+  },
+  {
+    "id": "h-20260902-2",
+    "title": "SUN：具身智能研究进展",
+    "category": "机器人 / 具身",
+    "date": "2026-09-02",
+    "sources": []
+  },
+  {
+    "id": "h-20260902-3",
+    "title": "TuringLLM：大模型研究进展",
+    "category": "AI / 大模型",
+    "date": "2026-09-02",
+    "sources": []
+  },
+  {
+    "id": "h-20260902-4",
+    "title": "Measure Before You Manage：Agent 系统评测",
+    "category": "Agent",
+    "date": "2026-09-02",
+    "sources": []
+  },
+  {
+    "id": "h-20260902-5",
+    "title": "Lucid Bots 发布 Power Tether 无人机系统",
+    "category": "无人机",
+    "date": "2026-09-02",
+    "sources": []
+  },
+  {
+    "id": "h-20260901-1",
+    "title": "GitHub Agentic Workflows：用 Agent 自动化开发流程",
+    "category": "Agent",
+    "date": "2026-09-01",
+    "sources": []
+  },
+  {
+    "id": "h-20260901-2",
+    "title": "HUMAIN × Applied Intuition 推进自动驾驶卡车",
+    "category": "科技产业",
+    "date": "2026-09-01",
+    "sources": []
+  },
+  {
+    "id": "h-20260901-3",
+    "title": "Gemini 进入人形机器人场景",
+    "category": "机器人 / 具身",
+    "date": "2026-09-01",
+    "sources": []
+  },
+  {
+    "id": "h-20260901-4",
+    "title": "VLAct：视觉语言动作学习",
+    "category": "机器人 / 具身",
+    "date": "2026-09-01",
+    "sources": []
+  },
+  {
+    "id": "h-20260901-5",
+    "title": "LLM 引导的无人机 ObjectNav",
+    "category": "无人机",
+    "date": "2026-09-01",
+    "sources": []
+  },
+  {
+    "id": "h-20260831-1",
+    "title": "AI 投资带来巨额账面收益",
+    "category": "科技产业",
+    "date": "2026-08-31",
+    "sources": []
+  },
+  {
+    "id": "h-20260831-2",
+    "title": "Microduck：轻量机器人系统",
+    "category": "机器人 / 具身",
+    "date": "2026-08-31",
+    "sources": []
+  },
+  {
+    "id": "h-20260831-3",
+    "title": "OpenAI 停止向 Cursor 提供部分模型",
+    "category": "科技产业",
+    "date": "2026-08-31",
+    "sources": []
+  },
+  {
+    "id": "h-20260831-4",
+    "title": "ATOMZA：机器人智能研究",
+    "category": "机器人 / 具身",
+    "date": "2026-08-31",
+    "sources": []
+  },
+  {
+    "id": "h-20260831-5",
+    "title": "ROS2SmolVLA：在 ROS 2 中部署轻量 VLA",
+    "category": "机器人 / 具身",
+    "date": "2026-08-31",
+    "sources": []
+  },
+  {
+    "id": "h-20260830-1",
+    "title": "Reimagine Robotics 推进通用机器人平台",
+    "category": "机器人 / 具身",
+    "date": "2026-08-30",
+    "sources": []
+  },
+  {
+    "id": "h-20260830-2",
+    "title": "Meta 将机器人用于数据中心运维",
+    "category": "机器人 / 具身",
+    "date": "2026-08-30",
+    "sources": []
+  },
+  {
+    "id": "h-20260830-3",
+    "title": "FlashVLA：面向实时机器人的视觉语言动作模型",
+    "category": "机器人 / 具身",
+    "date": "2026-08-30",
+    "sources": []
+  },
+  {
+    "id": "h-20260830-4",
+    "title": "Riemann-1.0：机器人基础模型",
+    "category": "机器人 / 具身",
+    "date": "2026-08-30",
+    "sources": []
+  },
+  {
+    "id": "h-20260830-5",
+    "title": "Instruct-to-Act：从语言指令生成机器人动作",
+    "category": "机器人 / 具身",
+    "date": "2026-08-30",
+    "sources": []
+  },
+  {
+    "id": "h-20260829-1",
+    "title": "高德 ABot-Recon：短期视觉上下文构建万帧级3D世界",
+    "category": "机器人 / 具身",
+    "date": "2026-08-29",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://amap-cvlab.github.io/ABot-Recon-html/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260829-2",
+    "title": "CLAP：一个 World Model 学习人类、机械臂和人形机器人",
+    "category": "机器人 / 具身",
+    "date": "2026-08-29",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.27406"
+      }
+    ]
+  },
+  {
+    "id": "h-20260829-3",
+    "title": "UrbanGround：城市级机器人仿真环境",
+    "category": "机器人 / 具身",
+    "date": "2026-08-29",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://urbanground.github.io/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260829-4",
+    "title": "WikiSkill：为 Agent 构建可持久复用的技能",
+    "category": "Agent",
+    "date": "2026-08-29",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.27454"
+      }
+    ]
+  },
+  {
+    "id": "h-20260829-5",
+    "title": "Salesforce × Anthropic 推出 Claudeforce",
+    "category": "Agent",
+    "date": "2026-08-29",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://www.salesforce.com/claudeforce/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260828-1",
+    "title": "Anthropic MHS：统一 Agent 与真实设备的控制接口",
+    "category": "Agent",
+    "date": "2026-08-28",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview"
+      }
+    ]
+  },
+  {
+    "id": "h-20260828-2",
+    "title": "OpenAI Codex Persistent Mode：跨会话长期运行的主动 Agent",
+    "category": "Agent",
+    "date": "2026-08-28",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://www.wired.com/story/openai-is-developing-a-persistent-ai-agent/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260828-3",
+    "title": "瑞萨在北京成立 Physical AI & Robotics Lab",
+    "category": "科技产业",
+    "date": "2026-08-28",
+    "sources": []
+  },
+  {
+    "id": "h-20260828-4",
+    "title": "Zero-WAM：把人类视频作为机器人上下文提示",
+    "category": "机器人 / 具身",
+    "date": "2026-08-28",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.26103"
+      }
+    ]
+  },
+  {
+    "id": "h-20260828-5",
+    "title": "R³：先用自然语言推理，再执行机器人短任务",
+    "category": "机器人 / 具身",
+    "date": "2026-08-28",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.26053"
+      }
+    ]
+  },
+  {
+    "id": "h-20260827-1",
+    "title": "AWS × NVIDIA 再加码200万块 GPU",
+    "category": "科技产业",
+    "date": "2026-08-27",
+    "sources": []
+  },
+  {
+    "id": "h-20260827-2",
+    "title": "Gemini 3.5 Transcribe 发布",
+    "category": "AI / 大模型",
+    "date": "2026-08-27",
+    "sources": []
+  },
+  {
+    "id": "h-20260827-3",
+    "title": "AIRSEAI 加入 LF AI & Data",
+    "category": "科技产业",
+    "date": "2026-08-27",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://github.com/AIRSEAI/AIRSEAI-1.0"
+      }
+    ]
+  },
+  {
+    "id": "h-20260827-4",
+    "title": "ARLI：机器人学习研究",
+    "category": "机器人 / 具身",
+    "date": "2026-08-27",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.23831"
+      }
+    ]
+  },
+  {
+    "id": "h-20260827-5",
+    "title": "SMITH：机器人研究新方法",
+    "category": "机器人 / 具身",
+    "date": "2026-08-27",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.24571"
+      }
+    ]
+  },
+  {
+    "id": "h-20260826-1",
+    "title": "NVIDIA Jetson Orin Nano 2 面向边缘 AI",
+    "category": "科技产业",
+    "date": "2026-08-26",
+    "sources": []
+  },
+  {
+    "id": "h-20260826-2",
+    "title": "OpenAI Jalapeño AI 芯片计划",
+    "category": "科技产业",
+    "date": "2026-08-26",
+    "sources": []
+  },
+  {
+    "id": "h-20260826-3",
+    "title": "小鹏机器人融资进展",
+    "category": "科技产业",
+    "date": "2026-08-26",
+    "sources": []
+  },
+  {
+    "id": "h-20260826-4",
+    "title": "EarthVerse：面向地球科学的研究 Agent",
+    "category": "Agent",
+    "date": "2026-08-26",
+    "sources": []
+  },
+  {
+    "id": "h-20260826-5",
+    "title": "Q-Planning：面向智能体的规划方法",
+    "category": "Agent",
+    "date": "2026-08-26",
+    "sources": []
+  },
+  {
+    "id": "h-20260824-1",
+    "title": "世界人形机器人运动会进入1500米与自由搏击项目",
+    "category": "科技产业",
+    "date": "2026-08-24",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://apnews.com/article/ce96217d30c6462e8d3d552d5dd1bb39"
+      }
+    ]
+  },
+  {
+    "id": "h-20260824-2",
+    "title": "Anthropic：专用“测谎模型”跨欺骗类型泛化失效",
+    "category": "AI / 大模型",
+    "date": "2026-08-24",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://alignment.anthropic.com/2026/lie-detectors/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260824-3",
+    "title": "GPT-5.6 Sol API 价格下调超过20%",
+    "category": "AI / 大模型",
+    "date": "2026-08-24",
+    "sources": [
+      {
+        "name": "原始来源",
+        "url": "https://openai.com/index/gpt-5-6/"
+      }
+    ]
+  },
+  {
+    "id": "h-20260824-4",
+    "title": "HiTac-WAM：触觉世界动作模型",
+    "category": "机器人 / 具身",
+    "date": "2026-08-24",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.19574"
+      }
+    ]
+  },
+  {
+    "id": "h-20260824-5",
+    "title": "What Matters for Latent Actions：比较41种机器人 Latent Action 设计",
+    "category": "机器人 / 具身",
+    "date": "2026-08-24",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.19613"
+      }
+    ]
+  },
+  {
+    "id": "h-20260823-1",
+    "title": "2026世界人形机器人运动会开幕：2,056台机器人接受公开压力测试",
+    "category": "科技产业",
+    "date": "2026-08-23",
+    "sources": []
+  },
+  {
+    "id": "h-20260823-2",
+    "title": "Anthropic 将 Computer Use、Skills API、Files API 推向正式可用",
+    "category": "Agent",
+    "date": "2026-08-23",
+    "sources": []
+  },
+  {
+    "id": "h-20260823-3",
+    "title": "AdaPT：人形机器人从网球比赛视频学习职业运动风格",
+    "category": "机器人 / 具身",
+    "date": "2026-08-23",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.20087"
+      }
+    ]
+  },
+  {
+    "id": "h-20260823-4",
+    "title": "AI4AI-Bench：科研 Agent 更擅长调参，而不是发明训练算法",
+    "category": "Agent",
+    "date": "2026-08-23",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.20318"
+      }
+    ]
+  },
+  {
+    "id": "h-20260823-5",
+    "title": "EXIMO：VLA 用 VLM 规划、模仿与强化学习掌握新任务",
+    "category": "机器人 / 具身",
+    "date": "2026-08-23",
+    "sources": [
+      {
+        "name": "arXiv 原论文",
+        "url": "https://arxiv.org/abs/2608.19891"
+      }
+    ]
+  }
+]
