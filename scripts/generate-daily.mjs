@@ -128,6 +128,24 @@ function assertFreshEdition(edition, date, allowedSourceUrls = null) {
   }
 }
 
+function normalizeEdition(edition) {
+  for (const item of edition.news || []) {
+    const category = String(item.category || '').toLowerCase();
+    if (category.includes('机器人') || category.includes('具身') || category.includes('robot')) {
+      item.category = '机器人 / 具身';
+    } else if (category.includes('无人机') || category.includes('uav') || category.includes('drone')) {
+      item.category = '无人机';
+    } else if (category.includes('agent') || category.includes('智能体')) {
+      item.category = 'Agent';
+    } else if (category.includes('产业') || category.includes('industry')) {
+      item.category = '科技产业';
+    } else {
+      item.category = 'AI / 大模型';
+    }
+  }
+  return edition;
+}
+
 function decodeXml(value) {
   return value
     .replaceAll('&amp;', '&')
@@ -255,7 +273,7 @@ async function generateCompatibilityEdition() {
   console.warn('Generating in source-grounded compatibility mode.');
   const compatibilityPrompt = `${instructions.replace('请使用联网搜索，并参考', '请只依据')}\n\n你必须从候选中选择恰好 5 条，不得加入候选之外的事实、数字或链接。sources.url 必须逐字复制对应候选的 url。\n输出结构示例：${JSON.stringify(template)}`;
   const result = await callResponsesApi(config, { model: config.model, input: compatibilityPrompt });
-  const parsed = parseJson(extractOutputText(result));
+  const parsed = normalizeEdition(parseJson(extractOutputText(result)));
   validateDaily(parsed, filename);
   assertFreshEdition(parsed, date, sourceUrls);
   return parsed;
@@ -281,7 +299,7 @@ try {
     max_output_tokens: 12000
   });
   console.log('Generated with Responses API web search and JSON Schema.');
-  edition = parseJson(extractOutputText(payload));
+  edition = normalizeEdition(parseJson(extractOutputText(payload)));
   validateDaily(edition, filename);
   assertFreshEdition(edition, date);
 } catch (error) {
