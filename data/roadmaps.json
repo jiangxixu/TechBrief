@@ -1,0 +1,50 @@
+{
+  "roadmaps": [
+    {
+      "id": "roadmap-uav-agent",
+      "title": "无人机 + Agent 学习路线",
+      "target": "LLM/VLM 与 PX4 无人机系统结合",
+      "steps": [
+        {
+          "stage": "基础系统",
+          "items": ["PX4 飞控", "ROS/MAVROS", "QGroundControl", "坐标系与传感器"]
+        },
+        {
+          "stage": "状态估计与规划",
+          "items": ["VINS-Fusion", "EGO-Planner", "轨迹优化", "避障规划"]
+        },
+        {
+          "stage": "智能决策",
+          "items": ["LLM Agent", "VLM", "任务规划", "工具调用"]
+        },
+        {
+          "stage": "高级方向",
+          "items": ["Multi-UAV", "MARL", "World Model", "具身智能"]
+        }
+      ]
+    },
+    {
+      "id": "roadmap-vla",
+      "title": "VLA 与具身智能学习路线",
+      "target": "从大模型到机器人动作",
+      "steps": [
+        {
+          "stage": "理论基础",
+          "items": ["Transformer", "LLM", "Vision Encoder", "Diffusion"]
+        },
+        {
+          "stage": "模型理解",
+          "items": ["VLM", "VLA", "Robot Foundation Model"]
+        },
+        {
+          "stage": "机器人系统",
+          "items": ["Policy", "Controller", "Simulation", "Sim2Real"]
+        },
+        {
+          "stage": "研究方向",
+          "items": ["World Model", "Robot Memory", "Online RL"]
+        }
+      ]
+    }
+  ]
+}
