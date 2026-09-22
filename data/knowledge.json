@@ -13,6 +13,10 @@
         {
           "title": "无人机映射",
           "content": "LLM/VLM 可以负责任务规划，局部规划器负责轨迹生成，PX4 控制器负责姿态和飞行稳定。"
+        },
+        {
+          "title": "学习重点",
+          "content": "阅读相关论文时重点关注慢层更新频率、快层输入输出、两层通信方式以及延迟情况下的系统行为。"
         }
       ],
       "related": ["NebulaVLA", "VLM-MPPI", "PX4"]
@@ -33,6 +37,40 @@
         }
       ],
       "related": ["World Model", "快慢脑", "Robot Controller"]
+    },
+    {
+      "id": "knowledge-world-model",
+      "title": "World Model（世界模型）",
+      "type": "concept",
+      "summary": "学习环境状态、动作和未来变化关系的模型，用于预测、规划和机器人训练数据生成。",
+      "sections": [
+        {
+          "title": "核心问题",
+          "content": "机器人不仅需要识别当前环境，还需要预测执行某个动作后未来会发生什么。"
+        },
+        {
+          "title": "与 VLA 的关系",
+          "content": "World Model 可以为 VLA 提供未来状态预测、模拟经验和规划依据。"
+        }
+      ],
+      "related": ["WorldContact", "VLA"]
+    },
+    {
+      "id": "knowledge-uav-agent",
+      "title": "LLM + UAV Agent",
+      "type": "concept",
+      "summary": "大模型进入无人机系统后，主要承担任务理解和高层自主决策，而不是替代实时飞控。",
+      "sections": [
+        {
+          "title": "系统分层",
+          "content": "LLM/VLM 负责任务规划，规划器负责轨迹生成，PX4 负责姿态与位置控制。"
+        },
+        {
+          "title": "研究方向",
+          "content": "包括多无人机任务分配、自然语言任务规划、工具调用、异常恢复和安全约束。"
+        }
+      ],
+      "related": ["PX4", "EGO-Planner", "Multi-UAV"]
     }
   ]
 }
