@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#2858eb">
-  <meta name="description" content="TechBrief 每日科技简报：发现 AI、机器人与无人机研究，搜索新闻、论文与历史专题。">
+  <meta name="description" content="TechBrief 每日科技简报：发现 AI、机器人与无人机研究，搜索新闻、论文、知识和学习路线。">
   <title>TechBrief · 每日科技简报</title>
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
@@ -18,31 +18,32 @@
     <a href="#today" class="brand" aria-label="TechBrief 首页"><span class="brand-icon">T<span>·</span></span><span>TechBrief<small>每日科技简报</small></span></a>
     <div class="nav-caption">我的阅读空间</div>
     <nav aria-label="主导航">
-      <a href="#today" data-view="today"><span aria-hidden="true">◈</span>今日简报</a>
-      <a href="#latest" data-view="latest"><span aria-hidden="true">↗</span>最新动态</a>
-      <a href="#history" data-view="history"><span aria-hidden="true">▦</span>历史归档</a>
-      <a href="#papers" data-view="papers"><span aria-hidden="true">▤</span>论文库</a>
-      <a href="#topics" data-view="topics"><span aria-hidden="true">◎</span>研究专题</a>
-      <a href="#saved" data-view="saved"><span aria-hidden="true">☆</span>我的收藏<span class="nav-count" id="saved-count">0</span></a>
+      <a href="#today" data-view="today"><span>◈</span>今日简报</a>
+      <a href="#latest" data-view="latest"><span>↗</span>最新动态</a>
+      <a href="#history" data-view="history"><span>▦</span>历史归档</a>
+      <a href="#papers" data-view="papers"><span>▤</span>论文库</a>
+      <a href="#topics" data-view="topics"><span>◎</span>研究专题</a>
+      <a href="./knowledge.html"><span>◇</span>知识库</a>
+      <a href="./roadmaps.html"><span>⇢</span>学习路线</a>
+      <a href="#saved" data-view="saved"><span>☆</span>我的收藏<span class="nav-count" id="saved-count">0</span></a>
     </nav>
     <div class="sidebar-bottom"><p>保持好奇，持续积累。</p><span>AI · ROBOTICS · UAV</span><a href="https://github.com/jiangxixu/TechBrief" target="_blank" rel="noopener noreferrer">项目仓库 ↗</a></div>
   </aside>
   <div class="workspace">
     <header class="topbar">
-      <form id="search-form" role="search"><span aria-hidden="true">⌕</span><label class="sr-only" for="search">搜索全部内容</label><input id="search" type="search" autocomplete="off" placeholder="搜索新闻、论文、专题…"><kbd>/</kbd></form>
-      <div class="top-actions"><button id="refresh" class="icon-button" aria-label="刷新简报" title="刷新简报">↻</button><button id="theme" class="icon-button" aria-label="切换深色模式" title="切换深色模式">◐</button><span class="avatar" aria-hidden="true">徐</span></div>
+      <form id="search-form" role="search"><span>⌕</span><label class="sr-only" for="search">搜索全部内容</label><input id="search" type="search" autocomplete="off" placeholder="搜索新闻、论文、专题…"><kbd>/</kbd></form>
+      <div class="top-actions"><button id="refresh" class="icon-button" aria-label="刷新简报">↻</button><button id="theme" class="icon-button" aria-label="切换深色模式">◐</button><span class="avatar">徐</span></div>
     </header>
     <main id="content" tabindex="-1">
       <div class="page-heading"><div><div class="eyebrow" id="eyebrow">DAILY INTELLIGENCE</div><h1 id="page-title">今日科技简报</h1><p id="page-description">正在读取简报…</p></div><div class="date-stamp" id="date-stamp"></div></div>
-      <div id="notice" class="notice" role="status" hidden></div>
+      <div id="notice" class="notice" hidden></div>
       <div id="view-controls"></div>
       <section id="results" aria-label="阅读内容" aria-busy="true"><div class="loading">正在整理阅读空间…</div></section>
       <footer class="page-footer"><span id="foot-status">TechBrief · 由 ChatGPT 整理</span><button id="install" hidden>添加到桌面</button><button id="install-help">手机使用</button></footer>
     </main>
   </div>
-  <dialog id="reader" aria-labelledby="reader-title"><div class="reader-toolbar"><span>TECHBRIEF / 阅读</span><button id="reader-close" class="icon-button" aria-label="关闭阅读">×</button></div><div id="reader-content"></div></dialog>
-  <div id="toast" role="status" hidden></div>
+  <dialog id="reader"><div class="reader-toolbar"><span>TECHBRIEF / 阅读</span><button id="reader-close" class="icon-button">×</button></div><div id="reader-content"></div></dialog>
+  <div id="toast" hidden></div>
   <input id="import-file" type="file" accept="application/json,.json" hidden>
-  <noscript>请开启 JavaScript 以浏览和搜索简报。每日原始内容也可以在 GitHub 仓库的 data/daily 目录查看。</noscript>
 </body>
 </html>
