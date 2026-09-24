@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="description" content="小徐的个人主页：技术、产品与项目作品。">
+  <title>小徐 · Personal Website</title>
+  <style>
+    :root{--bg:#0b0d10;--panel:#11151a;--text:#f6f7f8;--muted:#9ca3ad;--line:rgba(255,255,255,.1);--accent:#b6ff53;--max:1180px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 560px at 82% -12%,rgba(182,255,83,.11),transparent 60%),radial-gradient(700px 480px at -8% 34%,rgba(87,121,255,.09),transparent 62%);z-index:-1}
+    .shell{width:min(var(--max),calc(100% - 48px));margin:auto}.block{padding:132px 0}
+    header{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;width:min(900px,calc(100% - 30px));display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 12px 10px 18px;border:1px solid var(--line);border-radius:999px;background:rgba(13,16,20,.74);backdrop-filter:blur(18px);box-shadow:0 18px 50px rgba(0,0,0,.28)}
+    .brand{font-weight:800;letter-spacing:-.04em}.brand b{color:var(--accent)}nav{display:flex;gap:4px}nav a{padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px;font-weight:600}.git{justify-self:end;padding:9px 14px;border-radius:999px;background:var(--accent);color:#0b0d10;font-size:13px;font-weight:700}
+    .hero{min-height:100svh;display:grid;grid-template-columns:1.06fr .94fr;gap:42px;align-items:center;padding-top:112px}.eyebrow,.kicker{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.16em}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:9px;box-shadow:0 0 0 6px rgba(182,255,83,.08)}
+    h1{margin:24px 0 0;font-size:clamp(66px,8.8vw,132px);line-height:.9;letter-spacing:-.075em}h1 span{color:var(--accent)}.lede{max-width:600px;margin:34px 0 0;color:#c0c5cc;font-size:clamp(18px,2vw,23px);letter-spacing:-.02em}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;font-size:14px;font-weight:700}.primary{background:var(--accent);color:#0b0d10}.secondary{border:1px solid var(--line);background:rgba(255,255,255,.035)}
+    .visual{position:relative;aspect-ratio:1;min-height:450px}.orbit{position:absolute;inset:12%;border:1px solid rgba(255,255,255,.09);border-radius:50%;animation:spin 34s linear infinite}.orbit.two{inset:27%;border-style:dashed;animation-direction:reverse;animation-duration:24s}.orbit:after{content:"";position:absolute;top:50%;left:-4px;width:8px;height:8px;border-radius:50%;background:var(--accent)}.orb{position:absolute;width:42%;aspect-ratio:1;left:29%;top:29%;border-radius:50%;background:radial-gradient(circle at 35% 28%,#dfffac 0 7%,#b6ff53 8% 28%,#47671e 64%,#141a10 100%);box-shadow:0 0 90px rgba(182,255,83,.15),inset -26px -24px 50px rgba(0,0,0,.35)}
+    .float{position:absolute;min-width:155px;padding:15px;border:1px solid var(--line);border-radius:16px;background:rgba(18,22,27,.75);backdrop-filter:blur(12px);box-shadow:0 20px 50px rgba(0,0,0,.2)}.float small{display:block;color:var(--muted);font-size:10px}.float strong{display:block;margin:8px 0 2px}.a{left:1%;top:13%;transform:rotate(-6deg)}.b{right:0;top:40%;transform:rotate(5deg)}.c{left:14%;bottom:7%;transform:rotate(3deg)}@keyframes spin{to{transform:rotate(360deg)}}
+    .kicker{margin:0 0 18px}.title{margin:0;font-size:clamp(42px,6vw,78px);line-height:1.03;letter-spacing:-.055em}.about{display:grid;grid-template-columns:1.2fr .8fr;gap:80px;align-items:end}.copy{color:#c3c7ce;font-size:18px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}.chips span{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}
+    .head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:44px}.head .title{font-size:clamp(40px,5vw,70px)}.all{color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}
+    .projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{min-height:430px;display:flex;flex-direction:column;padding:24px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));transition:.25s}.card:hover{transform:translateY(-6px);border-color:rgba(182,255,83,.28)}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.12em}.art{flex:1;position:relative;min-height:235px;margin:22px 0;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.05);background:#0e1115}
+    .bars{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px;align-items:end}.bars i{display:block;border-radius:10px 10px 3px 3px;background:linear-gradient(180deg,var(--accent),#49691c)}.bars i:nth-child(1){height:42%;opacity:.55}.bars i:nth-child(2){height:76%}.bars i:nth-child(3){height:58%;opacity:.78}.drone{background:radial-gradient(circle at 50% 50%,rgba(182,255,83,.12),transparent 35%),#0d1115}.drone:before,.drone:after{content:"";position:absolute;left:19%;right:19%;top:50%;height:2px;background:linear-gradient(90deg,transparent,rgba(182,255,83,.75),transparent)}.drone:before{transform:rotate(35deg)}.drone:after{transform:rotate(-35deg)}.drone i{position:absolute;left:50%;top:50%;width:72px;height:42px;transform:translate(-50%,-50%);border:1px solid var(--accent);border-radius:14px;background:#10150f}.wave{background:radial-gradient(circle,#101924,#0d1014 62%)}.wave i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(90,166,255,.5);border-radius:50%}.wave i:nth-child(1){width:75px;height:75px}.wave i:nth-child(2){width:155px;height:155px}.wave i:nth-child(3){width:235px;height:235px}.words{display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8f9cc,#9ada40);color:#0b0d10}.words strong{font-size:104px;line-height:.85;letter-spacing:-.08em}.words span{font-weight:800;letter-spacing:.28em}.bottom{display:flex;align-items:end;justify-content:space-between}.bottom h3{margin:0;font-size:25px;letter-spacing:-.035em}.bottom p{margin:5px 0 0;color:var(--muted);font-size:13px}.arrow{font-size:25px;color:var(--accent)}
+    .contact{position:relative;overflow:hidden;padding:clamp(42px,7vw,88px);border-radius:32px;background:var(--accent);color:#0b0d10}.contact h2{margin:0;font-size:clamp(54px,8vw,108px);line-height:.9;letter-spacing:-.07em}.contact p{color:rgba(10,12,14,.65);font-size:18px}.light{margin-top:20px;background:#fff;color:#0b0d10}.contact .kicker{color:rgba(10,12,14,.55)}
+    footer{display:flex;justify-content:space-between;gap:20px;padding:34px 0 42px;color:#737b86;font-size:12px;border-top:1px solid var(--line)}
+    .reveal{opacity:0;transform:translateY(24px);transition:.7s}.reveal.visible{opacity:1;transform:none}
+    @media(max-width:880px){.hero{grid-template-columns:1fr;padding-top:155px}.visual{min-height:390px}.about{grid-template-columns:1fr;gap:34px}.projects{grid-template-columns:1fr}}
+    @media(max-width:640px){.shell{width:calc(100% - 28px)}.block{padding:94px 0}header{grid-template-columns:1fr auto}nav{display:none}.hero{padding-top:142px}h1{font-size:clamp(58px,19vw,92px)}.visual{min-height:320px}.float{min-width:128px;padding:12px}.head{align-items:flex-start;flex-direction:column}.card{padding:18px}.contact{border-radius:24px}footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+<header>
+  <a class="brand" href="#top">XU<b>.</b></a>
+  <nav><a href="#about">关于</a><a href="#work">项目</a><a href="#contact">联系</a></nav>
+  <a class="git" href="https://github.com/jiangxixu" target="_blank" rel="noreferrer">GitHub ↗</a>
+</header>
+<main id="top">
+  <section class="hero shell">
+    <div class="reveal">
+      <p class="eyebrow"><span class="dot"></span>BUILDING WITH CODE · AI · SYSTEMS</p>
+      <h1>你好，我是<br><span>小徐。</span></h1>
+      <p class="lede">我喜欢把复杂问题拆解成清晰、可用、可以真正落地的产品与技术方案。</p>
+      <div class="actions"><a class="btn primary" href="#work">查看项目</a><a class="btn secondary" href="https://github.com/jiangxixu" target="_blank" rel="noreferrer">访问 GitHub</a></div>
+    </div>
+    <div class="visual reveal">
+      <div class="orbit"></div><div class="orbit two"></div><div class="orb"></div>
+      <div class="float a"><small>01</small><strong>Think</strong><small>Understand the system</small></div>
+      <div class="float b"><small>02</small><strong>Build</strong><small>Turn ideas into products</small></div>
+      <div class="float c"><small>03</small><strong>Iterate</strong><small>Make it simpler & better</small></div>
+    </div>
+  </section>
+
+  <section id="about" class="shell block">
+    <p class="kicker reveal">ABOUT / 01</p>
+    <div class="about">
+      <h2 class="title reveal">做有用的东西，<br>也把它做得好用。</h2>
+      <div class="copy reveal">
+        <p>这是我的个人主页，用来整理正在做的项目、技术探索和长期积累。</p>
+        <p>我关注软件、AI、无人机与真实世界系统，也重视界面、体验和工程细节之间的平衡。</p>
+        <div class="chips"><span>AI</span><span>Software</span><span>UAV</span><span>Product</span><span>Engineering</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="shell block">
+    <div class="head reveal">
+      <div><p class="kicker">SELECTED WORK / 02</p><h2 class="title">一些正在公开的项目。</h2></div>
+      <a class="all" href="https://github.com/jiangxixu?tab=repositories" target="_blank" rel="noreferrer">全部仓库 ↗</a>
+    </div>
+    <div class="projects">
+      <a class="card reveal" href="https://github.com/jiangxixu/TechBrief" target="_blank" rel="noreferrer"><div class="meta"><span>TECH / CONTENT</span><span>01</span></div><div class="art bars"><i></i><i></i><i></i></div><div class="bottom"><div><h3>TechBrief</h3><p>公开 GitHub 项目</p></div><span class="arrow">↗</span></div></a>
+      <a class="card reveal" href="https://github.com/jiangxixu/Fast-Drone-250" target="_blank" rel="noreferrer"><div class="meta"><span>UAV / ENGINEERING</span><span>02</span></div><div class="art drone"><i></i></div><div class="bottom"><div><h3>Fast-Drone-250</h3><p>公开 GitHub 项目</p></div><span class="arrow">↗</span></div></a>
+      <a class="card reveal" href="https://github.com/jiangxixu/dji-psdk-udp" target="_blank" rel="noreferrer"><div class="meta"><span>DJI / NETWORKING</span><span>03</span></div><div class="art wave"><i></i><i></i><i></i></div><div class="bottom"><div><h3>dji-psdk-udp</h3><p>公开 GitHub 项目</p></div><span class="arrow">↗</span></div></a>
+      <a class="card reveal" href="https://github.com/jiangxixu/tenwords" target="_blank" rel="noreferrer"><div class="meta"><span>WEB / EXPERIMENT</span><span>04</span></div><div class="art words"><strong>10</strong><span>WORDS</span></div><div class="bottom"><div><h3>tenwords</h3><p>公开 GitHub 项目</p></div><span class="arrow">↗</span></div></a>
+    </div>
+  </section>
+
+  <section id="contact" class="shell block reveal"><div class="contact"><p class="kicker">CONTACT / 03</p><h2>有想法，就把它<br>做成现实。</h2><p>查看我的代码、项目与公开工作。</p><a class="btn light" href="https://github.com/jiangxixu" target="_blank" rel="noreferrer">github.com/jiangxixu ↗</a></div></section>
+</main>
+<footer class="shell"><span>© <span id="year"></span> 小徐</span><span>Designed & built as a personal web home.</span></footer>
+<script>
+  const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(el=>o.observe(el));
+  document.getElementById("year").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
