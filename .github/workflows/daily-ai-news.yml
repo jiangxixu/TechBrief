@@ -2,8 +2,10 @@ name: Generate Daily AI News
 
 on:
   schedule:
-    # GitHub cron 使用 UTC；00:00 UTC = 北京时间 08:00。
-    - cron: '0 0 * * *'
+    # GitHub cron 使用 UTC；前一天 18:00 / 18:30 UTC = 北京时间当天 02:00 / 02:30。
+    # 02:30 是补触发；当天简报已存在时生成脚本会跳过。
+    - cron: '0 18 * * *'
+    - cron: '30 18 * * *'
   workflow_dispatch:
     inputs:
       force_regenerate:
