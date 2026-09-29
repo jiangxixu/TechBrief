@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-09-30",
+      "count": 5,
+      "title": "从弹性大模型到可验证智能体与具身系统的最新进展"
+    },
+    {
       "date": "2026-09-29",
       "count": 5,
       "title": "从推理效率到具身运动：AI 系统开始重视置信度、验证边界与运行成本"
@@ -48,6 +53,131 @@
     }
   ],
   "news": [
+    {
+      "id": "n-20260930-telescopic-language-models",
+      "title": "Telescopic Language Models：一次训练覆盖连续算力预算",
+      "category": "AI / 大模型",
+      "kind": "论文",
+      "published": "2026-09-28",
+      "summary": "Telescopic Language Model（TLM）通过随机截断容量轴的前缀监督与完整模型锚定，使同一个嵌套式 Transformer 在多个深度上都能作为语言模型工作。论文在 200M 代理模型、20B FineWeb-Edu tokens 和 20 个层前缀上进行实验，报告其质量-预算曲线下面积相较固定出口方案降低 43% 至 44%，完整容量表现相当，并将每次运行的 GPU 成本降低约 12%。",
+      "why": "模型服务往往需要适配不同算力预算。若一个训练产物能在多个深度上有效运行，就可能减少为不同预算分别训练或压缩模型的需要。",
+      "relevance": "研究时应把弹性推理视为训练目标设计问题，而不只是网络嵌套问题；实验也提示，需要评估整个质量-算力连续曲线，而非少数固定退出点。",
+      "caveat": "上述数字来自论文在 200M 代理模型和指定数据流上的实验，不能直接外推到更大模型或所有任务；来源为 arXiv 预印本。",
+      "tags": [
+        "弹性推理",
+        "模型压缩",
+        "Transformer",
+        "训练目标"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35769v1"
+        }
+      ],
+      "type": "news",
+      "date": "2026-09-30"
+    },
+    {
+      "id": "n-20260930-tokencast-agent-cost",
+      "title": "TokenCast：在 Agent 执行过程中动态预测 token 消耗",
+      "category": "Agent",
+      "kind": "论文",
+      "published": "2026-09-28",
+      "summary": "TokenCast 为 Agent 的每个执行片段记录自身 token 消耗及其引入的上下文增长，并将相邻片段组合成累计成本估计；随着工具反馈和中间结果到达，预测会被刷新，无需额外调用大模型。在 4 个任务套件和 6 个 Agent 模型的 96 组组合评测中，论文报告其相较最强对比方法平均降低 14.5% 的平均绝对误差；在离线预算控制回放中，在完成轨迹相当的条件下平均少用 21.3% token。",
+      "why": "Agent 的成本不只来自当前输出，还来自后续调用反复读取增长后的上下文。执行中可更新的成本预测为预算控制和推理调度提供了直接接口。",
+      "relevance": "学习和研究 Agent 时，应把上下文增长建模为执行轨迹的一部分，并同时评估任务完成、预测误差与 token 成本，而不是只看最终成功率。",
+      "caveat": "预算控制结果来自离线回放，不等同于在线部署中的实际节省；评测范围是论文列出的 4 个任务套件和 6 个模型，来源为 arXiv 预印本。",
+      "tags": [
+        "Agent成本",
+        "token预测",
+        "上下文管理",
+        "预算控制"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35760v1"
+        }
+      ],
+      "type": "news",
+      "date": "2026-09-30"
+    },
+    {
+      "id": "n-20260930-dexroam-mobile-manipulation",
+      "title": "DexRoam：用第一视角全身示范学习移动双臂灵巧操作",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-28",
+      "summary": "DexRoam 使用消费级 VR 头显和头戴式双目相机采集无需外部相机或运动追踪器的人体全身操作示范，并通过具身、动作语义和时间三个对齐阶段，将人体运动映射到机器人动作空间。论文报告，在 GR00T N1.7 上加入人类示范后平均成功率从 29% 提升到 56%，在 pi0.5 上从 32% 提升到 57%；同时，使用一半机器人示范即可匹配仅使用机器人示范的训练结果。",
+      "why": "移动双臂灵巧操作同时涉及行走、全身运动和手指控制，机器人示范采集成本高。该方法探索了保留全身耦合结构的人类示范迁移路径。",
+      "relevance": "研究具身学习时，应分别检查具身、动作语义和时间对齐是否保留了任务所需的耦合结构，并比较人类示范与机器人示范在数据效率上的作用。",
+      "caveat": "论文摘要称进行了真实世界实验，但所给来源未提供任务清单、样本规模或置信区间；成功率是论文所述实验设置下的结果，来源为 arXiv 预印本。",
+      "tags": [
+        "移动操作",
+        "灵巧机器人",
+        "人类示范",
+        "VLA"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35761v1"
+        }
+      ],
+      "type": "news",
+      "date": "2026-09-30"
+    },
+    {
+      "id": "n-20260930-robocompiler-closed-chain",
+      "title": "RoboCompiler：用图原生编译统一闭链机器人的建模、控制与仿真",
+      "category": "机器人 / 具身",
+      "kind": "论文",
+      "published": "2026-09-28",
+      "summary": "RoboCompiler 从包含刚体、关节、坐标系、惯量和执行器端口的统一机构图出发，生成闭链路径、解析残差 Jacobian、可行构型、速度切映射和约束曲率修正后的动力学接口。论文在 Komatsu 挖掘机、Unitree Go2、Franka Panda、Kangaroo 和六 UPS Stewart 平台上进行评估，并报告在 Kangaroo 上残差与 Jacobian 计算时间减少 96.7%，闭环 rollout 墙钟时间减少 66.8%，同时保持动力学和控制设置不变。",
+      "why": "闭链、耦合执行器和变化接触会让控制与仿真接口容易出现不一致。共享机械接口可减少重复重建模型时的闭合约束和执行器映射错误。",
+      "relevance": "机器人系统研究应优先维护单一的机构图和可验证的约束接口，并将模型一致性、独立动力学检查和 rollout 性能作为共同评测项。",
+      "caveat": "摘要提到 MuJoCo 和 Isaac Sim/PhysX 执行，但并未说明所有性能数字都来自实机；因此这里不将结果表述为实机验证。来源为 arXiv 预印本。",
+      "tags": [
+        "机器人编译",
+        "闭链机构",
+        "动力学",
+        "仿真"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35717v1"
+        }
+      ],
+      "type": "news",
+      "date": "2026-09-30"
+    },
+    {
+      "id": "n-20260930-tah2-test-time-scaling",
+      "title": "TaH2：让循环 Transformer 只为受益 token 增加推理步数",
+      "category": "AI / 大模型",
+      "kind": "论文",
+      "published": "2026-09-28",
+      "summary": "论文发现，固定深度循环会让每个 token 都承担额外迭代，但并非所有 token 都从中受益，因此提出 TaH2，通过前瞻深度监督联合训练主干模型和迭代决策器，让额外迭代集中在更可能受益的 token 上。在 AIME 评测中，论文报告 TaH2 的准确率-计算量斜率为 2.74，相比非循环基线的 1.79 提高 53%，在匹配测试时计算量下超过基线峰值准确率约 3.4 个百分点。",
+      "why": "测试时扩展不应默认把额外计算平均分配给所有 token。按 token 分配循环深度可能改善推理计算的利用率和可扩展性。",
+      "relevance": "研究测试时扩展时，应同时报告准确率-计算量曲线、token 级计算分配和最大迭代深度下的收益，避免只比较固定计算点。",
+      "caveat": "结果来自论文指定的 AIME 评测与循环 Transformer 设置，不能据此断言对所有推理任务都成立；来源为 arXiv 预印本。",
+      "tags": [
+        "测试时扩展",
+        "循环Transformer",
+        "推理效率",
+        "自适应计算"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35748v1"
+        }
+      ],
+      "type": "news",
+      "date": "2026-09-30"
+    },
     {
       "id": "n-20260929-confidence-reasoning",
       "title": "只训练置信度，也能让推理模型减少生成 token",
@@ -3609,6 +3739,156 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20260930-telescopic-language-models",
+      "title": "Telescopic Language Models：一次训练覆盖连续算力预算",
+      "category": "AI / 大模型",
+      "published": "2026-09-28",
+      "paperTitle": "Telescopic Language Models：一次训练覆盖连续算力预算",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "Telescopic Language Model（TLM）通过随机截断容量轴的前缀监督与完整模型锚定，使同一个嵌套式 Transformer 在多个深度上都能作为语言模型工作。论文在 200M 代理模型、20B FineWeb-Edu tokens 和 20 个层前缀上进行实验，报告其质量-预算曲线下面积相较固定出口方案降低 43% 至 44%，完整容量表现相当，并将每次运行的 GPU 成本降低约 12%。",
+      "why": "模型服务往往需要适配不同算力预算。若一个训练产物能在多个深度上有效运行，就可能减少为不同预算分别训练或压缩模型的需要。",
+      "relevance": "研究时应把弹性推理视为训练目标设计问题，而不只是网络嵌套问题；实验也提示，需要评估整个质量-算力连续曲线，而非少数固定退出点。",
+      "caveat": "上述数字来自论文在 200M 代理模型和指定数据流上的实验，不能直接外推到更大模型或所有任务；来源为 arXiv 预印本。",
+      "tags": [
+        "弹性推理",
+        "模型压缩",
+        "Transformer",
+        "训练目标"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35769v1"
+        }
+      ],
+      "relatedIds": [
+        "n-20260930-telescopic-language-models"
+      ],
+      "type": "paper",
+      "date": "2026-09-28"
+    },
+    {
+      "id": "p-daily-20260930-tokencast-agent-cost",
+      "title": "TokenCast：在 Agent 执行过程中动态预测 token 消耗",
+      "category": "Agent",
+      "published": "2026-09-28",
+      "paperTitle": "TokenCast：在 Agent 执行过程中动态预测 token 消耗",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "TokenCast 为 Agent 的每个执行片段记录自身 token 消耗及其引入的上下文增长，并将相邻片段组合成累计成本估计；随着工具反馈和中间结果到达，预测会被刷新，无需额外调用大模型。在 4 个任务套件和 6 个 Agent 模型的 96 组组合评测中，论文报告其相较最强对比方法平均降低 14.5% 的平均绝对误差；在离线预算控制回放中，在完成轨迹相当的条件下平均少用 21.3% token。",
+      "why": "Agent 的成本不只来自当前输出，还来自后续调用反复读取增长后的上下文。执行中可更新的成本预测为预算控制和推理调度提供了直接接口。",
+      "relevance": "学习和研究 Agent 时，应把上下文增长建模为执行轨迹的一部分，并同时评估任务完成、预测误差与 token 成本，而不是只看最终成功率。",
+      "caveat": "预算控制结果来自离线回放，不等同于在线部署中的实际节省；评测范围是论文列出的 4 个任务套件和 6 个模型，来源为 arXiv 预印本。",
+      "tags": [
+        "Agent成本",
+        "token预测",
+        "上下文管理",
+        "预算控制"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35760v1"
+        }
+      ],
+      "relatedIds": [
+        "n-20260930-tokencast-agent-cost"
+      ],
+      "type": "paper",
+      "date": "2026-09-28"
+    },
+    {
+      "id": "p-daily-20260930-dexroam-mobile-manipulation",
+      "title": "DexRoam：用第一视角全身示范学习移动双臂灵巧操作",
+      "category": "机器人 / 具身",
+      "published": "2026-09-28",
+      "paperTitle": "DexRoam：用第一视角全身示范学习移动双臂灵巧操作",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "DexRoam 使用消费级 VR 头显和头戴式双目相机采集无需外部相机或运动追踪器的人体全身操作示范，并通过具身、动作语义和时间三个对齐阶段，将人体运动映射到机器人动作空间。论文报告，在 GR00T N1.7 上加入人类示范后平均成功率从 29% 提升到 56%，在 pi0.5 上从 32% 提升到 57%；同时，使用一半机器人示范即可匹配仅使用机器人示范的训练结果。",
+      "why": "移动双臂灵巧操作同时涉及行走、全身运动和手指控制，机器人示范采集成本高。该方法探索了保留全身耦合结构的人类示范迁移路径。",
+      "relevance": "研究具身学习时，应分别检查具身、动作语义和时间对齐是否保留了任务所需的耦合结构，并比较人类示范与机器人示范在数据效率上的作用。",
+      "caveat": "论文摘要称进行了真实世界实验，但所给来源未提供任务清单、样本规模或置信区间；成功率是论文所述实验设置下的结果，来源为 arXiv 预印本。",
+      "tags": [
+        "移动操作",
+        "灵巧机器人",
+        "人类示范",
+        "VLA"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35761v1"
+        }
+      ],
+      "relatedIds": [
+        "n-20260930-dexroam-mobile-manipulation"
+      ],
+      "type": "paper",
+      "date": "2026-09-28"
+    },
+    {
+      "id": "p-daily-20260930-robocompiler-closed-chain",
+      "title": "RoboCompiler：用图原生编译统一闭链机器人的建模、控制与仿真",
+      "category": "机器人 / 具身",
+      "published": "2026-09-28",
+      "paperTitle": "RoboCompiler：用图原生编译统一闭链机器人的建模、控制与仿真",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "RoboCompiler 从包含刚体、关节、坐标系、惯量和执行器端口的统一机构图出发，生成闭链路径、解析残差 Jacobian、可行构型、速度切映射和约束曲率修正后的动力学接口。论文在 Komatsu 挖掘机、Unitree Go2、Franka Panda、Kangaroo 和六 UPS Stewart 平台上进行评估，并报告在 Kangaroo 上残差与 Jacobian 计算时间减少 96.7%，闭环 rollout 墙钟时间减少 66.8%，同时保持动力学和控制设置不变。",
+      "why": "闭链、耦合执行器和变化接触会让控制与仿真接口容易出现不一致。共享机械接口可减少重复重建模型时的闭合约束和执行器映射错误。",
+      "relevance": "机器人系统研究应优先维护单一的机构图和可验证的约束接口，并将模型一致性、独立动力学检查和 rollout 性能作为共同评测项。",
+      "caveat": "摘要提到 MuJoCo 和 Isaac Sim/PhysX 执行，但并未说明所有性能数字都来自实机；因此这里不将结果表述为实机验证。来源为 arXiv 预印本。",
+      "tags": [
+        "机器人编译",
+        "闭链机构",
+        "动力学",
+        "仿真"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35717v1"
+        }
+      ],
+      "relatedIds": [
+        "n-20260930-robocompiler-closed-chain"
+      ],
+      "type": "paper",
+      "date": "2026-09-28"
+    },
+    {
+      "id": "p-daily-20260930-tah2-test-time-scaling",
+      "title": "TaH2：让循环 Transformer 只为受益 token 增加推理步数",
+      "category": "AI / 大模型",
+      "published": "2026-09-28",
+      "paperTitle": "TaH2：让循环 Transformer 只为受益 token 增加推理步数",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "论文发现，固定深度循环会让每个 token 都承担额外迭代，但并非所有 token 都从中受益，因此提出 TaH2，通过前瞻深度监督联合训练主干模型和迭代决策器，让额外迭代集中在更可能受益的 token 上。在 AIME 评测中，论文报告 TaH2 的准确率-计算量斜率为 2.74，相比非循环基线的 1.79 提高 53%，在匹配测试时计算量下超过基线峰值准确率约 3.4 个百分点。",
+      "why": "测试时扩展不应默认把额外计算平均分配给所有 token。按 token 分配循环深度可能改善推理计算的利用率和可扩展性。",
+      "relevance": "研究测试时扩展时，应同时报告准确率-计算量曲线、token 级计算分配和最大迭代深度下的收益，避免只比较固定计算点。",
+      "caveat": "结果来自论文指定的 AIME 评测与循环 Transformer 设置，不能据此断言对所有推理任务都成立；来源为 arXiv 预印本。",
+      "tags": [
+        "测试时扩展",
+        "循环Transformer",
+        "推理效率",
+        "自适应计算"
+      ],
+      "sources": [
+        {
+          "name": "arXiv 原论文",
+          "url": "https://arxiv.org/abs/2609.35748v1"
+        }
+      ],
+      "relatedIds": [
+        "n-20260930-tah2-test-time-scaling"
+      ],
+      "type": "paper",
+      "date": "2026-09-28"
+    },
     {
       "id": "p-daily-20260929-confidence-reasoning",
       "title": "只训练置信度，也能让推理模型减少生成 token",
