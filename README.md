@@ -1,6 +1,6 @@
 # TechBrief · 每日科技简报
 
-由 ChatGPT 整理内容的个人科技阅读网站，聚焦 AI、Agent、机器人与无人机。纯静态网站，无模型 API 调用，无运行时 npm 依赖。
+由 ChatGPT 整理内容的个人科技阅读网站，聚焦 AI、Agent、机器人与无人机。网站为纯静态页面，无浏览器端模型调用和运行时 npm 依赖；日报由 GitHub Actions 调用模型 API 检索与生成。
 
 ## 已实现
 
@@ -40,9 +40,11 @@ npm start
 
 ## 每日内容从哪里来
 
-现有 ChatGPT“AI 科技每日简报”任务负责联网检索、撰写与向此仓库新增日报。GitHub Actions 负责校验、建立索引与发布，不负责生成新闻。
+GitHub Actions 的 **Generate Daily AI News** 使用 Secrets 中的 `OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL` 调用 Responses API。基础URL需包含提供方要求的路径（如 `/v1`），脚本仅追加 `/responses`。网站浏览器端不持有密钥。
 
-定时任务与 GitHub 连接是外部服务，无法由这个静态仓库自行创建。任务配置状态应以 ChatGPT 实际任务设置为准；每次运行是否写入成功，可在仓库提交记录确认。若连接过期或权限不足，需恢复连接；不能把定时任务已配置等同于每天发布必定成功。
+生成先分别检索五个领域，再核对一手来源发布日期、历史去重并撰写。优先3天内、最多7天；arXiv最多2条，候选不足时少于5条，搜索不可用或没有可用来源时失败并保留旧日报。重复触发若当日日报已存在会跳过，不能据此判断搜索已经执行。
+
+Actions 上传 `generation-diagnostics` 诊断。手动验收可同时启用 `force_regenerate` 和 `dry_run`：使用真实API生成预览，不提交日报或部署。详情见 [生成流程排查与验收](docs/GENERATION_AUDIT.md)。另外的 Daily TechBrief Refresh 只维护索引。
 
 内容字段、日期、图片出处、查重与追加规则见 [docs/CONTENT.md](docs/CONTENT.md)。
 
@@ -72,3 +74,4 @@ scripts/serve.mjs                   本地预览
 - 双击 HTML 打不开数据：请使用本地 HTTP 服务或部署地址，浏览器通常会限制 file:// 页面读取 JSON。
 
 论文图与官方图片归原作者所有；图片出处列在每篇文章中。
+

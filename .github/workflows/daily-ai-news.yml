@@ -1,6 +1,9 @@
 name: Generate Daily AI News
 
 on:
+  push:
+    branches: [main]
+    paths: ['.github/techbrief-regenerate.json']
   schedule:
     # GitHub cron 使用 UTC；前一天 18:00 / 18:30 UTC = 北京时间当天 02:00 / 02:30。
     # 02:30 是补触发；当天简报已存在时生成脚本会跳过。
@@ -10,6 +13,11 @@ on:
     inputs:
       force_regenerate:
         description: '覆盖当天已经存在的日报'
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: '仅核验并上传预览，不写入日报或部署（仍会调用模型API）'
         required: false
         default: false
         type: boolean
@@ -26,12 +34,15 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    outputs:
+      dry_run: ${{ steps.generation_mode.outputs.dry_run }}
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
       OPENAI_MODEL: ${{ secrets.OPENAI_MODEL || 'gpt-5.6-sol' }}
       FORCE_REGENERATE: ${{ inputs.force_regenerate || 'false' }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
 
     steps:
       - name: Checkout
@@ -44,8 +55,29 @@ jobs:
         with:
           node-version: 22
 
+      - name: Resolve explicit regeneration request
+        id: generation_mode
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          let dryRun = process.env.DRY_RUN === 'true';
+          if (process.env.GITHUB_EVENT_NAME === 'push') {
+            const request = JSON.parse(readFileSync('.github/techbrief-regenerate.json', 'utf8'));
+            const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
+            const today = `${parts.year}-${parts.month}-${parts.day}`;
+            if (request.date !== today || typeof request.dryRun !== 'boolean') throw Error('Regeneration request must name today and a boolean dryRun');
+            dryRun = request.dryRun;
+            appendFileSync(process.env.GITHUB_ENV, `FORCE_REGENERATE=true\nDRY_RUN=${dryRun}\n`);
+          }
+          appendFileSync(process.env.GITHUB_OUTPUT, `dry_run=${dryRun}\n`);
+          JS
+
       - name: Check configuration
         run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ] && [ "$DRY_RUN" != "true" ]; then
+            echo "Non-main branches require dry_run=true."
+            exit 1
+          fi
           test -n "$OPENAI_API_KEY" || { echo "Missing secret: OPENAI_API_KEY"; exit 1; }
           test -n "$OPENAI_BASE_URL" || { echo "Missing secret: OPENAI_BASE_URL"; exit 1; }
           test -n "$OPENAI_MODEL" || { echo "Missing model configuration"; exit 1; }
@@ -53,10 +85,20 @@ jobs:
       - name: Generate daily edition
         run: npm run generate:daily
 
+      - name: Upload generation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generation-diagnostics-${{ github.run_id }}
+          path: reports/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Validate and build
         run: npm run build
 
       - name: Commit and push
+        if: ${{ env.DRY_RUN != 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -70,11 +112,13 @@ jobs:
           git push origin HEAD:main
 
       - name: Upload built website
+        if: ${{ env.DRY_RUN != 'true' }}
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
   deploy:
+    if: ${{ needs.generate.outputs.dry_run != 'true' }}
     needs: generate
     runs-on: ubuntu-latest
     permissions:
@@ -90,3 +134,4 @@ jobs:
       - name: Publish website
         id: deployment
         uses: actions/deploy-pages@v4
+

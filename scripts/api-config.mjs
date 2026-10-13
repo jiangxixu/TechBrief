@@ -19,6 +19,9 @@ export function getApiConfig() {
   if (baseUrl.protocol !== 'https:') {
     throw new Error('OPENAI_BASE_URL must use HTTPS');
   }
+  if (baseUrl.username || baseUrl.password) throw new Error('OPENAI_BASE_URL must not contain credentials');
+  // This is a base URL, not a chat/completions endpoint. Never guess /v1.
+  if (/\/chat\/completions\/?$/.test(baseUrl.pathname)) throw new Error('OPENAI_BASE_URL must be a base path or a /responses endpoint');
 
   const trimmedPath = baseUrl.pathname.replace(/\/+$/, '');
   baseUrl.pathname = trimmedPath.endsWith('/responses')
@@ -29,3 +32,4 @@ export function getApiConfig() {
 
   return { apiKey, model, responsesUrl: baseUrl.toString() };
 }
+
