@@ -158,7 +158,7 @@ export function assembleEdition(candidate, date, selected) {
   const byUrl = new Map(selected.map(n => [canonicalUrl(n.url), n]));
   const news = (candidate.news || []).map(n => ({ ...n, sources: (n.sources || []).map(s => {
     const verified = byUrl.get(canonicalUrl(s.url));
-    return { ...s, name: s.name || (verified ? new URL(verified.url).hostname : '') };
+    return { url: s.url, name: s.name || (verified ? new URL(verified.url).hostname : '') };
   }) }));
   return { schemaVersion: 1, date, timezone: 'Asia/Shanghai', generatedBy: 'ChatGPT',
     title: candidate.title || `${date}科技简报：${news.length}条核验来源`,
