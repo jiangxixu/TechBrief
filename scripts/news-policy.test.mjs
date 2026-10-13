@@ -70,7 +70,7 @@ test('writer cannot introduce sources, dates, categories or duplicate events', (
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.
-for (const scenario of ['normal', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run']) {
+for (const scenario of ['normal', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_wrong_date']) {
   test(`generation integration: ${scenario}`, async () => {
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
@@ -104,16 +104,22 @@ globalThis.fetch = async (url, options={}) => {
 };
 `;
       await writeFile(resolve(dir, 'mock.mjs'), mock);
+      if (scenario.startsWith('reuse')) {
+        const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x=>[x.type,x.value]));
+        const date = `${parts.year}-${parts.month}-${parts.day}`;
+        const selected = CATEGORIES.slice(0,2).map((c,i) => ({ title:'story-'+(i+1), category:c, published:date, url:'https://openai.com/news/item-'+(i+1) }));
+        await writeFile(resolve(dir, 'prior.json'), JSON.stringify({ date:scenario==='reuse_wrong_date'?'2000-01-01':date, runId:'42', selected, searches:CATEGORIES.map(c=>({category:c,calls:[{action:'search'}],sourceUrls:selected.map(n=>n.url)})) }));
+      }
       if (scenario === 'existing') {
         const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x=>[x.type,x.value]));
         const date = `${parts.year}-${parts.month}-${parts.day}`;
         await writeFile(resolve(dir, `data/daily/${date}.json`), JSON.stringify({ schemaVersion:1, date, timezone:'Asia/Shanghai', generatedBy:'ChatGPT', news:[{id:'n-fixture',title:'test',category:'Agent',summary:'fact',published:date,why:'analysis',relevance:'analysis',caveat:'limit',tags:['t'],sources:[{name:'Official',url:'https://openai.com/a'}]}] }));
       }
-      const run = spawnSync(process.execPath, ['--import', './mock.mjs', 'scripts/generate-daily.mjs'], { cwd: dir, env: { ...process.env, OPENAI_API_KEY: 'fixture-not-secret', OPENAI_BASE_URL: 'https://fixture.example/v1', OPENAI_MODEL: 'fixture', FORCE_REGENERATE: 'false', DRY_RUN: String(scenario === 'dry_run'), GITHUB_STEP_SUMMARY: '' }, encoding: 'utf8' });
+      const run = spawnSync(process.execPath, ['--import', './mock.mjs', 'scripts/generate-daily.mjs'], { cwd: dir, env: { ...process.env, OPENAI_API_KEY: 'fixture-not-secret', OPENAI_BASE_URL: 'https://fixture.example/v1', OPENAI_MODEL: 'fixture', FORCE_REGENERATE: 'false', DRY_RUN: String(scenario === 'dry_run'), GITHUB_STEP_SUMMARY: '', REUSE_SEARCH_AUDIT:scenario.startsWith('reuse')?'prior.json':'', REUSE_SEARCH_RUN_ID:'42' }, encoding: 'utf8' });
       const audit = JSON.parse(await readFile(resolve(dir, 'reports/generation.json')));
-      if (['no_search', 'wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
+      if (['no_search', 'wrong_date', 'reuse_wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
       else if (scenario === 'existing') { assert.equal(run.status, 0); assert.equal(audit.status, 'skipped_existing'); assert.equal(audit.apiCalls.length, 0); }
-      else { assert.equal(run.status, 0, run.stderr); assert.equal(audit.status, scenario === 'dry_run' ? 'validated_partial' : 'published_partial'); assert.equal(audit.selected.length, 2); assert.equal(audit.searches.length, 5); if (scenario==='format_retry') assert.equal(audit.formatRetry, 'invalid_json_schema'); if(scenario==='dry_run') { const preview = JSON.parse(await readFile(resolve(dir, 'reports/edition.preview.json'))); assert.equal(preview.news.length, 2); const { readdir } = await import('node:fs/promises'); assert.deepEqual(await readdir(resolve(dir,'data/daily')), []); } }
+      else { assert.equal(run.status, 0, run.stderr); assert.equal(audit.status, scenario === 'dry_run' ? 'validated_partial' : 'published_partial'); assert.equal(audit.selected.length, 2); assert.equal(audit.searches.length, 5); if (scenario==='reuse') { assert.equal(audit.apiCalls.length,1); assert.equal(audit.reusedSearchRunId,'42'); } if (scenario==='format_retry') assert.equal(audit.formatRetry, 'invalid_json_schema'); if(scenario==='dry_run') { const preview = JSON.parse(await readFile(resolve(dir, 'reports/edition.preview.json'))); assert.equal(preview.news.length, 2); const { readdir } = await import('node:fs/promises'); assert.deepEqual(await readdir(resolve(dir,'data/daily')), []); } }
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 }

@@ -23,6 +23,7 @@ on:
         type: boolean
 
 permissions:
+  actions: read
   contents: write
   pages: write
   id-token: write
@@ -61,16 +62,32 @@ jobs:
           node --input-type=module <<'JS'
           import { readFileSync, appendFileSync } from 'node:fs';
           let dryRun = process.env.DRY_RUN === 'true';
+          let reuseRunId = '';
           if (process.env.GITHUB_EVENT_NAME === 'push') {
             const request = JSON.parse(readFileSync('.github/techbrief-regenerate.json', 'utf8'));
             const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
             const today = `${parts.year}-${parts.month}-${parts.day}`;
             if (request.date !== today || typeof request.dryRun !== 'boolean') throw Error('Regeneration request must name today and a boolean dryRun');
             dryRun = request.dryRun;
+            if (request.reuseSearchRunId !== undefined) {
+              if (!Number.isSafeInteger(request.reuseSearchRunId) || request.reuseSearchRunId <= 0) throw Error('Invalid reuse search run ID');
+              reuseRunId = String(request.reuseSearchRunId);
+              appendFileSync(process.env.GITHUB_ENV, `REUSE_SEARCH_AUDIT=reports/source-reuse/generation.json\nREUSE_SEARCH_RUN_ID=${reuseRunId}\n`);
+            }
             appendFileSync(process.env.GITHUB_ENV, `FORCE_REGENERATE=true\nDRY_RUN=${dryRun}\n`);
           }
           appendFileSync(process.env.GITHUB_OUTPUT, `dry_run=${dryRun}\n`);
+          appendFileSync(process.env.GITHUB_OUTPUT, `reuse_run_id=${reuseRunId}\n`);
           JS
+
+      - name: Download same-day search evidence for an explicit retry
+        if: ${{ steps.generation_mode.outputs.reuse_run_id != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: generation-diagnostics-${{ steps.generation_mode.outputs.reuse_run_id }}
+          run-id: ${{ steps.generation_mode.outputs.reuse_run_id }}
+          github-token: ${{ github.token }}
+          path: reports/source-reuse
 
       - name: Check configuration
         run: |

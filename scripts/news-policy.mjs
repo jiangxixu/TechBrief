@@ -6,7 +6,8 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'blog.google', 'research.google', 'microsoft.com', 'nvidia.com', 'huggingface.co',
   'dji.com', 'px4.io', 'ardupilot.org', 'skydio.com', 'auterion.com',
   'unitree.com', 'agilityrobotics.com', 'figure.ai', 'physicalintelligence.company',
-  'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch', 'langchain.com'];
+  'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch', 'langchain.com',
+  'aws.amazon.com', 'developers.googleblog.com', 'intel.com', 'claude.com'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
