@@ -1,0 +1,17 @@
+name: Test news generation policy
+on:
+  pull_request:
+    paths: ['scripts/**', 'core.js', 'package.json', '.github/workflows/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - run: npm run build

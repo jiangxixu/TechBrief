@@ -2,8 +2,8 @@ name: Daily TechBrief Refresh
 
 # 说明：
 # GitHub Actions 可以每天自动运行维护任务。
-# 由于日报正文由 ChatGPT 生成（不使用额外模型 API），
-# 本流程负责检查已有日报、更新索引、触发部署。
+# 日报正文由 daily-ai-news.yml 调用 Responses API 生成。
+# 本流程仅更新已有内容的索引。
 
 on:
   schedule:
@@ -40,3 +40,4 @@ jobs:
           git add data/daily/index.json
           git diff --cached --quiet || git commit -m "chore: refresh TechBrief daily index"
           git push
+

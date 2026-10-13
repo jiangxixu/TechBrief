@@ -8,7 +8,8 @@
     "build": "node scripts/build.mjs",
     "generate:daily": "node scripts/generate-daily.mjs",
     "validate": "node scripts/validate.mjs",
-    "test": "node --test scripts/core.test.mjs",
+    "test": "node --test scripts/*.test.mjs",
     "start": "node scripts/serve.mjs"
   }
 }
+
