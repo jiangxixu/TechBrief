@@ -27,6 +27,11 @@ test('no search or failed search cannot be treated as successful retrieval', () 
   assert.throws(() => searchEvidence({ status: 'completed', output: [{ type: 'web_search_call', status: 'completed', action: { type: 'search' } }] }), /provenance/);
   const result = searchEvidence({ status: 'completed', output: [{ type: 'web_search_call', status: 'completed', action: { type: 'search', sources: [{ url: 'https://openai.com/news/a' }] } }] });
   assert.equal(result.urls.size, 1);
+  const opened = searchEvidence({ status: 'completed', output: [
+    { type: 'web_search_call', status: 'completed', action: { type: 'search', sources: [{ url: 'https://openai.com/' }] } },
+    { type: 'web_search_call', status: 'completed', action: { type: 'open_page', url: 'https://openai.com/news/article' } }
+  ] });
+  assert.ok(opened.urls.has('https://openai.com/news/article'));
 });
 test('publication metadata excludes modification dates and detects conflicts', () => {
   assert.deepEqual(publicationDates('<script type="application/ld+json">{"dateModified":"2026-10-13"}</script>'), []);

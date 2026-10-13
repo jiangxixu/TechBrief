@@ -6,7 +6,7 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'blog.google', 'research.google', 'microsoft.com', 'nvidia.com', 'huggingface.co',
   'dji.com', 'px4.io', 'ardupilot.org', 'skydio.com', 'auterion.com',
   'unitree.com', 'agilityrobotics.com', 'figure.ai', 'physicalintelligence.company',
-  'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch'];
+  'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch', 'langchain.com'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
@@ -36,13 +36,16 @@ export function searchEvidence(payload) {
   if (!calls.some(o => o.action?.type === 'search')) throw Error('No completed web search action; provider capability unverified');
   const urls = new Set();
   for (const call of calls) {
+    // Opened article links are direct tool provenance too, even when JSON text
+    // carries no URL citation and the article was not itself a search result.
+    if (['open_page', 'find_in_page'].includes(call.action?.type) && call.action.url) urls.add(canonicalUrl(call.action.url));
     for (const source of call.action?.sources || []) if (source.url) urls.add(canonicalUrl(source.url));
   }
   for (const output of payload.output || []) for (const part of output.content || []) {
     for (const a of part.annotations || []) if (a.type === 'url_citation' && a.url) urls.add(canonicalUrl(a.url));
   }
   if (!urls.size) throw Error('Search returned no source provenance');
-  return { urls, calls: calls.map(c => ({ id: c.id, action: c.action?.type, queries: c.action?.queries || [] })) };
+  return { urls, calls: calls.map(c => ({ id: c.id, action: c.action?.type, queries: c.action?.queries || [], ...(c.action?.url ? { url: c.action.url } : {}) })) };
 }
 
 // Accept publication metadata only, never dateModified or a date anywhere in page text.

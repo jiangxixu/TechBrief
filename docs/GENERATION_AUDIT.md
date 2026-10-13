@@ -1,5 +1,13 @@
 # TechBrief 生成流程排查与验收（2026-10-13）
 
+## 实际运行补充
+
+修复已合并，运行 [38385575763](https://github.com/jiangxixu/TechBrief/actions/runs/38385575763) 首次执行真实检索。诊断中Agent和无人机均有HTTP200、completed search/open_page动作，来源数量分别59与71；实际端点类型为custom。因此已确认该接口实际执行了web_search。此次运行失败，未覆盖旧日报；后续错误被旧诊断归为泛化生成错误，尚不能仅据该信息断定具体原因。
+
+实际联调发现工具open_page/find_in_page的action.url也应纳入来源证据，不能只读取搜索sources及文本引用。补充这类工具来源、候选拒绝URL和搜索失败阶段诊断；单次请求预算从90秒延长为180秒。每个领域独立记录失败并继续其他领域，只有至少一篇网页文章完成来源和日期核验才允许进入筛选，避免再次退回纯arXiv日报；任何检索缺失都标明部分发布。
+
+另增按日期显式触发的 `.github/techbrief-regenerate.json` 请求，只有该文件在main发生变更时才触发强制生成，并要求请求日期等于当日。dryRun可选择预览或正常发布。普通日报提交不会循环触发生成。
+
 ## 已确认的根因
 
 真正生成日报的三次运行都先收到 HTTP 400 / invalid_json_schema，再进入不带搜索工具的 arXiv 兼容模式。

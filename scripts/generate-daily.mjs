@@ -128,7 +128,7 @@ async function fetchArxivSources() {
 
 async function callResponsesApi({ apiKey, model, responsesUrl }, body) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 90_000);
+  const timer = setTimeout(() => controller.abort(), 180_000);
   try {
     const response = await fetch(responsesUrl, {
       method: 'POST',
@@ -163,7 +163,14 @@ const filename = `${date}.json`;
 const outputPath = resolve(dailyDir, filename);
 const auditDir = resolve(root, 'reports');
 const audit = { date, startedAt: new Date().toISOString(), runId: process.env.GITHUB_RUN_ID || null,
-  status: 'started', apiCalls: [], searches: [], rejected: [], selected: [] };
+  status: 'started', apiCalls: [], searches: [], searchFailures: [], rejected: [], selected: [] };
+
+function safeFailure(error) {
+  if (error.status) return `API HTTP ${error.status}, code ${error.code || 'unknown'}`;
+  if (error.name === 'AbortError' || error.name === 'TimeoutError') return 'Request timed out';
+  if (/^No completed web search|^Search returned|^Search response|^No fresh|^Writer|^Invalid discovery|^Model output|^API response/.test(error.message)) return error.message;
+  return `${error.name || 'Error'} during generation or validation`;
+}
 
 async function generate() {
   await mkdir(dailyDir, { recursive: true });
@@ -191,6 +198,8 @@ async function generate() {
   // Discovery has no JSON Schema so schema support cannot disable web search.
   // Each domain has its own request; supplied paper abstracts cannot replace searches.
   for (const category of CATEGORIES) {
+    audit.currentStage = `search:${category}`;
+    try {
     const result = await callResponsesApi(config, {
       model: config.model, tools: [{ type: 'web_search' }], tool_choice: 'required',
       include: ['web_search_call.action.sources'], max_output_tokens: 5000,
@@ -198,7 +207,7 @@ async function generate() {
       input: `Search ${category}: ${queries[category]}. Return dated primary articles, not homepages.`
     });
     const provenance = searchEvidence(result);
-    audit.searches.push({ category, responseId: result.id, calls: provenance.calls, sourceCount: provenance.urls.size });
+    audit.searches.push({ category, responseId: result.id, calls: provenance.calls, sourceCount: provenance.urls.size, sourceUrls: [...provenance.urls] });
     const candidates = parseJson(extractOutputText(result)).candidates;
     if (!Array.isArray(candidates) || candidates.length > 4) throw Error('Invalid discovery candidates');
     for (const candidate of candidates) {
@@ -208,12 +217,21 @@ async function generate() {
         if (!provenance.urls.has(canonicalUrl(candidate.url))) throw Error('Candidate URL absent from search provenance');
         pool.push(await verifyPage(candidate, date));
       } catch (error) {
-        audit.rejected.push({ category, reason: error.message });
+        let url;
+        try { url = canonicalUrl(candidate.url); } catch {}
+        audit.rejected.push({ category, url, reason: error.message });
       }
     }
+    } catch (error) {
+      const reason = safeFailure(error);
+      audit.searchFailures.push({ category, reason });
+      console.warn(`Domain search failed (${category}): ${reason}`);
+    }
   }
+  if (!pool.length) throw Error('No fresh verified web articles; no edition published');
   // Live arXiv feed remains useful, but can contribute at most two stories.
   try {
+    audit.currentStage = 'arxiv';
     for (const paper of await fetchArxivSources()) {
       const text = `${paper.title} ${paper.summary}`;
       const category = /\b(UAV|drone|aerial|quadrotor)\b/i.test(text) ? '无人机'
@@ -234,6 +252,7 @@ async function generate() {
     max_output_tokens: 10000
   };
   let result;
+  audit.currentStage = 'writer';
   try { result = await callResponsesApi(config, writerBody); }
   catch (error) {
     // A format-only retry preserves the SAME verified sources. No retrieval downgrade.
@@ -249,8 +268,8 @@ async function generate() {
   assertGroundedEdition(edition, selected);
   // Do not trust the writer's quality disclosure.
   const older = selected.filter(n => ageDays(n.published, date) > 3).length;
-  edition.editorialNote = `本期收录 ${selected.length} 条核验来源，${older} 条为4至7天前的补充。未收录领域：${audit.missingCategories.join('、') || '无'}。来源公开日期依据出版方元数据或实时arXiv记录；不把预印本视为同行评审。`;
-  const partial = selected.length < 5 || older > 0 || audit.missingCategories.length > 0;
+  edition.editorialNote = `本期收录 ${selected.length} 条核验来源，${older} 条为4至7天前的补充。未收录领域：${audit.missingCategories.join('、') || '无'}。检索未完成领域：${audit.searchFailures.map(n => n.category).join('、') || '无'}。来源公开日期依据出版方元数据或实时arXiv记录；不把预印本视为同行评审。`;
+  const partial = selected.length < 5 || older > 0 || audit.missingCategories.length > 0 || audit.searchFailures.length > 0;
   if (dryRun) {
     await mkdir(auditDir, { recursive: true });
     await writeFile(resolve(auditDir, 'edition.preview.json'), JSON.stringify(edition, null, 2) + '\n');
@@ -268,8 +287,7 @@ try { await generate(); }
 catch (error) {
   audit.status = 'failed';
   // API bodies may contain sensitive data; report only bounded classifications.
-  audit.failure = error.status ? `API HTTP ${error.status}, code ${error.code || 'unknown'}` :
-    (/^No completed web search|^Search returned|^Search response|^No fresh|^Writer|^Invalid discovery/.test(error.message) ? error.message : 'Generation or validation failed');
+  audit.failure = safeFailure(error);
   console.error(audit.failure);
   process.exitCode = 1;
 } finally {
