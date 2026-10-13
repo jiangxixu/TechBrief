@@ -4,7 +4,7 @@
     {
       "date": "2026-10-13",
       "count": 5,
-      "title": "世界模型、可靠 Agent 与具身策略成为本期研究主线"
+      "title": "2026-10-13科技简报：5条核验来源"
     },
     {
       "date": "2026-10-12",
@@ -119,25 +119,28 @@
   ],
   "news": [
     {
-      "id": "n-20261013-hidden-capabilities",
-      "title": "加密后门可让模型隐藏任意计算能力",
-      "category": "AI / 大模型",
-      "kind": "论文",
-      "published": "2026-10-09",
-      "summary": "研究者构造了把加密神经网络嵌入宿主模型权重的后门攻击，使其仅在收到秘密触发器后解密并执行。论文称，在特定密码学假设下，即使检查者能完整访问模型权重，这些隐藏电路仍难以被诱发和解释；概念验证在一个小型化学反应预测任务上测试了微调、权重加噪、基于梯度的触发器搜索和潜空间对抗训练。",
-      "why": "这项工作指出，能力评估依赖“隐藏能力最终可以被测试诱发”的前提，而加密构造可能形成该前提的理论边界。",
-      "relevance": "对 AI 安全学习与研究的启发是，应区分普通分布偏移下的漏测与主动对抗隐藏，并研究不只依赖行为诱发的审计、防后门和模型来源验证方法。",
-      "caveat": "论文是预印本；实证部分是小型化学反应预测代理任务，所谓难以诱发和解释依赖论文给定的密码学假设，不能直接外推为现有大型模型普遍具有此类后门。",
+      "id": "n-20261013-fortem-mbda-counter-drone",
+      "title": "Fortem与MBDA扩大自主反无人机合作",
+      "category": "无人机",
+      "kind": "产业动态",
+      "published": "2026-10-12",
+      "summary": "Fortem Technologies与MBDA宣布扩大合作，把DroneHunter自主拦截器和双方共同开发的FireThorn拦截器纳入MBDA面向欧洲及其他地区客户的防空架构。DroneHunter采用网捕方式，FireThorn则结合Fortem的雷达制导自主飞行器与MBDA的战斗部；相关销售仍须取得适用的出口授权。",
+      "why": "分析：将不同拦截方式接入既有防空网络，反映反无人机产品正从独立设备转向分层、可集成的防御体系。",
+      "relevance": "分析：对欧洲及盟友防空体系而言，这项合作可能降低新增反无人机能力与现有架构对接的门槛。",
+      "caveat": "证据来自Fortem发布的企业新闻稿，能够确认合作方公布的协议和产品定位，但未提供客户采购规模、部署时间表或独立实战评估。",
       "tags": [
-        "AI安全",
-        "能力评估",
-        "加密后门",
-        "模型审计"
+        "反无人机",
+        "自主拦截",
+        "防空系统",
+        "欧洲防务"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13928v1"
+          "title": "2026-10-12-fortem-technologies-and-mbda-expand-partnership-to-build-autonomous-counter-drone-protection-into-european-and-allied-air-defenses",
+          "category": "无人机",
+          "url": "https://fortemtech.com/press-releases/2026-10-12-fortem-technologies-and-mbda-expand-partnership-to-build-autonomous-counter-drone-protection-into-european-and-allied-air-defenses",
+          "published": "2026-10-12",
+          "name": "fortemtech.com"
         }
       ],
       "type": "news",
@@ -145,103 +148,112 @@
     },
     {
       "id": "n-20261013-rated-tool-retrieval",
-      "title": "RATED 根据运行反馈规避失效工具",
+      "title": "RATED利用执行反馈改进智能体工具检索",
       "category": "Agent",
-      "kind": "论文",
+      "kind": "研究",
       "published": "2026-10-09",
-      "summary": "RATED 将冻结双编码器的语义匹配与轻量级上下文老虎机重排序结合，依据实时执行反馈调整工具候选。论文同时提出包含 5,172 个真实工具和超过 21 万个查询—工具对的 EcoAgent 基准；实验报告其相对 ToolLLM API 检索器的 MRR 提升 52.2%，在 API 故障率为 30%的严重中断场景中，将故障工具选择率从 86.2%降至 2.9%，编码推理之外的延迟低于 1 毫秒。",
-      "why": "工具是否可用会随运行环境变化，仅依赖静态语义相关性可能把 Agent 导向已经失效的 API；该方法把运行可靠性直接纳入检索。",
-      "relevance": "研究工具型 Agent 时，可将工具选择拆分为语义召回与在线可靠性重排，并利用执行成功或失败信号持续更新后者。",
-      "caveat": "论文是预印本；所列数字来自作者设置的离线检索与动态故障评估，不能证明在所有真实服务、故障模式或长链任务中都能取得相同收益。",
+      "summary": "研究提出RATED工具检索框架，以冻结的双编码器进行语义匹配，并通过轻量级上下文老虎机模块依据实时执行反馈重新排序候选工具。作者还构建了包含5,172个真实工具和超过210,000个查询—工具配对的EcoAgent基准；实验中，RATED相较ToolLLM API检索器取得52.2%的相对MRR提升，并在30%故障率的严重API中断场景下把故障工具选择率从86.2%降至2.9%。",
+      "why": "分析：把工具的实时可用性纳入检索过程，有助于解决智能体选中语义相关但执行失败工具的问题。",
+      "relevance": "分析：该方法对依赖大量外部API的智能体系统具有工程意义，因为它尝试在不重新训练主模型的情况下适应运行时故障。",
+      "caveat": "这是arXiv预印本，尚不能视为经过同行评审的定论；所列改进来自作者在离线检索与动态故障评估中的实验，正文未提供生产系统长期部署结果。",
       "tags": [
-        "Agent",
         "工具检索",
+        "智能体可靠性",
         "上下文老虎机",
-        "可靠性",
-        "EcoAgent"
+        "预印本"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13889v1"
+          "title": "RATED: Reliability-Aware AI Agent Tool Retrieval via Execution Dynamics",
+          "category": "Agent",
+          "url": "https://arxiv.org/abs/2610.13889v1",
+          "published": "2026-10-09",
+          "name": "arxiv.org"
         }
       ],
       "type": "news",
       "date": "2026-10-13"
     },
     {
-      "id": "n-20261013-splat2act",
-      "title": "Splat2Act 用手机扫描为特定场景定制 VLA",
+      "id": "n-20261013-splat2act-robot-personalization",
+      "title": "Splat2Act用场景扫描个性化机器人操作策略",
       "category": "机器人 / 具身",
-      "kind": "论文",
+      "kind": "研究",
       "published": "2026-10-09",
-      "summary": "Splat2Act 是一条自动化真实—仿真—真实流程：以手持手机扫描和用户物体图像构建基于 3D Gaussian Splatting 与碰撞几何的数字孪生，自动生成抓取任务，并由具备特权信息的仿真 oracle 产生示范。作者在 101 个校园扫描环境中得到 852 个容器位置和超过 6.8 万条抓取示范；最强个性化策略在目标场景的汇总抓取成功率为 62.5%。同一策略部署到真实 Stretch 3 后，在 12 项任务子集上成功率为 63.9%，对应仿真结果为 66.7%。",
-      "why": "它探索了无需在每位用户环境中人工采集机器人示范，而通过场景扫描和仿真数据为通用 VLA 做环境个性化的路径。",
-      "relevance": "具身智能研究可进一步考察数字孪生质量、任务自动生成和分阶段微调分别贡献多少，以及仿真指标能否预测特定场景的实机表现。",
-      "caveat": "论文是预印本；实机数字仅覆盖 Stretch 3 上的 12 项任务子集，环境主要来自扫描的校园场景，不能据此认定流程已适用于任意家庭、机器人平台或操作任务。",
+      "summary": "研究提出Splat2Act自动化真实到仿真再回到真实的训练流程，仅需手持手机扫描场景并采集用户物体图像，即可构建数字孪生、生成拾取任务与仿真示范，并微调视觉—语言—动作策略。流程应用于101个校园环境，生成超过68,000个拾取示范；最强个性化策略在目标场景的总体拾取成功率为62.5%，并在真实Stretch 3机器人上的12项任务子集中达到63.9%，对应仿真结果为66.7%。",
+      "why": "分析：该工作尝试减少为每个家庭或办公室单独采集真实机器人示范的成本，把场景数字化转化为个性化训练数据。",
+      "relevance": "分析：仿真与实机结果接近，显示真实到仿真再回到真实的流程可能成为通用机器人适配具体环境的一条可行路径。",
+      "caveat": "这是arXiv预印本，尚未经过同行评审。大规模示范数据和总体策略评估主要来自仿真，实机结果仅覆盖Stretch 3上的12项任务子集，不能等同于所有场景或任务上的真实部署表现。",
       "tags": [
-        "VLA",
         "具身智能",
-        "sim2real",
-        "3D高斯泼溅",
-        "机器人抓取"
+        "机器人操作",
+        "数字孪生",
+        "真实到仿真",
+        "预印本"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13945v1"
+          "title": "Splat2Act: From Captured Scenes to Personalized VLA Manipulation",
+          "category": "机器人 / 具身",
+          "url": "https://arxiv.org/abs/2610.13945v1",
+          "published": "2026-10-09",
+          "name": "arxiv.org"
         }
       ],
       "type": "news",
       "date": "2026-10-13"
     },
     {
-      "id": "n-20261013-chronos-policy",
-      "title": "Chronos Policy 将物理时间显式加入机器人策略",
-      "category": "机器人 / 具身",
-      "kind": "论文",
-      "published": "2026-10-09",
-      "summary": "Chronos Policy 不再仅以序列位置隐式表达时间，而是以观测采集时刻和期望动作执行时刻为条件。作者比较了时间戳嵌入与时间感知旋转位置编码，并报告后者更稳健；训练时还随机化观测采样时刻和动作块起点，以覆盖异步、多速率感知以及不同推理延迟。论文称，该方法在仿真和真实世界的动态及多传感器任务上改善表现，在准静态任务上维持标称性能并增强对时序变化的鲁棒性。",
-      "why": "真实机器人中的传感频率、通信延迟和推理耗时并不恒定，显式建模物理时间有助于避免把固定 token 间隔错误等同于固定现实时间。",
-      "relevance": "学习或设计机器人 Transformer 时，可把时间戳视为独立于内容的结构信号，并通过时序随机化检验策略对延迟和异步传感的敏感性。",
-      "caveat": "论文是预印本；候选摘要没有提供各任务的具体提升数字、硬件范围或完整失败案例，因此只能确认作者报告了仿真与实机实验，不能量化其普适优势。",
+      "id": "n-20261013-aqua-agent-quality",
+      "title": "谷歌公开生产智能体质量诊断方案AQuA",
+      "category": "Agent",
+      "kind": "工程实践",
+      "published": "2026-10-08",
+      "summary": "谷歌开发者博客介绍AQuA环境质量智能体，可定期读取Cloud Trace、Cloud Logging或BigQuery中的生产轨迹，经过采样、审查、聚类、验证和跟踪流程形成经验证的问题洞察，并可按需结合部署时保存的源码快照执行根因分析。AQuA不位于请求路径中，也不会自行修改智能体或创建拉取请求。",
+      "why": "分析：AQuA关注基础设施指标正常但对话质量或任务完成情况悄然下降的问题，为生产智能体提供持续的外层质量反馈。",
+      "relevance": "分析：把失败轨迹与具体部署版本的源码快照关联，可帮助团队区分模型、编排、工具契约和指令等不同故障来源。",
+      "caveat": "证据来自谷歌开发者博客介绍的开放参考实现及旅行智能体案例；案例结果不能证明该方案在其他业务、模型和遥测环境中具有相同效果，文中也明确指出模型评审可能出错。",
       "tags": [
-        "机器人策略",
-        "时间建模",
-        "扩散Transformer",
-        "多传感器",
-        "异步数据"
+        "智能体评估",
+        "生产监控",
+        "根因分析",
+        "Google Cloud"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13929v1"
+          "title": "the-outer-loop-insights-first-an-ambient-quality-agent-that-diagnoses-your-production-agent",
+          "category": "Agent",
+          "url": "https://developers.googleblog.com/en/the-outer-loop-insights-first-an-ambient-quality-agent-that-diagnoses-your-production-agent",
+          "published": "2026-10-08",
+          "name": "developers.googleblog.com"
         }
       ],
       "type": "news",
       "date": "2026-10-13"
     },
     {
-      "id": "n-20261013-prompteina",
-      "title": "PromptEina 用自然语言条件生成全原子蛋白结构",
-      "category": "AI / 大模型",
-      "kind": "论文",
-      "published": "2026-10-09",
-      "summary": "PromptEina 是一个支持用自然语言描述结构与功能目标的全原子蛋白结构生成模型。作者构建了包含 180 万个结构和超过 5,000 万条说明的配对数据集，并报告模型在 18 项结构属性中的 15 项优于基线。在结合体设计中，其至少在 20 个靶点中的 13 个领先基线，界面置信度较最强基线提高 14%。作者还对 GM2A 靶点进行了实验验证，识别出 9 个结合体，其中最强者的表观解离常数为 107 nM。",
-      "why": "自然语言接口可把多种全局及残基级设计约束统一到同一种条件表达中，减少为每类蛋白性质单独设计输入表示的需求。",
-      "relevance": "对生成式生物设计研究的启发是，可以系统研究文本描述的可控性、残基—文本对齐以及计算反馈与湿实验验证之间的闭环，而不只比较生成结构的单一评分。",
-      "caveat": "论文是预印本；多数结果来自计算评估，湿实验验证集中于 GM2A，表观解离常数也不等同于已经证明体内功能、安全性或临床有效性。",
+      "id": "n-20261013-agent-lightning-rl",
+      "title": "微软发布轻量级智能体强化学习框架Agent Lightning",
+      "category": "Agent",
+      "kind": "研究工程",
+      "published": "2026-10-07",
+      "summary": "微软研究院介绍重新构建的Agent Lightning v1.0，以约3,500行代码实现智能体强化学习控制平面，并允许部署所用的真实智能体框架直接参与训练。该框架提供兼容OpenAI接口的代理、原生Kubernetes任务支持和协同异步强化学习；其编码智能体实验使用约6,000个训练样本，将Qwen3.5-9B在SWE-bench Verified上的Pass@1从41.8%提高到56.4%。",
+      "why": "分析：让真实部署框架直接进入强化学习流程，可减少为了训练而重新实现智能体执行循环所造成的开发成本和行为偏差。",
+      "relevance": "分析：轻量代码规模、现有集群支持和完整训练示例，使该框架对希望自行控制智能体训练基础设施的团队具有参考价值。",
+      "caveat": "证据来自微软研究博客及其报告的编码智能体实验；性能提升针对特定模型、数据与基准，不代表其他智能体、任务或生产环境中必然获得同等收益。",
       "tags": [
-        "蛋白质设计",
-        "生成模型",
-        "自然语言条件",
-        "科学AI",
-        "实验验证"
+        "强化学习",
+        "智能体训练",
+        "Kubernetes",
+        "编码智能体"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13917v1"
+          "title": "Agent Lightning v1.0: A 3,500-Line Lightweight Agentic RL Framework for Training Agents with Real Harnesses",
+          "category": "Agent",
+          "url": "https://microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses",
+          "published": "2026-10-07",
+          "name": "microsoft.com"
         }
       ],
       "type": "news",
@@ -5435,58 +5447,30 @@
   ],
   "papers": [
     {
-      "id": "p-daily-20261013-hidden-capabilities",
-      "title": "加密后门可让模型隐藏任意计算能力",
-      "category": "AI / 大模型",
-      "published": "2026-10-09",
-      "paperTitle": "加密后门可让模型隐藏任意计算能力",
-      "authors": [],
-      "venue": "arXiv 预印本",
-      "summary": "研究者构造了把加密神经网络嵌入宿主模型权重的后门攻击，使其仅在收到秘密触发器后解密并执行。论文称，在特定密码学假设下，即使检查者能完整访问模型权重，这些隐藏电路仍难以被诱发和解释；概念验证在一个小型化学反应预测任务上测试了微调、权重加噪、基于梯度的触发器搜索和潜空间对抗训练。",
-      "why": "这项工作指出，能力评估依赖“隐藏能力最终可以被测试诱发”的前提，而加密构造可能形成该前提的理论边界。",
-      "relevance": "对 AI 安全学习与研究的启发是，应区分普通分布偏移下的漏测与主动对抗隐藏，并研究不只依赖行为诱发的审计、防后门和模型来源验证方法。",
-      "caveat": "论文是预印本；实证部分是小型化学反应预测代理任务，所谓难以诱发和解释依赖论文给定的密码学假设，不能直接外推为现有大型模型普遍具有此类后门。",
-      "tags": [
-        "AI安全",
-        "能力评估",
-        "加密后门",
-        "模型审计"
-      ],
-      "sources": [
-        {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13928v1"
-        }
-      ],
-      "relatedIds": [
-        "n-20261013-hidden-capabilities"
-      ],
-      "type": "paper",
-      "date": "2026-10-09"
-    },
-    {
       "id": "p-daily-20261013-rated-tool-retrieval",
-      "title": "RATED 根据运行反馈规避失效工具",
+      "title": "RATED利用执行反馈改进智能体工具检索",
       "category": "Agent",
       "published": "2026-10-09",
-      "paperTitle": "RATED 根据运行反馈规避失效工具",
+      "paperTitle": "RATED利用执行反馈改进智能体工具检索",
       "authors": [],
       "venue": "arXiv 预印本",
-      "summary": "RATED 将冻结双编码器的语义匹配与轻量级上下文老虎机重排序结合，依据实时执行反馈调整工具候选。论文同时提出包含 5,172 个真实工具和超过 21 万个查询—工具对的 EcoAgent 基准；实验报告其相对 ToolLLM API 检索器的 MRR 提升 52.2%，在 API 故障率为 30%的严重中断场景中，将故障工具选择率从 86.2%降至 2.9%，编码推理之外的延迟低于 1 毫秒。",
-      "why": "工具是否可用会随运行环境变化，仅依赖静态语义相关性可能把 Agent 导向已经失效的 API；该方法把运行可靠性直接纳入检索。",
-      "relevance": "研究工具型 Agent 时，可将工具选择拆分为语义召回与在线可靠性重排，并利用执行成功或失败信号持续更新后者。",
-      "caveat": "论文是预印本；所列数字来自作者设置的离线检索与动态故障评估，不能证明在所有真实服务、故障模式或长链任务中都能取得相同收益。",
+      "summary": "研究提出RATED工具检索框架，以冻结的双编码器进行语义匹配，并通过轻量级上下文老虎机模块依据实时执行反馈重新排序候选工具。作者还构建了包含5,172个真实工具和超过210,000个查询—工具配对的EcoAgent基准；实验中，RATED相较ToolLLM API检索器取得52.2%的相对MRR提升，并在30%故障率的严重API中断场景下把故障工具选择率从86.2%降至2.9%。",
+      "why": "分析：把工具的实时可用性纳入检索过程，有助于解决智能体选中语义相关但执行失败工具的问题。",
+      "relevance": "分析：该方法对依赖大量外部API的智能体系统具有工程意义，因为它尝试在不重新训练主模型的情况下适应运行时故障。",
+      "caveat": "这是arXiv预印本，尚不能视为经过同行评审的定论；所列改进来自作者在离线检索与动态故障评估中的实验，正文未提供生产系统长期部署结果。",
       "tags": [
-        "Agent",
         "工具检索",
+        "智能体可靠性",
         "上下文老虎机",
-        "可靠性",
-        "EcoAgent"
+        "预印本"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13889v1"
+          "title": "RATED: Reliability-Aware AI Agent Tool Retrieval via Execution Dynamics",
+          "category": "Agent",
+          "url": "https://arxiv.org/abs/2610.13889v1",
+          "published": "2026-10-09",
+          "name": "arxiv.org"
         }
       ],
       "relatedIds": [
@@ -5496,94 +5480,35 @@
       "date": "2026-10-09"
     },
     {
-      "id": "p-daily-20261013-splat2act",
-      "title": "Splat2Act 用手机扫描为特定场景定制 VLA",
+      "id": "p-daily-20261013-splat2act-robot-personalization",
+      "title": "Splat2Act用场景扫描个性化机器人操作策略",
       "category": "机器人 / 具身",
       "published": "2026-10-09",
-      "paperTitle": "Splat2Act 用手机扫描为特定场景定制 VLA",
+      "paperTitle": "Splat2Act用场景扫描个性化机器人操作策略",
       "authors": [],
       "venue": "arXiv 预印本",
-      "summary": "Splat2Act 是一条自动化真实—仿真—真实流程：以手持手机扫描和用户物体图像构建基于 3D Gaussian Splatting 与碰撞几何的数字孪生，自动生成抓取任务，并由具备特权信息的仿真 oracle 产生示范。作者在 101 个校园扫描环境中得到 852 个容器位置和超过 6.8 万条抓取示范；最强个性化策略在目标场景的汇总抓取成功率为 62.5%。同一策略部署到真实 Stretch 3 后，在 12 项任务子集上成功率为 63.9%，对应仿真结果为 66.7%。",
-      "why": "它探索了无需在每位用户环境中人工采集机器人示范，而通过场景扫描和仿真数据为通用 VLA 做环境个性化的路径。",
-      "relevance": "具身智能研究可进一步考察数字孪生质量、任务自动生成和分阶段微调分别贡献多少，以及仿真指标能否预测特定场景的实机表现。",
-      "caveat": "论文是预印本；实机数字仅覆盖 Stretch 3 上的 12 项任务子集，环境主要来自扫描的校园场景，不能据此认定流程已适用于任意家庭、机器人平台或操作任务。",
+      "summary": "研究提出Splat2Act自动化真实到仿真再回到真实的训练流程，仅需手持手机扫描场景并采集用户物体图像，即可构建数字孪生、生成拾取任务与仿真示范，并微调视觉—语言—动作策略。流程应用于101个校园环境，生成超过68,000个拾取示范；最强个性化策略在目标场景的总体拾取成功率为62.5%，并在真实Stretch 3机器人上的12项任务子集中达到63.9%，对应仿真结果为66.7%。",
+      "why": "分析：该工作尝试减少为每个家庭或办公室单独采集真实机器人示范的成本，把场景数字化转化为个性化训练数据。",
+      "relevance": "分析：仿真与实机结果接近，显示真实到仿真再回到真实的流程可能成为通用机器人适配具体环境的一条可行路径。",
+      "caveat": "这是arXiv预印本，尚未经过同行评审。大规模示范数据和总体策略评估主要来自仿真，实机结果仅覆盖Stretch 3上的12项任务子集，不能等同于所有场景或任务上的真实部署表现。",
       "tags": [
-        "VLA",
         "具身智能",
-        "sim2real",
-        "3D高斯泼溅",
-        "机器人抓取"
+        "机器人操作",
+        "数字孪生",
+        "真实到仿真",
+        "预印本"
       ],
       "sources": [
         {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13945v1"
+          "title": "Splat2Act: From Captured Scenes to Personalized VLA Manipulation",
+          "category": "机器人 / 具身",
+          "url": "https://arxiv.org/abs/2610.13945v1",
+          "published": "2026-10-09",
+          "name": "arxiv.org"
         }
       ],
       "relatedIds": [
-        "n-20261013-splat2act"
-      ],
-      "type": "paper",
-      "date": "2026-10-09"
-    },
-    {
-      "id": "p-daily-20261013-chronos-policy",
-      "title": "Chronos Policy 将物理时间显式加入机器人策略",
-      "category": "机器人 / 具身",
-      "published": "2026-10-09",
-      "paperTitle": "Chronos Policy 将物理时间显式加入机器人策略",
-      "authors": [],
-      "venue": "arXiv 预印本",
-      "summary": "Chronos Policy 不再仅以序列位置隐式表达时间，而是以观测采集时刻和期望动作执行时刻为条件。作者比较了时间戳嵌入与时间感知旋转位置编码，并报告后者更稳健；训练时还随机化观测采样时刻和动作块起点，以覆盖异步、多速率感知以及不同推理延迟。论文称，该方法在仿真和真实世界的动态及多传感器任务上改善表现，在准静态任务上维持标称性能并增强对时序变化的鲁棒性。",
-      "why": "真实机器人中的传感频率、通信延迟和推理耗时并不恒定，显式建模物理时间有助于避免把固定 token 间隔错误等同于固定现实时间。",
-      "relevance": "学习或设计机器人 Transformer 时，可把时间戳视为独立于内容的结构信号，并通过时序随机化检验策略对延迟和异步传感的敏感性。",
-      "caveat": "论文是预印本；候选摘要没有提供各任务的具体提升数字、硬件范围或完整失败案例，因此只能确认作者报告了仿真与实机实验，不能量化其普适优势。",
-      "tags": [
-        "机器人策略",
-        "时间建模",
-        "扩散Transformer",
-        "多传感器",
-        "异步数据"
-      ],
-      "sources": [
-        {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13929v1"
-        }
-      ],
-      "relatedIds": [
-        "n-20261013-chronos-policy"
-      ],
-      "type": "paper",
-      "date": "2026-10-09"
-    },
-    {
-      "id": "p-daily-20261013-prompteina",
-      "title": "PromptEina 用自然语言条件生成全原子蛋白结构",
-      "category": "AI / 大模型",
-      "published": "2026-10-09",
-      "paperTitle": "PromptEina 用自然语言条件生成全原子蛋白结构",
-      "authors": [],
-      "venue": "arXiv 预印本",
-      "summary": "PromptEina 是一个支持用自然语言描述结构与功能目标的全原子蛋白结构生成模型。作者构建了包含 180 万个结构和超过 5,000 万条说明的配对数据集，并报告模型在 18 项结构属性中的 15 项优于基线。在结合体设计中，其至少在 20 个靶点中的 13 个领先基线，界面置信度较最强基线提高 14%。作者还对 GM2A 靶点进行了实验验证，识别出 9 个结合体，其中最强者的表观解离常数为 107 nM。",
-      "why": "自然语言接口可把多种全局及残基级设计约束统一到同一种条件表达中，减少为每类蛋白性质单独设计输入表示的需求。",
-      "relevance": "对生成式生物设计研究的启发是，可以系统研究文本描述的可控性、残基—文本对齐以及计算反馈与湿实验验证之间的闭环，而不只比较生成结构的单一评分。",
-      "caveat": "论文是预印本；多数结果来自计算评估，湿实验验证集中于 GM2A，表观解离常数也不等同于已经证明体内功能、安全性或临床有效性。",
-      "tags": [
-        "蛋白质设计",
-        "生成模型",
-        "自然语言条件",
-        "科学AI",
-        "实验验证"
-      ],
-      "sources": [
-        {
-          "name": "arXiv 原论文",
-          "url": "https://arxiv.org/abs/2610.13917v1"
-        }
-      ],
-      "relatedIds": [
-        "n-20261013-prompteina"
+        "n-20261013-splat2act-robot-personalization"
       ],
       "type": "paper",
       "date": "2026-10-09"
