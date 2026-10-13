@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promi
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { responseSchema } from './daily-schema.mjs';
-import { canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, selectCandidates, assertGroundedEdition, CATEGORIES } from './news-policy.mjs';
+import { canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, selectCandidates, assertGroundedEdition, assembleEdition, CATEGORIES } from './news-policy.mjs';
 
 test('all Schema properties explicitly declare type; count may be below five', () => {
   const walk = schema => {
@@ -43,6 +43,7 @@ test('page verification rejects date mismatch, missing metadata and unsafe redir
   const candidate = { title: 'Example', url: 'https://openai.com/news/a', published: '2026-10-12', category: 'Agent' };
   const page = date => async () => new Response(`<meta property="article:published_time" content="${date}"><article>Source fact</article>`, { headers: { 'content-type': 'text/html' } });
   assert.equal((await verifyPage(candidate, '2026-10-13', page('2026-10-12'))).published, '2026-10-12');
+  assert.equal((await verifyPage({ ...candidate, published: undefined }, '2026-10-13', page('2026-10-12'), true)).published, '2026-10-12');
   await assert.rejects(verifyPage(candidate, '2026-10-13', page('2026-10-11')), /does not match/);
   await assert.rejects(verifyPage(candidate, '2026-10-13', page('')), /Missing/);
   await assert.rejects(verifyPage(candidate, '2026-10-13', async () => new Response('', { status: 302, headers: { location: 'http://127.0.0.1' } })));
@@ -67,6 +68,17 @@ test('writer cannot introduce sources, dates, categories or duplicate events', (
   assert.throws(() => assertGroundedEdition({ news: [{ ...n, published: '2026-10-13' }] }, [c]));
   assert.throws(() => assertGroundedEdition({ news: [{ ...n, sources: [{ url: 'https://openai.com/invented' }] }] }, [c]));
   assert.throws(() => assertGroundedEdition({ news: [n, n] }, [c, candidate('无人机', 'y')]));
+});
+test('provider envelope drift is repaired only for application metadata and source labels', () => {
+  const c = candidate('Agent', 'x');
+  const raw = {editionMetadata:{schemaVersion:1}, news:[{category:c.category,published:c.published,summary:'A source-supported fact',sources:[{url:c.url}]}]};
+  const day = assembleEdition(raw,'2026-10-13',[c]);
+  assert.equal(day.schemaVersion,1); assert.equal(day.date,'2026-10-13');
+  assert.equal(day.news[0].sources[0].name,'openai.com');
+  assertGroundedEdition(day,[c]);
+  assert.equal(day.news[0].summary,raw.news[0].summary);
+  raw.news[0].published='2026-10-14';
+  assert.throws(()=>assertGroundedEdition(assembleEdition(raw,'2026-10-13',[c]),[c]));
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.

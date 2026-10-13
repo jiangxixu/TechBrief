@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { getApiConfig } from './api-config.mjs';
 import { root, validateDaily } from './validate.mjs';
 import { responseSchema } from './daily-schema.mjs';
-import { CATEGORIES, canonicalUrl, searchEvidence, verifyPage, selectCandidates, assertGroundedEdition, ageDays } from './news-policy.mjs';
+import { CATEGORIES, canonicalUrl, primaryUrl, searchEvidence, verifyPage, selectCandidates, assertGroundedEdition, assembleEdition, ageDays } from './news-policy.mjs';
 
 const dailyDir = resolve(root, 'data/daily');
 const force = process.env.FORCE_REGENERATE === 'true';
@@ -214,6 +214,20 @@ async function generate() {
       if (!provenUrls.has(canonicalUrl(candidate.url))) throw Error('Reused source missing search provenance');
       pool.push(await verifyPage(candidate, date));
     }
+    // Newly audited publisher hosts may recover prior rejected articles without
+    // repeating searches. Dates come directly from unique publisher metadata.
+    const recover = (prior.rejected || []).filter(n => n.url && n.reason === 'Source host not in primary publisher allowlist'
+      && primaryUrl(n.url) && provenUrls.has(canonicalUrl(n.url))).slice(0, 10);
+    for (let start = 0; start < recover.length; start += 2) {
+      const results = await Promise.allSettled(recover.slice(start, start + 2).map(n => verifyPage({
+        title: new URL(n.url).pathname.split('/').filter(Boolean).at(-1), category: n.category, url: n.url
+      }, date, fetch, true)));
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i];
+        if (result.status === 'fulfilled') pool.push(result.value);
+        else audit.rejected.push({ category: recover[start+i].category, url: recover[start+i].url, reason: safeFailure(result.reason) });
+      }
+    }
   } else for (const category of CATEGORIES) {
     audit.currentStage = `search:${category}`;
     try {
@@ -282,9 +296,11 @@ async function generate() {
     result = await callResponsesApi(config, retry);
   }
   if (result.status !== 'completed') throw Error('Writer response incomplete');
-  const edition = normalizeEdition(parseJson(extractOutputText(result)));
+  const candidate = normalizeEdition(parseJson(extractOutputText(result)));
   await mkdir(auditDir, { recursive: true });
-  await writeFile(resolve(auditDir, 'edition.candidate.json'), JSON.stringify(edition, null, 2) + '\n');
+  await writeFile(resolve(auditDir, 'edition.candidate.json'), JSON.stringify(candidate, null, 2) + '\n');
+  audit.providerSchemaAdhered = candidate.schemaVersion === 1 && candidate.date === date && candidate.news?.every(n => n.sources?.every(s => s.name));
+  const edition = assembleEdition(candidate, date, selected);
   validateDaily(edition, filename);
   assertGroundedEdition(edition, selected);
   // Do not trust the writer's quality disclosure.

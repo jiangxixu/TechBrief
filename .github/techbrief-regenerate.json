@@ -2,5 +2,5 @@
   "date": "2026-10-13",
   "dryRun": false,
   "reuseSearchRunId": 38386336442,
-  "reason": "Retry writing from today's completed searches, rechecking all reused publication pages."
+  "reason": "Retry after handling provider envelope drift; story facts and publication dates still require exact verification."
 }

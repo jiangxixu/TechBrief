@@ -7,7 +7,8 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'dji.com', 'px4.io', 'ardupilot.org', 'skydio.com', 'auterion.com',
   'unitree.com', 'agilityrobotics.com', 'figure.ai', 'physicalintelligence.company',
   'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch', 'langchain.com',
-  'aws.amazon.com', 'developers.googleblog.com', 'intel.com', 'claude.com'];
+  'aws.amazon.com', 'developers.googleblog.com', 'intel.com', 'claude.com',
+  'fortemtech.com', 'pdw.ai', 'palladyneai.com'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
@@ -73,7 +74,7 @@ export function publicationDates(html) {
   return [...dates];
 }
 
-export async function verifyPage(candidate, date, fetchImpl = fetch) {
+export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate = false) {
   if (!primaryUrl(candidate.url)) throw Error('Source host not in primary publisher allowlist');
   let url = candidate.url;
   let response;
@@ -103,7 +104,7 @@ export async function verifyPage(candidate, date, fetchImpl = fetch) {
   } finally { await reader.cancel(); }
   const dates = publicationDates(html);
   if (dates.length !== 1) throw Error('Missing or conflicting publication metadata');
-  if (candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
+  if (!deriveDate && candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
   if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > 7) throw Error('Source outside 7-day publication window');
   const evidence = html.replace(/<(script|style|nav|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24000);
@@ -148,4 +149,18 @@ export function assertGroundedEdition(edition, selected) {
     if (!candidate || n.published !== candidate.published || n.category !== candidate.category) throw Error('Writer changed verified source/date/category');
     unused.delete(key);
   }
+}
+
+// Provider proxies may accept text.format but return their own envelope.
+// Edition metadata and display source labels are application-owned, not facts
+// for the model to invent. News facts/dates/categories/URLs stay untouched.
+export function assembleEdition(candidate, date, selected) {
+  const byUrl = new Map(selected.map(n => [canonicalUrl(n.url), n]));
+  const news = (candidate.news || []).map(n => ({ ...n, sources: (n.sources || []).map(s => {
+    const verified = byUrl.get(canonicalUrl(s.url));
+    return { ...s, name: s.name || (verified ? new URL(verified.url).hostname : '') };
+  }) }));
+  return { schemaVersion: 1, date, timezone: 'Asia/Shanghai', generatedBy: 'ChatGPT',
+    title: candidate.title || `${date}科技简报：${news.length}条核验来源`,
+    editorialNote: candidate.editorialNote || '来源及覆盖度见核验记录。', news };
 }
