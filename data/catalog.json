@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-10-15",
+      "count": 3,
+      "title": "2026年10月15日科技简报"
+    },
+    {
       "date": "2026-10-14",
       "count": 4,
       "title": "科技事实简报｜智能体、具身机器人与产业动态"
@@ -123,6 +128,81 @@
     }
   ],
   "news": [
+    {
+      "category": "Agent",
+      "caveat": "证据边界：这是arXiv预印本；所给正文仅报告LIBERO-Pro结果，未说明该结果对应仿真还是实机，也未提供真实机器人验证的实验细节。",
+      "id": "n-20261015-chunkact",
+      "kind": "arXiv预印本",
+      "published": "2026-10-13",
+      "relevance": "分析：对需要组合感知、运动与VLA工具的机器人Agent，调用效率会影响任务规模与部署成本；该工作适合用于观察推理次数与执行自主性之间的折中。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.18874v1",
+          "name": "ChunkAct: Action Chunking for Agentic Robotics"
+        }
+      ],
+      "summary": "预印本提出ChunkAct，为智能体机器人引入动作分块：在线由一次LLM调用启动一串链式原语，只有失败时才返回控制；离线把记忆编译成动作块，使测试时无需记忆，并让规划器只处理需要推理的决策。所给摘要称，ChunkAct在LIBERO-Pro上较现有智能体机器人方法提高任务成功率，并减少LLM调用及输入、输出token需求。",
+      "tags": [
+        "ChunkAct",
+        "动作分块",
+        "智能体机器人",
+        "LLM调用效率"
+      ],
+      "title": "智能体机器人动作分块方法",
+      "why": "分析：把重复的原语级推理合并为可执行动作块，可能降低长任务中的模型调用开销，并把推理预算集中到子目标决策。",
+      "type": "news",
+      "date": "2026-10-15"
+    },
+    {
+      "category": "无人机",
+      "caveat": "证据边界：这是arXiv预印本；正文未分别给出仿真、真实世界地图与实体机器人团队的实验设置、量化结果或对比细节。",
+      "id": "n-20261015-mend",
+      "kind": "arXiv预印本",
+      "published": "2026-10-13",
+      "relevance": "分析：无人机与无人车协同任务的关键不只是生成路径，还包括在约束下持续可执行；该方法可作为评估神经生成规划与符号约束结合方式的案例。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.18850v1",
+          "name": "Collaborative Planning for UAV-UGV Teams under Operational Constraints via Masked Error-bounded Neuro-Symbolic Diffusion"
+        }
+      ],
+      "summary": "预印本提出MEND，将UAV-UGV协同规划建模为条件掩码生成过程；执行时用逻辑诱导的可接受性指示器重加权动作分布，以满足运行约束，并按约束感知动作分布的最低预测熵安排去掩码。所给摘要称，实验覆盖仿真、真实世界地图和实体机器人团队。",
+      "tags": [
+        "MEND",
+        "UAV-UGV",
+        "协同规划",
+        "神经符号扩散"
+      ],
+      "title": "运行约束下的无人机—无人车协同规划",
+      "why": "分析：把能耗、道路可通行性等运行约束直接纳入协同动作生成，意义在于让并行规划更贴近异构团队的实际执行条件。",
+      "type": "news",
+      "date": "2026-10-15"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "证据边界：这是Google Developers Blog的发布者材料；所给正文主要是自述、提示词和演示说明，未提供ERQA评测协议、独立复现或各仿真与实机工作流的系统性对比，不能据此外推普遍性能。",
+      "id": "n-20261015-gemini-argon",
+      "kind": "发布者博客",
+      "published": "2026-10-13",
+      "relevance": "分析：具身系统的实际价值取决于仿真练习、Real2Sim与实机控制之间的迁移；该文同时展示这些环节，因此适合作为能力演示而非独立性能结论来观察。",
+      "sources": [
+        {
+          "url": "https://developers.googleblog.com/gemini-4-argon-for-robotics",
+          "name": "Gemini 4 Argon for Robotics"
+        }
+      ],
+      "summary": "Google Developers Blog介绍Gemini 4 Argon，称其在Embodied Reasoning（ERQA）基准的纯推理评测中得分87%，并将其定位为可用于机器人控制、Real2Sim、物理理解以及研究和自我改进的通用物理推理模型。正文同时描述了仿真与实机流程：Spot先在MuJoCo数字孪生中练习脚踏垃圾桶操作，再在实体机器人上执行；另有简单机械臂的零样本控制示例。",
+      "tags": [
+        "Gemini 4 Argon",
+        "机器人控制",
+        "Real2Sim",
+        "物理理解"
+      ],
+      "title": "Gemini 4 Argon的机器人能力",
+      "why": "分析：若这些能力在不同平台上可复现，把物理推理、代码生成、视觉语义理解与闭环控制连接起来，可能缩短机器人从感知到执行的开发链路。",
+      "type": "news",
+      "date": "2026-10-15"
+    },
     {
       "id": "n-20261014-agentred",
       "title": "X-AgentRed探索跨服务智能体的有害工具调用路径",
@@ -5551,6 +5631,66 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20261015-chunkact",
+      "title": "智能体机器人动作分块方法",
+      "category": "Agent",
+      "published": "2026-10-13",
+      "paperTitle": "智能体机器人动作分块方法",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "预印本提出ChunkAct，为智能体机器人引入动作分块：在线由一次LLM调用启动一串链式原语，只有失败时才返回控制；离线把记忆编译成动作块，使测试时无需记忆，并让规划器只处理需要推理的决策。所给摘要称，ChunkAct在LIBERO-Pro上较现有智能体机器人方法提高任务成功率，并减少LLM调用及输入、输出token需求。",
+      "why": "分析：把重复的原语级推理合并为可执行动作块，可能降低长任务中的模型调用开销，并把推理预算集中到子目标决策。",
+      "relevance": "分析：对需要组合感知、运动与VLA工具的机器人Agent，调用效率会影响任务规模与部署成本；该工作适合用于观察推理次数与执行自主性之间的折中。",
+      "caveat": "证据边界：这是arXiv预印本；所给正文仅报告LIBERO-Pro结果，未说明该结果对应仿真还是实机，也未提供真实机器人验证的实验细节。",
+      "tags": [
+        "ChunkAct",
+        "动作分块",
+        "智能体机器人",
+        "LLM调用效率"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.18874v1",
+          "name": "ChunkAct: Action Chunking for Agentic Robotics"
+        }
+      ],
+      "relatedIds": [
+        "n-20261015-chunkact"
+      ],
+      "type": "paper",
+      "date": "2026-10-13"
+    },
+    {
+      "id": "p-daily-20261015-mend",
+      "title": "运行约束下的无人机—无人车协同规划",
+      "category": "无人机",
+      "published": "2026-10-13",
+      "paperTitle": "运行约束下的无人机—无人车协同规划",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "预印本提出MEND，将UAV-UGV协同规划建模为条件掩码生成过程；执行时用逻辑诱导的可接受性指示器重加权动作分布，以满足运行约束，并按约束感知动作分布的最低预测熵安排去掩码。所给摘要称，实验覆盖仿真、真实世界地图和实体机器人团队。",
+      "why": "分析：把能耗、道路可通行性等运行约束直接纳入协同动作生成，意义在于让并行规划更贴近异构团队的实际执行条件。",
+      "relevance": "分析：无人机与无人车协同任务的关键不只是生成路径，还包括在约束下持续可执行；该方法可作为评估神经生成规划与符号约束结合方式的案例。",
+      "caveat": "证据边界：这是arXiv预印本；正文未分别给出仿真、真实世界地图与实体机器人团队的实验设置、量化结果或对比细节。",
+      "tags": [
+        "MEND",
+        "UAV-UGV",
+        "协同规划",
+        "神经符号扩散"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.18850v1",
+          "name": "Collaborative Planning for UAV-UGV Teams under Operational Constraints via Masked Error-bounded Neuro-Symbolic Diffusion"
+        }
+      ],
+      "relatedIds": [
+        "n-20261015-mend"
+      ],
+      "type": "paper",
+      "date": "2026-10-13"
+    },
     {
       "id": "p-daily-20261014-agentred",
       "title": "X-AgentRed探索跨服务智能体的有害工具调用路径",
