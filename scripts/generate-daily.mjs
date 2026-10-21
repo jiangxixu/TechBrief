@@ -194,15 +194,20 @@ async function generate() {
     }
     // Newly audited publisher hosts may recover prior rejected articles without
     // repeating searches. Dates come directly from unique publisher metadata.
-    const recover = (prior.rejected || []).filter(n => n.url && n.reason === 'Source host not in primary publisher allowlist'
-      && primaryUrl(n.url) && provenUrls.has(canonicalUrl(n.url))).slice(0, 10);
+    const recover = (prior.rejected || []).filter(n => n.url
+      && ['Source host not in primary publisher allowlist', 'Missing or conflicting publication metadata'].includes(n.reason)
+      && primaryUrl(n.url) && (provenUrls.has(canonicalUrl(n.url)) || prior.searches.some(s => s.category === n.category
+        && s.opaqueUrls === true && s.sourceUrls?.length > 0 && s.sourceUrls.every(raw => {
+          const u = new URL(raw); return u.hostname === 'api.shep-api.com' && u.pathname.startsWith('/v1/media/assets/');
+        })))).slice(0, 10);
     for (let start = 0; start < recover.length; start += 2) {
       const results = await Promise.allSettled(recover.slice(start, start + 2).map(n => verifyPage({
         title: new URL(n.url).pathname.split('/').filter(Boolean).at(-1), category: n.category, url: n.url
       }, date, fetch, true)));
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-        if (result.status === 'fulfilled') pool.push(result.value);
+        if (result.status === 'fulfilled') pool.push({ ...result.value, provenanceBasis: provenUrls.has(canonicalUrl(recover[start+i].url))
+          ? 'search tool URL' : 'independent publisher fetch after opaque search' });
         else audit.rejected.push({ category: recover[start+i].category, url: recover[start+i].url, reason: safeFailure(result.reason) });
       }
     }
@@ -282,7 +287,7 @@ async function generate() {
   assertGroundedEdition(edition, selected);
   // Do not trust the writer's quality disclosure.
   const older = selected.filter(n => ageDays(n.published, date) > 3).length;
-  edition.editorialNote = `本期收录 ${selected.length} 条核验来源，${older} 条为4至7天前的补充。未收录领域：${audit.missingCategories.join('、') || '无'}。检索未完成领域：${audit.searchFailures.map(n => n.category).join('、') || '无'}。来源公开日期依据出版方元数据或实时arXiv记录；不把预印本视为同行评审。`;
+  edition.editorialNote = `本期收录 ${selected.length} 条核验来源，${older} 条为4至7天前的补充。未收录领域：${audit.missingCategories.join('、') || '无'}。检索未完成领域：${audit.searchFailures.map(n => n.category).join('、') || '无'}。来源公开日期依据出版方元数据、专用发布日期栏或实时arXiv记录；不把预印本视为同行评审。`;
   const partial = selected.length < 5 || older > 0 || audit.missingCategories.length > 0 || audit.searchFailures.length > 0;
   if (dryRun) {
     await mkdir(auditDir, { recursive: true });

@@ -10,7 +10,8 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'aws.amazon.com', 'developers.googleblog.com', 'intel.com', 'claude.com',
   'fortemtech.com', 'pdw.ai', 'palladyneai.com', 'github.blog', 'crewai.com',
   'minimax.io', 'deepseek.com', 'inceptionlabs.ai', 'reflection.ai',
-  'sensetime.com', 'synaptics.com', 'robinsonheli.com', 'openrobotics.org'];
+  'sensetime.com', 'synaptics.com', 'robinsonheli.com', 'openrobotics.org',
+  'mistral.ai', 'meta.ai', 'github.github.com', 'zoom.com'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
@@ -69,7 +70,7 @@ export async function verifyDiscoveredPage(candidate, date, provenance, fetchImp
 }
 
 // Accept publication metadata only, never dateModified or a date anywhere in page text.
-export function publicationDates(html) {
+export function publicationDates(html, publisherUrl = '') {
   const dates = new Set();
   const add = value => {
     const m = String(value).match(/^(\d{4}-\d{2}-\d{2})(?:T|\s|$)/);
@@ -88,6 +89,16 @@ export function publicationDates(html) {
   };
   for (const m of html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     try { walk(JSON.parse(m[1])); } catch {}
+  }
+  // NVIDIA's newsroom publishes its date in this dedicated article header,
+  // not JSON-LD. Scope the adapter to this publisher and this exact element;
+  // dates in related links, copyright notices and scripts are not evidence.
+  if (publisherUrl && new URL(publisherUrl).hostname === 'nvidianews.nvidia.com') {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    for (const match of html.matchAll(/<div\b[^>]*class=["']article-date["'][^>]*>\s*([A-Z][a-z]+)\s+(\d{1,2}),\s*(\d{4})\s*<\/div>/g)) {
+      const month = months.indexOf(match[1]) + 1;
+      if (month) add(`${match[3]}-${String(month).padStart(2, '0')}-${match[2].padStart(2, '0')}`);
+    }
   }
   return [...dates];
 }
@@ -120,13 +131,14 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
     }
     html += decoder.decode();
   } finally { await reader.cancel(); }
-  const dates = publicationDates(html);
+  const dates = publicationDates(html, url);
   if (dates.length !== 1) throw Error('Missing or conflicting publication metadata');
   if (!deriveDate && candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
   if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > 7) throw Error('Source outside 7-day publication window');
   const evidence = html.replace(/<(script|style|nav|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24000);
-  return { ...candidate, url: canonicalUrl(url), published: dates[0], evidence, dateBasis: 'publisher publication metadata' };
+  return { ...candidate, url: canonicalUrl(url), published: dates[0], evidence,
+    dateBasis: new URL(url).hostname === 'nvidianews.nvidia.com' ? 'NVIDIA newsroom article publication header' : 'publisher publication metadata' };
 }
 
 export function selectCandidates(pool, history, date) {

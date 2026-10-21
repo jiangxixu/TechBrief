@@ -58,6 +58,14 @@ test('publication metadata excludes modification dates and detects conflicts', (
   assert.equal(publicationDates('<script type="application/ld+json">[{"datePublished":"2026-10-12"},{"datePublished":"2026-10-11"}]</script>').length, 2);
   assert.equal(ageDays('2026-02-30', '2026-10-13'), Infinity);
 });
+
+test('NVIDIA newsroom date adapter reads only the publisher article header', () => {
+  const html = '<div class="article-date">\n October 21, 2026\n</div><footer>2026</footer><a href="/2026/10/22/related">October 22, 2026</a>';
+  assert.deepEqual(publicationDates(html, 'https://nvidianews.nvidia.com/news/openshell-reference-architecture'), ['2026-10-21']);
+  assert.deepEqual(publicationDates(html, 'https://openai.com/news/a'), []);
+  assert.deepEqual(publicationDates('<footer>October 21, 2026</footer>', 'https://nvidianews.nvidia.com/news/a'), []);
+  assert.equal(publicationDates(html + '<meta property="article:published_time" content="2026-10-20">', 'https://nvidianews.nvidia.com/news/a').length, 2);
+});
 test('page verification rejects date mismatch, missing metadata and unsafe redirects', async () => {
   const candidate = { title: 'Example', url: 'https://openai.com/news/a', published: '2026-10-12', category: 'Agent' };
   const page = date => async () => new Response(`<meta property="article:published_time" content="${date}"><article>Source fact</article>`, { headers: { 'content-type': 'text/html' } });
@@ -101,7 +109,7 @@ test('provider envelope drift is repaired only for application metadata and sour
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.
-for (const scenario of ['normal', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_wrong_date']) {
+for (const scenario of ['normal', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_opaque', 'reuse_recover_opaque', 'reuse_wrong_date']) {
   test(`generation integration: ${scenario}`, async () => {
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
@@ -139,7 +147,11 @@ globalThis.fetch = async (url, options={}) => {
         const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x=>[x.type,x.value]));
         const date = `${parts.year}-${parts.month}-${parts.day}`;
         const selected = CATEGORIES.slice(0,2).map((c,i) => ({ title:'story-'+(i+1), category:c, published:date, url:'https://openai.com/news/item-'+(i+1) }));
-        await writeFile(resolve(dir, 'prior.json'), JSON.stringify({ date:scenario==='reuse_wrong_date'?'2000-01-01':date, runId:'42', selected, searches:CATEGORIES.map(c=>({category:c,calls:[{action:'search'}],sourceUrls:selected.map(n=>n.url)})) }));
+        const opaque = scenario.includes('opaque');
+        const rejected = scenario === 'reuse_recover_opaque' ? selected.map(n => ({ category:n.category, url:n.url, reason:'Missing or conflicting publication metadata' })) : [];
+        await writeFile(resolve(dir, 'prior.json'), JSON.stringify({ date:scenario==='reuse_wrong_date'?'2000-01-01':date, runId:'42',
+          selected: rejected.length ? [] : selected.map(n => ({ ...n, ...(opaque ? { provenanceBasis:'independent publisher fetch after opaque search' } : {}) })),
+          rejected, searches:CATEGORIES.map(c=>({category:c,calls:[{action:'search'}],opaqueUrls:opaque,sourceUrls:opaque ? ['https://api.shep-api.com/v1/media/assets/token'] : selected.map(n=>n.url)})) }));
       }
       if (scenario === 'existing') {
         const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x=>[x.type,x.value]));

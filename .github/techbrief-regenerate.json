@@ -1,5 +1,6 @@
 {
   "date": "2026-10-22",
   "dryRun": false,
-  "reason": "Publish after successful live five-story preview; retry intermittent gateway failures and deploy only the validated build."
+  "reason": "Reuse completed same-day searches and independently recheck publisher sources after adding verified publisher/date adapters.",
+  "reuseSearchRunId": 39635116081
 }
