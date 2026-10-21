@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { getApiConfig } from './api-config.mjs';
 import { root, validateDaily } from './validate.mjs';
 import { responseSchema } from './daily-schema.mjs';
-import { CATEGORIES, canonicalUrl, primaryUrl, searchEvidence, verifyPage, selectCandidates, assertGroundedEdition, assembleEdition, ageDays } from './news-policy.mjs';
+import { CATEGORIES, canonicalUrl, primaryUrl, searchEvidence, verifyPage, verifyDiscoveredPage, selectCandidates, assertGroundedEdition, assembleEdition, ageDays } from './news-policy.mjs';
 
 const dailyDir = resolve(root, 'data/daily');
 const force = process.env.FORCE_REGENERATE === 'true';
@@ -211,8 +211,15 @@ async function generate() {
     audit.reusedSearchRunId = prior.runId;
     for (const candidate of prior.selected || []) {
       if (new URL(candidate.url).hostname === 'arxiv.org') continue;
-      if (!provenUrls.has(canonicalUrl(candidate.url))) throw Error('Reused source missing search provenance');
-      pool.push(await verifyPage(candidate, date));
+      const sourceSearch = prior.searches.find(s => s.category === candidate.category);
+      const opaqueVerified = candidate.provenanceBasis === 'independent publisher fetch after opaque search'
+        && sourceSearch?.opaqueUrls === true && sourceSearch.sourceUrls?.length > 0
+        && sourceSearch.sourceUrls.every(raw => {
+          const u = new URL(raw);
+          return u.hostname === 'api.shep-api.com' && u.pathname.startsWith('/v1/media/assets/');
+        });
+      if (!provenUrls.has(canonicalUrl(candidate.url)) && !opaqueVerified) throw Error('Reused source missing search provenance');
+      pool.push({ ...await verifyPage(candidate, date), provenanceBasis: candidate.provenanceBasis });
     }
     // Newly audited publisher hosts may recover prior rejected articles without
     // repeating searches. Dates come directly from unique publisher metadata.
@@ -238,15 +245,14 @@ async function generate() {
       input: `Search ${category}: ${queries[category]}. Return dated primary articles, not homepages.`
     });
     const provenance = searchEvidence(result);
-    audit.searches.push({ category, responseId: result.id, calls: provenance.calls, sourceCount: provenance.urls.size, sourceUrls: [...provenance.urls] });
+    audit.searches.push({ category, responseId: result.id, calls: provenance.calls, sourceCount: provenance.urls.size, sourceUrls: [...provenance.urls], opaqueUrls: provenance.opaqueUrls });
     const candidates = parseJson(extractOutputText(result)).candidates;
     if (!Array.isArray(candidates) || candidates.length > 4) throw Error('Invalid discovery candidates');
     for (const candidate of candidates) {
       try {
         if (!candidate.title || candidate.category !== category) throw Error('Invalid candidate title/category');
         if (new URL(candidate.url).hostname.replace(/^www\./, '') === 'arxiv.org') throw Error('arXiv belongs in supplemental paper pool');
-        if (!provenance.urls.has(canonicalUrl(candidate.url))) throw Error('Candidate URL absent from search provenance');
-        pool.push(await verifyPage(candidate, date));
+        pool.push(await verifyDiscoveredPage(candidate, date, provenance));
       } catch (error) {
         let url;
         try { url = canonicalUrl(candidate.url); } catch {}
@@ -273,7 +279,7 @@ async function generate() {
   } catch { audit.rejected.push({ category: 'arXiv', reason: 'Live arXiv feed unavailable' }); }
   const selected = selectCandidates(pool, history, date);
   if (!selected.length) throw Error('No fresh, dated, nonduplicate primary stories; no edition published');
-  audit.selected = selected.map(({ title, url, published, category, dateBasis }) => ({ title, url, published, category, dateBasis, ageDays: ageDays(published, date) }));
+  audit.selected = selected.map(({ title, url, published, category, dateBasis, provenanceBasis }) => ({ title, url, published, category, dateBasis, provenanceBasis, ageDays: ageDays(published, date) }));
   audit.missingCategories = CATEGORIES.filter(c => !selected.some(n => n.category === c));
   const writerBody = {
     model: config.model,
@@ -326,6 +332,8 @@ catch (error) {
   // API bodies may contain sensitive data; report only bounded classifications.
   audit.failure = safeFailure(error);
   console.error(audit.failure);
+  for (const { category, reason } of audit.searchFailures) console.error(`Search (${category}): ${reason}`);
+  for (const { category, reason } of audit.rejected) console.error(`Rejected (${category}): ${reason}`);
   process.exitCode = 1;
 } finally {
   await mkdir(auditDir, { recursive: true });

@@ -8,7 +8,9 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'unitree.com', 'agilityrobotics.com', 'figure.ai', 'physicalintelligence.company',
   'mit.edu', 'stanford.edu', 'berkeley.edu', 'cmu.edu', 'ethz.ch', 'langchain.com',
   'aws.amazon.com', 'developers.googleblog.com', 'intel.com', 'claude.com',
-  'fortemtech.com', 'pdw.ai', 'palladyneai.com'];
+  'fortemtech.com', 'pdw.ai', 'palladyneai.com', 'github.blog', 'crewai.com',
+  'minimax.io', 'deepseek.com', 'inceptionlabs.ai', 'reflection.ai',
+  'sensetime.com', 'synaptics.com', 'robinsonheli.com', 'openrobotics.org'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
@@ -47,7 +49,23 @@ export function searchEvidence(payload) {
     for (const a of part.annotations || []) if (a.type === 'url_citation' && a.url) urls.add(canonicalUrl(a.url));
   }
   if (!urls.size) throw Error('Search returned no source provenance');
-  return { urls, calls: calls.map(c => ({ id: c.id, action: c.action?.type, queries: c.action?.queries || [], ...(c.action?.url ? { url: c.action.url } : {}) })) };
+  // Some gateways replace every tool URL with an opaque, temporary media URL.
+  // Those URLs cannot establish the identity of the original publisher article.
+  const opaqueUrls = [...urls].every(raw => {
+    const u = new URL(raw);
+    return u.hostname === 'api.shep-api.com' && u.pathname.startsWith('/v1/media/assets/');
+  });
+  return { urls, opaqueUrls, calls: calls.map(c => ({ id: c.id, action: c.action?.type, queries: c.action?.queries || [], ...(c.action?.url ? { url: c.action.url } : {}) })) };
+}
+
+export async function verifyDiscoveredPage(candidate, date, provenance, fetchImpl = fetch) {
+  const linked = provenance.urls.has(canonicalUrl(candidate.url));
+  if (!linked && !provenance.opaqueUrls) throw Error('Candidate URL absent from search provenance');
+  // A completed search is still mandatory. In opaque mode the original URL is
+  // a discovery hint only: independently fetch the allowlisted publisher and
+  // verify its publication date before giving any content to the writer.
+  const verified = await verifyPage(candidate, date, fetchImpl);
+  return { ...verified, provenanceBasis: linked ? 'search tool URL' : 'independent publisher fetch after opaque search' };
 }
 
 // Accept publication metadata only, never dateModified or a date anywhere in page text.

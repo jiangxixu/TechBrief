@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promi
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { responseSchema } from './daily-schema.mjs';
-import { canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, selectCandidates, assertGroundedEdition, assembleEdition, CATEGORIES } from './news-policy.mjs';
+import { canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, verifyDiscoveredPage, selectCandidates, assertGroundedEdition, assembleEdition, CATEGORIES } from './news-policy.mjs';
 
 test('all Schema properties explicitly declare type; count may be below five', () => {
   const walk = schema => {
@@ -33,6 +33,25 @@ test('no search or failed search cannot be treated as successful retrieval', () 
   ] });
   assert.ok(opened.urls.has('https://openai.com/news/article'));
 });
+test('opaque gateway links require independent publisher verification', async () => {
+  const evidence = urls => searchEvidence({ status: 'completed', output: [{ type: 'web_search_call', status: 'completed', action: { type: 'search', sources: urls.map(url => ({ url })) } }] });
+  const opaque = evidence(['https://api.shep-api.com/v1/media/assets/temporary-token']);
+  const item = { title: 'Official announcement', category: 'Agent', published: '2026-10-21', url: 'https://microsoft.com/news/announcement' };
+  let requests = 0;
+  const page = async () => { requests++; return new Response('<meta property="article:published_time" content="2026-10-21"><article>Official announcement</article>', { headers: { 'content-type': 'text/html' } }); };
+  const verified = await verifyDiscoveredPage(item, '2026-10-22', opaque, page);
+  assert.equal(requests, 1);
+  assert.equal(verified.provenanceBasis, 'independent publisher fetch after opaque search');
+  await assert.rejects(verifyDiscoveredPage({ ...item, url: 'https://attacker.example/a' }, '2026-10-22', opaque, page), /allowlist/);
+  await assert.rejects(verifyDiscoveredPage({ ...item, published: '2026-10-20' }, '2026-10-22', opaque, page), /does not match/);
+  await assert.rejects(verifyDiscoveredPage(item, '2026-10-22', opaque, async () => new Response('', { status: 404 })), /HTTP 404/);
+  const direct = evidence(['https://openai.com/a']);
+  assert.equal(direct.opaqueUrls, false);
+  await assert.rejects(verifyDiscoveredPage(item, '2026-10-22', direct, page), /absent/);
+  const mixed = evidence(['https://api.shep-api.com/v1/media/assets/token', 'https://openai.com/a']);
+  await assert.rejects(verifyDiscoveredPage(item, '2026-10-22', mixed, page), /absent/);
+});
+
 test('publication metadata excludes modification dates and detects conflicts', () => {
   assert.deepEqual(publicationDates('<script type="application/ld+json">{"dateModified":"2026-10-13"}</script>'), []);
   assert.deepEqual(publicationDates('<meta content="2026-10-12T10:00:00Z" property="article:published_time">'), ['2026-10-12']);
@@ -82,7 +101,7 @@ test('provider envelope drift is repaired only for application metadata and sour
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.
-for (const scenario of ['normal', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_wrong_date']) {
+for (const scenario of ['normal', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_wrong_date']) {
   test(`generation integration: ${scenario}`, async () => {
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
@@ -104,7 +123,7 @@ globalThis.fetch = async (url, options={}) => {
    if(body.text || body.tool_choice!=='required') throw Error('Discovery must require search independently of schema');
    const category=categories[searches++], source='https://openai.com/news/item-'+searches;
    const result=output({candidates: searches>2 ? [] : [{title:'story-'+searches,category,published:date,url:source}]});
-   if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:[{url:source}]}});
+   if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:[{url:scenario==='opaque'?'https://api.shep-api.com/v1/media/assets/token':source}]}});
    return Response.json(result);
   }
   writers++;

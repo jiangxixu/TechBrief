@@ -1,6 +1,5 @@
 {
-  "date": "2026-10-13",
-  "dryRun": false,
-  "reuseSearchRunId": 38386336442,
-  "reason": "Retry after handling provider envelope drift; story facts and publication dates still require exact verification."
+  "date": "2026-10-22",
+  "dryRun": true,
+  "reason": "Verify recovery from opaque search gateway URLs against live primary publisher pages before publishing."
 }
