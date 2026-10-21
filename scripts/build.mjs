@@ -8,7 +8,7 @@ const serialized=JSON.stringify(catalog,null,2)+'\n';
 await writeFile(resolve(root,'data/catalog.json'),serialized);
 await writeFile(resolve(root,'data/daily/index.json'),JSON.stringify({schemaVersion:1,latest:catalog.days[0]?.date||null,days:catalog.days},null,2)+'\n');
 const dist=resolve(root,'dist');await rm(dist,{recursive:true,force:true});await mkdir(dist,{recursive:true});
-for(const f of ['index.html','styles.css','core.js','app.js','manifest.webmanifest'])await copyFile(resolve(root,f),resolve(dist,f));
+for(const f of ['index.html','knowledge.html','roadmaps.html','styles.css','core.js','app.js','manifest.webmanifest'])await copyFile(resolve(root,f),resolve(dist,f));
 for(const d of ['data','assets'])await cp(resolve(root,d),resolve(dist,d),{recursive:true});
 await writeFile(resolve(dist,'.nojekyll'),'');
 const hash=createHash('sha256');for(const f of ['index.html','styles.css','core.js','app.js','sw.js','manifest.webmanifest'])hash.update(await readFile(resolve(root,f)));hash.update(serialized);

@@ -1,6 +1,7 @@
 import { mkdir, readFile, readdir, writeFile, rename } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { getApiConfig } from './api-config.mjs';
+import { callResponsesApi as requestResponses } from './responses-api.mjs';
 import { root, validateDaily } from './validate.mjs';
 import { responseSchema } from './daily-schema.mjs';
 import { CATEGORIES, canonicalUrl, primaryUrl, searchEvidence, verifyPage, verifyDiscoveredPage, selectCandidates, assertGroundedEdition, assembleEdition, ageDays } from './news-policy.mjs';
@@ -126,44 +127,14 @@ async function fetchArxivSources() {
   }).filter((item) => item.title && item.published && item.url.startsWith('https://'));
 }
 
-async function callResponsesApi({ apiKey, model, responsesUrl }, body) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 180_000);
-  try {
-    const response = await fetch(responsesUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body),
-      signal: controller.signal
-    });
-    const raw = await response.text();
-    audit.apiCalls.push({ status: response.status, requestId: response.headers.get('x-request-id') });
-    if (!response.ok) {
-      const safeMessage = raw.slice(0, 1500).replaceAll(apiKey, '[REDACTED]');
-      const error = new Error(`Responses API returned HTTP ${response.status}: ${safeMessage}`);
-      error.status = response.status;
-      try { error.code = JSON.parse(raw).error?.code; } catch {}
-      throw error;
-    }
-    try {
-      return JSON.parse(raw);
-    } catch {
-      throw new Error('Responses API returned a non-JSON response');
-    }
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
 const date = shanghaiDate();
 const filename = `${date}.json`;
 const outputPath = resolve(dailyDir, filename);
 const auditDir = resolve(root, 'reports');
 const audit = { date, startedAt: new Date().toISOString(), runId: process.env.GITHUB_RUN_ID || null,
   status: 'started', apiCalls: [], searches: [], searchFailures: [], rejected: [], selected: [] };
+
+const callResponsesApi = (config, body) => requestResponses(config, body, audit);
 
 function safeFailure(error) {
   if (error.status) return `API HTTP ${error.status}, code ${error.code || 'unknown'}`;

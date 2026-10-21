@@ -1,5 +1,5 @@
 {
   "date": "2026-10-22",
-  "dryRun": true,
-  "reason": "Verify recovery from opaque search gateway URLs against live primary publisher pages before publishing."
+  "dryRun": false,
+  "reason": "Publish after successful live five-story preview; retry intermittent gateway failures and deploy only the validated build."
 }
