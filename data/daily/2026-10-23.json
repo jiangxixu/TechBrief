@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-23",
+  "timezone": "Asia/Shanghai",
+  "generatedBy": "ChatGPT",
+  "title": "科技简报｜2026年10月23日",
+  "editorialNote": "本期收录 5 条核验来源，1 条为4至7天前的补充。未收录领域：科技产业。检索未完成领域：无。来源公开日期依据出版方元数据、专用发布日期栏或实时arXiv记录；不把预印本视为同行评审。",
+  "news": [
+    {
+      "category": "Agent",
+      "caveat": "内容来自Google Developers Blog，Agents CLI Extension System在v1.8.0中仍标记为实验性，清单模式和命令界面可能发生破坏性变化；文中部署与评估流程为说明性示例。",
+      "id": "n-20261023-agents-cli",
+      "kind": "产品更新",
+      "published": "2026-10-21",
+      "relevance": "对使用不同智能体框架的团队而言，扩展机制把框架适配、部署、评估和可观测性纳入同一命令生命周期，可能减少维护分叉工具的需要。",
+      "sources": [
+        {
+          "url": "https://developers.googleblog.com/powering-the-agent-development-lifecycle-with-any-framework-from-adk-to-langchain-and-beyond",
+          "name": "Google Developers Blog"
+        }
+      ],
+      "summary": "Google Agents CLI从1.5.0开始提供Extension System，可在不分叉工具的情况下覆盖内置命令或添加新命令；1.8.0提供首个官方LangChain扩展。该扩展可为LangChain、LangGraph和Deep Agents项目提供脚手架，并沿用Cloud Run部署路径；扩展通过Git仓库分发，并以锁定文件记录精确提交。",
+      "tags": [
+        "Agents CLI",
+        "LangChain",
+        "LangGraph",
+        "扩展系统",
+        "Cloud Run"
+      ],
+      "title": "Google Agents CLI支持通过扩展接入多种智能体框架与组织策略",
+      "why": "这表明智能体开发工具正在从绑定单一框架转向可插拔生命周期管理，企业也可将合规扫描、登录和部署策略编码为扩展。"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "该来源是NVIDIA公司博客，所述模型、合作方使用情况和性能信息均为发布方陈述；来源未提供独立验证，也未说明所有模型的实际部署规模。",
+      "id": "n-20261023-nvidia-open-models",
+      "kind": "模型与平台发布",
+      "published": "2026-10-21",
+      "relevance": "开放权重模型覆盖结构化数据、机器人、自动驾驶和生物设计等场景，可能降低企业围绕本地数据定制模型和在自有基础设施部署的门槛。",
+      "sources": [
+        {
+          "url": "https://blogs.nvidia.com/blog/open-models-europe-industry",
+          "name": "NVIDIA Blog"
+        }
+      ],
+      "summary": "NVIDIA宣布扩展开放模型家族，包含Nemotron 3.5 Super VL、Nemotron Retriever、Kumo、Cosmos 3.5、Alpamayo 2 Edge、BioNeMo RFD4-Proteina和Ising等。NVIDIA称Cosmos提供用于驾驶和机器人操作场景行为评估的仿真检查点，并称Alpamayo 2 Edge面向自动驾驶车辆的实时场景理解和运动规划。",
+      "tags": [
+        "开放模型",
+        "Cosmos",
+        "机器人",
+        "自动驾驶",
+        "Nemotron"
+      ],
+      "title": "NVIDIA发布覆盖机器人、自动驾驶与行业数据的开放模型家族",
+      "why": "模型、数据工厂和仿真工具被组合成面向行业的开发栈，竞争重点因此不只在单个模型能力，也在训练数据、评估和部署工具链。"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "这是arXiv预印本，结论基于作者在五个长上下文推理基准上的实验；来源没有提供同行评审结果或生产环境验证。",
+      "id": "n-20261023-longzero",
+      "kind": "研究论文",
+      "published": "2026-10-21",
+      "relevance": "如果自生成且无需外部数据的训练任务能稳定迁移到真实任务，长上下文推理训练对外部语料和更强教师模型的依赖可能下降。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.30132v1",
+          "name": "arXiv"
+        }
+      ],
+      "summary": "预印本LongZero提出一种无需外部数据的长上下文推理强化学习方法：模型先生成问题、答案和支持证据，再将证据扩展为长多文档上下文，并结合自生成的多跳推理和多轮检索任务使用GRPO训练。作者在两个大语言模型和五个长上下文推理基准上进行评估，报告其优于所比较的基线。",
+      "tags": [
+        "预印本",
+        "长上下文",
+        "强化学习",
+        "GRPO",
+        "检索"
+      ],
+      "title": "LongZero提出无需外部数据的长上下文推理强化学习方法",
+      "why": "该方法把训练数据生成和长上下文构造都放入模型自生成流程，探索了在高质量长数据稀缺时扩展推理训练的路径。"
+    },
+    {
+      "category": "无人机",
+      "caveat": "这是2026-10-19发布的企业新闻稿，来源只说明已完成合作第一阶段并建立连接器，未说明实地部署、任务效果或独立评估结果。",
+      "id": "n-20261023-auterion-hydris",
+      "kind": "合作集成",
+      "published": "2026-10-19",
+      "relevance": "双向交换传感器、无人系统和任务数据，可能为多厂商无人系统协同提供更开放的集成方式，但实际价值仍取决于后续部署和验证。",
+      "sources": [
+        {
+          "url": "https://auterion.com/auterion-and-project-q-connect-auterionos-and-hydris-to-advance-open-defense-architectures-and-enhance-mission-capabilities",
+          "name": "Auterion Press Release"
+        }
+      ],
+      "summary": "Auterion与Project Q宣布完成谅解备忘录下合作的第一阶段，将AuterionOS和Auterion Mission Control与Project Q的HYDRIS连接。新连接器支持任务控制系统与HYDRIS之间双向传递传感器探测、无人机位置和任务指令，形成共享的多厂商运行态势。",
+      "tags": [
+        "无人机",
+        "开放架构",
+        "AuterionOS",
+        "HYDRIS",
+        "国防"
+      ],
+      "title": "Auterion与Project Q打通无人系统任务控制与开放集成层",
+      "why": "这项集成将开放操作系统与跨系统编排层连接起来，体现国防无人系统从单一供应商栈向模块化、多厂商协作架构发展的方向。"
+    },
+    {
+      "category": "Agent",
+      "caveat": "这是arXiv预印本；评估同时包含RoboTwin 2.0仿真和实体双臂操作任务，但来源未给出具体任务、数据集规模或性能数值，不能据此推断已实现通用实机能力。",
+      "id": "n-20261023-aw0",
+      "kind": "研究论文",
+      "published": "2026-10-21",
+      "relevance": "把可复用程序技能、未来视频预测和机器人动作预测结合起来，可能改善智能体规划与物理执行之间的衔接。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.30136v1",
+          "name": "arXiv"
+        }
+      ],
+      "summary": "预印本Agentic World Action Models提出AW-0框架，将基于代码的规划与视频和动作联合预测结合起来，在统一架构中生成技能程序、未来视觉状态和低层机器人动作。作者在RoboTwin 2.0和实体双臂操作任务上评估，报告其相较VLA和WAM基线在任务表现、语言跟随、语义推理和鲁棒性方面有所提升。",
+      "tags": [
+        "预印本",
+        "具身智能",
+        "世界模型",
+        "机器人操作",
+        "技能复用"
+      ],
+      "title": "AW-0将代码规划与视频和机器人动作预测结合",
+      "why": "若这一架构在更多实体任务中得到验证，代码化技能库可成为连接高层规划、世界模型预测和低层控制的中间表示。"
+    }
+  ]
+}
