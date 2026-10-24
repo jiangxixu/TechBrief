@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-10-25",
+      "count": 4,
+      "title": "科技简报｜2026年10月25日"
+    },
+    {
       "date": "2026-10-24",
       "count": 5,
       "title": "科技简报｜2026年10月24日"
@@ -143,6 +148,103 @@
     }
   ],
   "news": [
+    {
+      "category": "Agent",
+      "caveat": "信息来自Anthropic公告；公告未证明捐赠后的治理机制已经实施，也未提供安全指引的成效数据。",
+      "id": "n-20261025-agent-skills",
+      "kind": "标准与治理",
+      "published": "2026-10-22",
+      "relevance": "Agent开发者和平台方可关注后续维护机制、提案流程及安全指导能否形成跨平台共用的实践。",
+      "sources": [
+        {
+          "url": "https://anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation",
+          "name": "Anthropic"
+        }
+      ],
+      "summary": "Anthropic宣布将Agent Skills标准及其名称、标识、GitHub组织和agentskills.io域名捐赠给Agentic AI Foundation（AAIF）。Anthropic称该标准已被70多个agent平台集成，并提议以版本化发布、正式提案流程和技能安全指导作为后续路线图。",
+      "tags": [
+        "Agent Skills",
+        "开放标准",
+        "互操作性"
+      ],
+      "title": "Agent Skills标准捐赠给Agentic AI Foundation",
+      "why": "将标准交由基金会承接，有望降低跨平台采用对单一发布方路线的依赖；这是对生态治理方向的分析，而非已实现效果。",
+      "type": "news",
+      "date": "2026-10-25"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "这是arXiv预印本。所给摘要未说明机器人任务评测是在仿真还是实机环境开展，因此不能据此认定已在真实机器人上验证。",
+      "id": "n-20261025-sensorimotor-alignment",
+      "kind": "研究论文（预印本）",
+      "published": "2026-10-22",
+      "relevance": "该指标可能补充机器人基础模型的筛选流程，但不能替代具体任务上的闭环评测或实机验证。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.31670v1",
+          "name": "arXiv"
+        }
+      ],
+      "summary": "这篇arXiv预印本提出免训练的感知运动对齐指标S²，用模型感知表征与物理运动几何的对齐程度评估具身模型。作者报告，S²与多个具身模型家族的下游机器人任务成功率正相关，也可用于筛选视觉语言模型骨干。",
+      "tags": [
+        "具身模型",
+        "机器人评测",
+        "预印本"
+      ],
+      "title": "感知运动对齐指标尝试预测具身策略表现",
+      "why": "如果这种相关性能够复现，离线指标有望帮助研究者在昂贵的闭环评测前筛选模型，降低迭代成本。",
+      "type": "news",
+      "date": "2026-10-25"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "基准成绩和性能数据来自NVIDIA；其页面也指出，推理表现会随硬件、软件和配置变化。",
+      "id": "n-20261025-nemotron-bolt",
+      "kind": "模型发布",
+      "published": "2026-10-23",
+      "relevance": "本地模型开发者可将其纳入设备端对话与工具调用方案的评估，并在目标硬件和实际任务上验证表现。",
+      "sources": [
+        {
+          "url": "https://research.nvidia.com/labs/nemotron/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB",
+          "name": "NVIDIA"
+        }
+      ],
+      "summary": "NVIDIA发布Nemotron 3.5 Bolt E4B 4GB，称其基于Gemma 4 E4B并经Nemotron后训练，支持多轮工具调用、可配置推理和64K上下文。NVIDIA报告称，该模型在其所选对话代理基准中的平均质量较前代提高约40%，并在部分推理启用的比较中最多减少约80%的输出token。",
+      "tags": [
+        "小型语言模型",
+        "本地推理",
+        "工具调用"
+      ],
+      "title": "NVIDIA发布Nemotron 3.5 Bolt E4B 4GB",
+      "why": "小型模型结合多轮工具调用，可能让更多交互式agent工作负载在本地运行；实际收益仍取决于目标应用和设备条件。",
+      "type": "news",
+      "date": "2026-10-25"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "这是arXiv预印本；所给摘要未列出八种模型的名称及完整评测设置，结论仍需同行评审与独立复现。",
+      "id": "n-20261025-thought-pruning",
+      "kind": "研究论文（预印本）",
+      "published": "2026-10-22",
+      "relevance": "该方法可能改善推理阶段的计算分配，但其实际增益需要结合候选数量、保留规模和任务表现评估。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.31667v1",
+          "name": "arXiv"
+        }
+      ],
+      "summary": "这篇arXiv预印本提出直接按Pass@k目标优化推理候选剪枝，使被保留的部分推理轨迹兼顾正确性与多样性。作者称，该方法在八种开放权重推理模型上优于既有的质量导向和多样性导向剪枝策略，保留中等数量候选时优势更明显。",
+      "tags": [
+        "推理时扩展",
+        "候选剪枝",
+        "Pass@k",
+        "预印本"
+      ],
+      "title": "以Pass@k目标优化推理候选剪枝",
+      "why": "若结果稳定，按目标成功概率筛选候选有望减少低价值轨迹的后续生成，缓解测试时扩展带来的计算负担。",
+      "type": "news",
+      "date": "2026-10-25"
+    },
     {
       "category": "Agent",
       "caveat": "这是arXiv预印本；所给摘要未列出实验中的具体审计率和错误控制阈值。",
@@ -6016,6 +6118,65 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20261025-sensorimotor-alignment",
+      "title": "感知运动对齐指标尝试预测具身策略表现",
+      "category": "机器人 / 具身",
+      "published": "2026-10-22",
+      "paperTitle": "感知运动对齐指标尝试预测具身策略表现",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "这篇arXiv预印本提出免训练的感知运动对齐指标S²，用模型感知表征与物理运动几何的对齐程度评估具身模型。作者报告，S²与多个具身模型家族的下游机器人任务成功率正相关，也可用于筛选视觉语言模型骨干。",
+      "why": "如果这种相关性能够复现，离线指标有望帮助研究者在昂贵的闭环评测前筛选模型，降低迭代成本。",
+      "relevance": "该指标可能补充机器人基础模型的筛选流程，但不能替代具体任务上的闭环评测或实机验证。",
+      "caveat": "这是arXiv预印本。所给摘要未说明机器人任务评测是在仿真还是实机环境开展，因此不能据此认定已在真实机器人上验证。",
+      "tags": [
+        "具身模型",
+        "机器人评测",
+        "预印本"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.31670v1",
+          "name": "arXiv"
+        }
+      ],
+      "relatedIds": [
+        "n-20261025-sensorimotor-alignment"
+      ],
+      "type": "paper",
+      "date": "2026-10-22"
+    },
+    {
+      "id": "p-daily-20261025-thought-pruning",
+      "title": "以Pass@k目标优化推理候选剪枝",
+      "category": "AI / 大模型",
+      "published": "2026-10-22",
+      "paperTitle": "以Pass@k目标优化推理候选剪枝",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "这篇arXiv预印本提出直接按Pass@k目标优化推理候选剪枝，使被保留的部分推理轨迹兼顾正确性与多样性。作者称，该方法在八种开放权重推理模型上优于既有的质量导向和多样性导向剪枝策略，保留中等数量候选时优势更明显。",
+      "why": "若结果稳定，按目标成功概率筛选候选有望减少低价值轨迹的后续生成，缓解测试时扩展带来的计算负担。",
+      "relevance": "该方法可能改善推理阶段的计算分配，但其实际增益需要结合候选数量、保留规模和任务表现评估。",
+      "caveat": "这是arXiv预印本；所给摘要未列出八种模型的名称及完整评测设置，结论仍需同行评审与独立复现。",
+      "tags": [
+        "推理时扩展",
+        "候选剪枝",
+        "Pass@k",
+        "预印本"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.31667v1",
+          "name": "arXiv"
+        }
+      ],
+      "relatedIds": [
+        "n-20261025-thought-pruning"
+      ],
+      "type": "paper",
+      "date": "2026-10-22"
+    },
     {
       "id": "p-daily-20261024-selective-audit",
       "title": "AI辅助决策的选择性审计",
