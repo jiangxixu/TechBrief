@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-10-27",
+      "count": 3,
+      "title": "科技简报｜2026年10月27日"
+    },
+    {
       "date": "2026-10-26",
       "count": 5,
       "title": "科技简报｜2026年10月26日"
@@ -153,6 +158,81 @@
     }
   ],
   "news": [
+    {
+      "category": "Agent",
+      "caveat": "这是 arXiv 预印本。研究报告了仿真场景生成与策略训练结果，以及在未见真实扫描场景中的导航评估；来源未说明该评估是在真实机器人上完成。",
+      "id": "n-20261027-scenebloom",
+      "kind": "研究论文（arXiv预印本）",
+      "published": "2026-10-23",
+      "relevance": "对具身智能而言，兼顾场景多样性与几何有效性的室内环境生成，有望改善训练数据的可用性；真实扫描场景上的评估为仿真训练的迁移效果提供了参考。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.32978v1",
+          "name": "SceneBloom: Agentic Indoor Environment Generation with Realistic and Diverse Layouts for Embodied Learning"
+        }
+      ],
+      "summary": "SceneBloom将视觉布局采样与契约引导的3D编译结合，用于生成室内场景。在五类房间的比较中，论文报告其布局视觉质量和物理稳定性最高，且未检测到网格碰撞或越界物体；在这些场景中训练的物体导航策略，在未见真实扫描场景上的成功率高于使用同等数量真实训练扫描训练的策略。",
+      "tags": [
+        "具身智能",
+        "仿真环境",
+        "场景生成",
+        "导航"
+      ],
+      "title": "SceneBloom：面向具身学习的真实多样室内环境生成",
+      "why": "场景生成的几何可靠性会影响仿真训练样本的质量，而论文还报告了在真实扫描场景中的策略评估结果。",
+      "type": "news",
+      "date": "2026-10-27"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "这是 arXiv 预印本。证据包括仿体实验和离体猪组织实验；来源未报告人体在体实验，结果不应外推为临床验证。",
+      "id": "n-20261027-oct-shape-control",
+      "kind": "研究论文（arXiv预印本）",
+      "published": "2026-10-23",
+      "relevance": "研究展示了体积成像与数据驱动闭环控制结合的可行方向；不同表征和残差条件的表现差异，也说明控制方案需要结合具体任务选择。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.32961v1",
+          "name": "Robotic Optical Coherence Tomography-Guided Geometric Modeling of Soft Tissue: 3D Representations for Data-Driven Closed-Loop Shape Control"
+        }
+      ],
+      "summary": "研究提出基于光学相干断层成像（OCT）反馈的软组织形状控制框架，并比较多种三维表征与控制策略。论文报告了仿体上的576次实验，以及离体猪组织上的60次实验；在方向控制任务中，全体积扩散策略加入残差条件后，形状RMSE由0.748毫米降至0.555毫米。",
+      "tags": [
+        "医疗机器人",
+        "OCT",
+        "软组织",
+        "闭环控制"
+      ],
+      "title": "OCT引导的软组织建模与闭环形状控制",
+      "why": "软组织变形难以观察和控制，OCT提供的体积反馈可能帮助机器人系统更直接地比较目标形状与当前状态。",
+      "type": "news",
+      "date": "2026-10-27"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "信息来自NVIDIA新闻稿。部分内容是试点或未来计划，公告中的公司陈述未由其他来源独立核实。",
+      "id": "n-20261027-ai-ran-networks",
+      "kind": "企业公告",
+      "published": "2026-10-21",
+      "relevance": "若相关部署按计划推进，电信网络可能不仅承担连接功能，也会承载靠近用户侧的计算与智能服务；试点进展和实际运营效果仍有待观察。",
+      "sources": [
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-nokia-and-leading-telecom-operators-turn-networks-into-distributed-intelligence-platforms",
+          "name": "NVIDIA, Nokia and Leading Telecom Operators Turn Networks Into Distributed Intelligence Platforms"
+        }
+      ],
+      "summary": "NVIDIA公告称，T-Mobile已在商用网络完成AI-RAN通话，Elisa已在其5G现场环境开展AI-RAN试验；BT计划于2027年进行现场试验。公告还介绍了电信运营商在网络边缘部署加速计算，以及合作伙伴将Nemotron模型用于网络运维代理的相关计划。",
+      "tags": [
+        "电信网络",
+        "AI-RAN",
+        "边缘计算",
+        "网络运维"
+      ],
+      "title": "NVIDIA、诺基亚与电信运营商推动网络转向分布式智能平台",
+      "why": "公告显示运营商与设备、计算平台供应商正推进AI-RAN和网络运维代理相关试点，但公告中的试验和部署计划不能视为已普遍商用。",
+      "type": "news",
+      "date": "2026-10-27"
+    },
     {
       "id": "n-20261026-episem-bench",
       "title": "EpiSEM-Bench评测智能体在证据缺失下的安全行为",
@@ -6248,6 +6328,66 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20261027-scenebloom",
+      "title": "SceneBloom：面向具身学习的真实多样室内环境生成",
+      "category": "Agent",
+      "published": "2026-10-23",
+      "paperTitle": "SceneBloom：面向具身学习的真实多样室内环境生成",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "SceneBloom将视觉布局采样与契约引导的3D编译结合，用于生成室内场景。在五类房间的比较中，论文报告其布局视觉质量和物理稳定性最高，且未检测到网格碰撞或越界物体；在这些场景中训练的物体导航策略，在未见真实扫描场景上的成功率高于使用同等数量真实训练扫描训练的策略。",
+      "why": "场景生成的几何可靠性会影响仿真训练样本的质量，而论文还报告了在真实扫描场景中的策略评估结果。",
+      "relevance": "对具身智能而言，兼顾场景多样性与几何有效性的室内环境生成，有望改善训练数据的可用性；真实扫描场景上的评估为仿真训练的迁移效果提供了参考。",
+      "caveat": "这是 arXiv 预印本。研究报告了仿真场景生成与策略训练结果，以及在未见真实扫描场景中的导航评估；来源未说明该评估是在真实机器人上完成。",
+      "tags": [
+        "具身智能",
+        "仿真环境",
+        "场景生成",
+        "导航"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.32978v1",
+          "name": "SceneBloom: Agentic Indoor Environment Generation with Realistic and Diverse Layouts for Embodied Learning"
+        }
+      ],
+      "relatedIds": [
+        "n-20261027-scenebloom"
+      ],
+      "type": "paper",
+      "date": "2026-10-23"
+    },
+    {
+      "id": "p-daily-20261027-oct-shape-control",
+      "title": "OCT引导的软组织建模与闭环形状控制",
+      "category": "机器人 / 具身",
+      "published": "2026-10-23",
+      "paperTitle": "OCT引导的软组织建模与闭环形状控制",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "研究提出基于光学相干断层成像（OCT）反馈的软组织形状控制框架，并比较多种三维表征与控制策略。论文报告了仿体上的576次实验，以及离体猪组织上的60次实验；在方向控制任务中，全体积扩散策略加入残差条件后，形状RMSE由0.748毫米降至0.555毫米。",
+      "why": "软组织变形难以观察和控制，OCT提供的体积反馈可能帮助机器人系统更直接地比较目标形状与当前状态。",
+      "relevance": "研究展示了体积成像与数据驱动闭环控制结合的可行方向；不同表征和残差条件的表现差异，也说明控制方案需要结合具体任务选择。",
+      "caveat": "这是 arXiv 预印本。证据包括仿体实验和离体猪组织实验；来源未报告人体在体实验，结果不应外推为临床验证。",
+      "tags": [
+        "医疗机器人",
+        "OCT",
+        "软组织",
+        "闭环控制"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2610.32961v1",
+          "name": "Robotic Optical Coherence Tomography-Guided Geometric Modeling of Soft Tissue: 3D Representations for Data-Driven Closed-Loop Shape Control"
+        }
+      ],
+      "relatedIds": [
+        "n-20261027-oct-shape-control"
+      ],
+      "type": "paper",
+      "date": "2026-10-23"
+    },
     {
       "id": "p-daily-20261026-episem-bench",
       "title": "EpiSEM-Bench评测智能体在证据缺失下的安全行为",
