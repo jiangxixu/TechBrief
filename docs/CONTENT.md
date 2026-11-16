@@ -46,7 +46,7 @@
 
 ## 提交流程
 
-1. 每天北京时间 02:00、02:30 由 `.github/workflows/daily-ai-news.yml` 启动（GitHub 调度可能延迟）；脚本检查当天文件是否已存在，默认存在时跳过、不覆盖。
+1. 每天北京时间 02:00 由 `.github/workflows/daily-ai-news.yml` 仅启动一次正式生成（GitHub 调度可能延迟），不自动运行预览或 02:30 补触发；脚本检查当天文件是否已存在，默认存在时跳过、不覆盖。失败后等待次日定时任务，或由用户明确要求手动重跑。
 2. 阅读近期日报原文件，查重并核验新的来源。
 3. 创建日报，必要时添加已核验的论文记录至 `data/papers.json`。保留已有记录，不为了扩大数量虚构论文或补填未知信息。
 4. 本地可用时运行 `node scripts/add-daily.mjs /absolute/path/to/new-edition.json`，然后 `npm test && npm run build`。

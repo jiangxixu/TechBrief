@@ -44,7 +44,9 @@ GitHub Actions 的 **Generate Daily AI News** 使用 Secrets 中的 `OPENAI_API_
 
 生成先分别检索五个领域，再核对一手来源发布日期、历史去重并撰写。优先3天内、最多7天；arXiv最多2条，候选不足时少于5条，搜索不可用或没有可用来源时失败并保留旧日报。重复触发若当日日报已存在会跳过，不能据此判断搜索已经执行。
 
-Actions 上传 `generation-diagnostics` 诊断。手动验收可同时启用 `force_regenerate` 和 `dry_run`：使用真实API生成预览，不提交日报或部署。详情见 [生成流程排查与验收](docs/GENERATION_AUDIT.md)。另外的 Daily TechBrief Refresh 只维护索引。
+每天北京时间 02:00 只安排一次正式生成，不自动运行预览，也不安排半小时后的补触发；当天日报已经存在时直接跳过。失败后等待次日定时任务，或由用户明确要求手动重跑。
+
+Actions 上传 `generation-diagnostics` 诊断。正常运行直接校验并发布这一份生成结果，不再另跑一遍收费预览。排障时优先使用已有诊断、免费校验与模拟测试；只有用户明确要求时才启用 `force_regenerate` 和 `dry_run` 进行收费模型预览。单次正式生成仍保留分领域检索、原文核验和撰写，API 请求数不等于生成份数。详情见 [生成流程排查与验收](docs/GENERATION_AUDIT.md)。另外的 Daily TechBrief Refresh 只维护索引，不调用模型。
 
 内容字段、日期、图片出处、查重与追加规则见 [docs/CONTENT.md](docs/CONTENT.md)。
 
