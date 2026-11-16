@@ -1,6 +1,5 @@
 {
-  "date": "2026-10-22",
+  "date": "2026-11-16",
   "dryRun": false,
-  "reason": "Reuse completed same-day searches and independently recheck publisher sources after adding verified publisher/date adapters.",
-  "reuseSearchRunId": 39635116081
+  "reason": "Publish today's edition after validating the new Responses gateway with a complete local dry-run."
 }
