@@ -109,12 +109,12 @@ test('provider envelope drift is repaired only for application metadata and sour
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.
-for (const scenario of ['normal', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_opaque', 'reuse_recover_opaque', 'reuse_wrong_date']) {
+for (const scenario of ['normal', 'anthropic', 'quota', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_opaque', 'reuse_recover_opaque', 'reuse_wrong_date']) {
   test(`generation integration: ${scenario}`, async () => {
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
       await mkdir(resolve(dir, 'scripts')); await mkdir(resolve(dir, 'data/daily'), { recursive: true });
-      for (const file of ['core.js', 'package.json', ...['generate-daily.mjs', 'responses-api.mjs', 'api-config.mjs', 'validate.mjs', 'news-policy.mjs', 'daily-schema.mjs'].map(n => 'scripts/' + n)]) await copyFile(file, resolve(dir, file));
+      for (const file of ['core.js', 'package.json', ...['generate-daily.mjs', 'responses-api.mjs', 'messages-api.mjs', 'api-config.mjs', 'validate.mjs', 'news-policy.mjs', 'daily-schema.mjs'].map(n => 'scripts/' + n)]) await copyFile(file, resolve(dir, file));
       const mock = `
 import { readFile } from 'node:fs/promises';
 const categories = ${JSON.stringify(CATEGORIES)};
@@ -122,21 +122,23 @@ const scenario = ${JSON.stringify(scenario)};
 const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
 const date = parts.year+'-'+parts.month+'-'+parts.day;
 let searches=0, writers=0;
-const output = value => ({status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(value)}]}]});
+const output = value => scenario==='anthropic' ? {type:'message',stop_reason:'end_turn',content:[{type:'text',text:JSON.stringify(value)}]} : {status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(value)}]}]};
 globalThis.fetch = async (url, options={}) => {
  if (String(url).includes('export.arxiv.org')) throw Error('fixture unavailable');
  if (options.method==='POST') {
   const body=JSON.parse(options.body);
   if(body.tools) {
-   if(body.text || body.tool_choice!=='required') throw Error('Discovery must require search independently of schema');
+   if(scenario==='quota') return Response.json({error:{type:'new_api_error',message:'令牌额度不足'}},{status:403});
+   if(scenario!=='anthropic' && (body.text || body.tool_choice!=='required')) throw Error('Discovery must require search independently of schema');
    const category=categories[searches++], source='https://openai.com/news/item-'+searches;
    const result=output({candidates: searches>2 ? [] : [{title:'story-'+searches,category,published:date,url:source}]});
-   if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:[{url:scenario==='opaque'?'https://api.shep-api.com/v1/media/assets/token':source}]}});
+   if(scenario==='anthropic') result.content.unshift({type:'server_tool_use',id:'search-'+searches,name:'web_search',input:{query:'fixture'}},{type:'web_search_tool_result',tool_use_id:'search-'+searches,content:[{type:'web_search_result',url:source}]});
+   else if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:[{url:scenario==='opaque'?'https://api.shep-api.com/v1/media/assets/token':source}]}});
    return Response.json(result);
   }
   writers++;
   if(scenario==='format_retry' && writers===1) return Response.json({error:{code:'invalid_json_schema'}},{status:400});
-  const selected=JSON.parse(body.input.split('\\nJSON结构：')[0]).sources;
+  const selected=JSON.parse((body.input || body.messages[0].content).split('\\nJSON结构：')[0]).sources;
   return Response.json(output({schemaVersion:1,date,timezone:'Asia/Shanghai',generatedBy:'ChatGPT',title:'Fixture',editorialNote:'Fixture',news:selected.map((s,i)=>({id:'n-'+date.replaceAll('-','')+'-item-'+i,title:s.title,category:s.category,kind:'动态',published:s.published,summary:'Source fact',why:'Analysis',relevance:'Analysis',caveat:'Limit',tags:['test'],sources:[{name:'Official',url:s.url}]}))}));
  }
  return new Response('<meta property="article:published_time" content="'+(scenario==='wrong_date'?'2000-01-01':date)+'"><article>Source fact</article>',{headers:{'content-type':'text/html'}});
@@ -158,9 +160,9 @@ globalThis.fetch = async (url, options={}) => {
         const date = `${parts.year}-${parts.month}-${parts.day}`;
         await writeFile(resolve(dir, `data/daily/${date}.json`), JSON.stringify({ schemaVersion:1, date, timezone:'Asia/Shanghai', generatedBy:'ChatGPT', news:[{id:'n-fixture',title:'test',category:'Agent',summary:'fact',published:date,why:'analysis',relevance:'analysis',caveat:'limit',tags:['t'],sources:[{name:'Official',url:'https://openai.com/a'}]}] }));
       }
-      const run = spawnSync(process.execPath, ['--import', './mock.mjs', 'scripts/generate-daily.mjs'], { cwd: dir, env: { ...process.env, OPENAI_API_KEY: 'fixture-not-secret', OPENAI_BASE_URL: 'https://fixture.example/v1', OPENAI_MODEL: 'fixture', FORCE_REGENERATE: 'false', DRY_RUN: String(scenario === 'dry_run'), GITHUB_STEP_SUMMARY: '', REUSE_SEARCH_AUDIT:scenario.startsWith('reuse')?'prior.json':'', REUSE_SEARCH_RUN_ID:'42' }, encoding: 'utf8' });
+      const run = spawnSync(process.execPath, ['--import', './mock.mjs', 'scripts/generate-daily.mjs'], { cwd: dir, env: { ...process.env, OPENAI_API_KEY: 'fixture-not-secret', OPENAI_BASE_URL: 'https://fixture.example/v1', OPENAI_MODEL: 'fixture', AI_API_PROTOCOL: scenario==='anthropic'?'anthropic':'responses', FORCE_REGENERATE: 'false', DRY_RUN: String(scenario === 'dry_run'), GITHUB_STEP_SUMMARY: '', REUSE_SEARCH_AUDIT:scenario.startsWith('reuse')?'prior.json':'', REUSE_SEARCH_RUN_ID:'42' }, encoding: 'utf8' });
       const audit = JSON.parse(await readFile(resolve(dir, 'reports/generation.json')));
-      if (['no_search', 'wrong_date', 'reuse_wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
+      if (['no_search', 'wrong_date', 'reuse_wrong_date', 'quota'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); if(scenario==='quota') assert.equal(audit.apiCalls.length,1); }
       else if (scenario === 'existing') { assert.equal(run.status, 0); assert.equal(audit.status, 'skipped_existing'); assert.equal(audit.apiCalls.length, 0); }
       else { assert.equal(run.status, 0, run.stderr); assert.equal(audit.status, scenario === 'dry_run' ? 'validated_partial' : 'published_partial'); assert.equal(audit.selected.length, 2); assert.equal(audit.searches.length, 5); if (scenario==='reuse') { assert.equal(audit.apiCalls.length,1); assert.equal(audit.reusedSearchRunId,'42'); } if (scenario==='format_retry') assert.equal(audit.formatRetry, 'invalid_json_schema'); if(scenario==='dry_run') { const preview = JSON.parse(await readFile(resolve(dir, 'reports/edition.preview.json'))); assert.equal(preview.news.length, 2); const { readdir } = await import('node:fs/promises'); assert.deepEqual(await readdir(resolve(dir,'data/daily')), []); } }
     } finally { await rm(dir, { recursive: true, force: true }); }

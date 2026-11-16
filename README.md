@@ -1,6 +1,6 @@
 # TechBrief · 每日科技简报
 
-由 ChatGPT 整理内容的个人科技阅读网站，聚焦 AI、Agent、机器人与无人机。网站为纯静态页面，无浏览器端模型调用和运行时 npm 依赖；日报由 GitHub Actions 调用模型 API 检索与生成。
+由 AI 整理内容的个人科技阅读网站，聚焦 AI、Agent、机器人与无人机。网站为纯静态页面，无浏览器端模型调用和运行时 npm 依赖；日报由 GitHub Actions 调用模型 API 检索与生成。
 
 ## 已实现
 
@@ -40,7 +40,7 @@ npm start
 
 ## 每日内容从哪里来
 
-GitHub Actions 的 **Generate Daily AI News** 使用 Secrets 中的 `OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL` 调用 Responses API。基础URL需包含提供方要求的路径（如 `/v1`），脚本仅追加 `/responses`。网站浏览器端不持有密钥。
+GitHub Actions 的 **Generate Daily AI News** 使用 Secrets 中的 `OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL` 调用模型 API。基础 URL 需包含提供方要求的路径（如 `/v1`）；模型名以 `claude-` 开头时使用 Claude Messages API 并追加 `/messages`，其他模型继续使用 Responses API 并追加 `/responses`。网站浏览器端不持有密钥。
 
 生成先分别检索五个领域，再核对一手来源发布日期、历史去重并撰写。优先3天内、最多7天；arXiv最多2条，候选不足时少于5条，搜索不可用或没有可用来源时失败并保留旧日报。重复触发若当日日报已存在会跳过，不能据此判断搜索已经执行。
 
@@ -75,3 +75,10 @@ scripts/serve.mjs                   本地预览
 
 论文图与官方图片归原作者所有；图片出处列在每篇文章中。
 
+
+
+### Claude 网关迁移
+
+先在本地或修复分支验证，再更新仓库 Secrets：`OPENAI_API_KEY` 使用新网关密钥，`OPENAI_BASE_URL` 填 `https://apinebula.ai/v1`，`OPENAI_MODEL` 填实际允许的 Claude 模型（例如 `claude-sonnet-4-6`）。沿用原 Secret 名称以兼容已有工作流，不把密钥写入仓库。模型列表和普通聊天成功只能证明鉴权和基础生成可用；必须再以 `dry_run=true` 验证联网检索、原文日期核验和日报结构。
+
+Claude 搜索要求真实的服务器搜索调用及对应结果；仅有文字声称已搜索不算成功。网关只返回搜索结果时，再调用一次模型提取候选 JSON，随后仍执行原有来源、日期和历史查重规则。截断结果拒绝发布；额度不足立即停止，不继续请求其他领域。Claude 生成的日报标记为 `generatedBy: Claude`。
