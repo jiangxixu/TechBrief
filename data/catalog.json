@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-11-17",
+      "count": 2,
+      "title": "科技简报：科学计算平台与多模态决策接口"
+    },
+    {
       "date": "2026-11-16",
       "count": 3,
       "title": "科技简报：机器人仿真训练、摩擦建模与多模型工作流"
@@ -168,6 +173,54 @@
     }
   ],
   "news": [
+    {
+      "category": "科技产业",
+      "caveat": "来源为NVIDIA官方公告。OpenFOAM性能结果来自厂商测试，气象模型的性能与能效提升为预测值，不能推广为所有科学计算任务的表现。机架供货与超算上线时间均为计划，不代表已经交付。",
+      "id": "n-20261117-vera-cpu",
+      "kind": "厂商平台公告",
+      "published": "2026-11-16",
+      "relevance": "分析：对于科学计算基础设施选型，值得关注的是CPU、内存、网络与编译工具的整体适配，而不仅是处理器规格；实际收益仍需结合目标应用验证。",
+      "sources": [
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-expands-vera-cpu-platform-to-accelerate-scientific-discovery",
+          "name": "NVIDIA Newsroom"
+        }
+      ],
+      "summary": "NVIDIA宣布面向高性能计算的Vera CPU机架级平台，将192颗Vera CPU与Quantum-X800 InfiniBand网络结合，采用液冷设计，面向气候建模、分子动力学等科学计算负载。德国气候计算中心DKRZ已为HLRE-5超算选择Vera CPU，该系统预计于2028年初可用。Vera CPU机架预计自2027年初由戴尔、HPE、联想和超微供应。",
+      "tags": [
+        "高性能计算",
+        "数据中心CPU",
+        "科学计算"
+      ],
+      "title": "英伟达发布Vera CPU机架级平台，面向科学计算负载",
+      "why": "分析：这一发布体现出NVIDIA对科学计算中内存带宽和跨节点协同瓶颈的重视，其平台布局并不局限于GPU加速任务。",
+      "type": "news",
+      "date": "2026-11-17"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "来源为Google官方产品文章，延迟、成本优势、校准表现及内部应用效果均为厂商披露。文中低延迟描述对应特定上下文和问题数量范围，不能直接外推至最大输入与最大问题数量同时使用的场景；置信度分数也不等于答案正确性保证。",
+      "id": "n-20261117-gemini-decisions",
+      "kind": "厂商API发布",
+      "published": "2026-11-11",
+      "relevance": "分析：对于需要模型路由、工具选择或规则检查的应用，这类接口提供了不同于自由文本生成的实现路径；能否采用仍取决于具体任务上的准确性、校准表现与回退机制。",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api",
+          "name": "Google官方博客"
+        }
+      ],
+      "summary": "Google推出由Gemini Decision 1模型驱动的Gemini Decisions API，可针对文本、图像、音频、视频及PDF输入，在单次前向计算中评估最多1,000个独立问题，支持是非判断、多项选择和量表评分，并返回概率与置信度。该接口已通过Google AI Studio中的Gemini API提供，按输入token计费，不收取输出token费用。Google称其已用于内部模型路由、设计交互和工具安全检查等场景。",
+      "tags": [
+        "多模态",
+        "决策接口",
+        "模型路由"
+      ],
+      "title": "谷歌推出Gemini决策接口，支持多模态封闭选项判断",
+      "why": "分析：将有限选项的判断与自由文本生成分开，可能让应用更直接地利用概率设定回退或人工复核条件，但效果仍需业务数据验证。",
+      "type": "news",
+      "date": "2026-11-17"
+    },
     {
       "category": "Agent",
       "caveat": "来源为arXiv预印本，结果属于作者报告，不能视为已经同行评审或独立复现。训练完全在仿真中进行，真实双臂机器人的成功率来自作者开展的实机试验；所提供摘要未披露实机试验数量，不能据此推断任意机器人或开放环境中的表现。",
