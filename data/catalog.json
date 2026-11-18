@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-11-19",
+      "count": 5,
+      "title": "科技简报：模型发布、桌面Agent更新与机器人研究"
+    },
+    {
       "date": "2026-11-18",
       "count": 2,
       "title": "科技简报：策略记忆与大规模机器人模型"
@@ -178,6 +183,131 @@
     }
   ],
   "news": [
+    {
+      "category": "AI / 大模型",
+      "caveat": "来源为Google官方发布，性能排名、成本优势及安全表现均为该公告所述，未在本期独立复核。产品采用逐步开放方式，不能据此认定所有用户已可使用。",
+      "id": "n-20261119-gemini-neon",
+      "kind": "产品发布",
+      "published": "2026-11-18",
+      "relevance": "分析：对开发团队而言，值得结合自身软件工程与知识工作流程，评估其任务完成质量、耗时和实际费用，而非仅依据榜单选型。",
+      "sources": [
+        {
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon",
+          "name": "Google官方博客"
+        }
+      ],
+      "summary": "Google发布Gemini 4 Neon，面向复杂软件工程、知识工作和科学工作流，提供100万token上下文窗口。公告列出的价格为每百万输入token 3美元、缓存输入token 0.15美元、输出token 15美元，并开始向Gemini API、企业服务及部分付费订阅用户开放。Google同时介绍了模型在长时工具调用、代码修改和多步骤指令执行方面的能力。",
+      "tags": [
+        "Gemini",
+        "大模型",
+        "编程",
+        "工具调用"
+      ],
+      "title": "Google发布Gemini新模型，面向编程与复杂知识工作",
+      "why": "分析：这次发布将模型能力、任务执行效率和工具协作放在同一产品定位中，反映出模型竞争正在更直接地面向完整工作流。",
+      "type": "news",
+      "date": "2026-11-19"
+    },
+    {
+      "category": "Agent",
+      "caveat": "来源为AWS产品公告，未提供量化的开发周期缩短或生产成功率证据。在镜像构建器上通过测试，并不等于所有生产桌面环境均能可靠运行。",
+      "id": "n-20261119-workspaces-builder",
+      "kind": "产品功能更新",
+      "published": "2026-11-16",
+      "relevance": "分析：对依赖桌面应用的企业自动化团队，这提供了在发布镜像前检查权限、弹窗和应用配置兼容性的测试入口。",
+      "sources": [
+        {
+          "url": "https://aws.amazon.com/blogs/desktop-and-application-streaming/workspaces-for-ai-agents-now-available-on-workspaces-applications-image-builders",
+          "name": "AWS官方博客"
+        }
+      ],
+      "summary": "AWS宣布WorkSpaces for AI Agents支持WorkSpaces Applications镜像构建器，允许在创建镜像、实例集或堆栈前测试桌面Agent。Agent沿用堆栈使用的托管MCP服务器、授权方式、计算机操作工具和监控机制，并可在同一会话中切换内置Windows用户。开发者可用标准账户验证工作流，并通过截图和审计记录检查执行情况。",
+      "tags": [
+        "桌面Agent",
+        "MCP",
+        "测试",
+        "WorkSpaces"
+      ],
+      "title": "AWS将桌面Agent测试接入镜像构建流程",
+      "why": "分析：将验证环节前移到镜像制作阶段，有助于更早发现应用配置和用户权限差异带来的问题，但实际收益仍需通过具体工作流验证。",
+      "type": "news",
+      "date": "2026-11-19"
+    },
+    {
+      "category": "Agent",
+      "caveat": "这是2026-11-13发布的补充信息。Windows 11支持采用自带许可证方式，功能可用范围限于提供WorkSpaces Applications MCP端点的AWS区域；公告未给出跨应用自动化成功率。",
+      "id": "n-20261119-workspaces-oauth",
+      "kind": "产品功能更新",
+      "published": "2026-11-13",
+      "relevance": "分析：已有Linux应用或Windows 11应用的团队，可据此检查其工作流是否进入支持范围，同时仍需核对许可证、区域和IAM权限条件。",
+      "sources": [
+        {
+          "url": "https://aws.amazon.com/blogs/desktop-and-application-streaming/amazon-workspaces-for-ai-agents-adds-linux-windows-11-and-oauth-support",
+          "name": "AWS官方博客"
+        }
+      ],
+      "summary": "AWS为WorkSpaces for AI Agents增加Linux和Windows 11实例集支持，其中Windows 11采用自带许可证方式。服务新增标准MCP OAuth认证，可通过AWS身份在浏览器中登录，继续使用IAM工具级权限和CloudTrail连接审计。Agent Toolkit for AWS还加入相关技能，提供会话连接、工具使用和常见连接错误处理说明。",
+      "tags": [
+        "桌面Agent",
+        "OAuth",
+        "Linux",
+        "WorkSpaces"
+      ],
+      "title": "AWS扩展桌面Agent系统支持并加入OAuth接入",
+      "why": "分析：操作系统覆盖与身份认证是桌面Agent落地的基础条件；此次更新可能减少部分接入准备工作，但不等同于提升Agent本身的任务能力。",
+      "type": "news",
+      "date": "2026-11-19"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "这是arXiv预印本。摘要分别报告RoboTwin基准和真实世界任务结果，不能把基准成绩直接当作实机成功率；所给正文未说明RoboTwin的仿真配置，也未提供实机任务的完整设置和统计细节。",
+      "id": "n-20261119-tcp-tracking",
+      "kind": "研究预印本",
+      "published": "2026-11-17",
+      "relevance": "分析：对于希望复用机器人视频的研究团队，关键验证点是动作恢复误差、跨机器人迁移效果，以及增强数据在真实任务中的可靠性。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23143v1",
+          "name": "arXiv：TCP4D论文摘要"
+        }
+      ],
+      "summary": "TCP4D以工具中心点位姿作为动作空间，用共享的四维场景表示统一跟踪已观察动作并生成未来轨迹。模型从单目视频和初始二维查询恢复工具中心点位姿、夹爪状态及场景信息，再结合机器人观测和语言指令预测后续动作。作者还提出跨机器人形态的数据增强方法，并分别报告RoboTwin基准成绩和两项真实世界任务上的比较结果。",
+      "tags": [
+        "机器人操作",
+        "动作跟踪",
+        "跨形态迁移",
+        "预印本"
+      ],
+      "title": "机器人研究提出统一动作跟踪与轨迹生成模型",
+      "why": "分析：把视频中的动作恢复与策略生成连接起来，可能为复用既有演示视频提供路径，但其适用范围取决于恢复精度和迁移后的任务表现。",
+      "type": "news",
+      "date": "2026-11-19"
+    },
+    {
+      "category": "Agent",
+      "caveat": "这是arXiv预印本，所给正文主要介绍资源组成及使用示例，未提供足以证明Agent科研能力提升的对照结果。训练数据准备使用的是私有示例，不能据此认定所有配套材料均已公开。",
+      "id": "n-20261119-stringqft",
+      "kind": "研究资源预印本",
+      "published": "2026-11-17",
+      "relevance": "分析：对科学Agent与检索增强生成研究者，这类资源可用于设计来源可追踪、答案可检查的领域任务，但仍需另行验证模型表现。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23225v1",
+          "name": "arXiv：StringQFT论文摘要"
+        }
+      ],
+      "summary": "StringQFT将量子场论弦构造教材整理为AI辅助理论物理资源，包含18卷、190章和3795页。其开卷基准收录1073个条目，其中499个支持有限答案自动检查；检索资源提供1371条关联教材来源及PDF位置的章节记录和本地词法检索器。面向Agent，资源还提供19个具有指定输入与有限定义域的计算工具，将工具调用连接到教材推导。",
+      "tags": [
+        "科学Agent",
+        "理论物理",
+        "检索增强生成",
+        "预印本"
+      ],
+      "title": "理论物理教材资源连接检索、评测与Agent计算工具",
+      "why": "分析：将教材出处、可检查答案和计算工具放入同一资源体系，有助于构建更便于核查推导依据的科学Agent实验。",
+      "type": "news",
+      "date": "2026-11-19"
+    },
     {
       "category": "Agent",
       "caveat": "该来源为arXiv预印本，评估限于CartPole与HalfCheetah仿真环境，不包含实机验证。证据针对完整架构，不能将保持能力单独归因于无梯度优化，也未证明其优于其他持续学习方法。在所评估序列中，ENA在CartPole上的适应速度慢于PPO，在HalfCheetah上的回报低于SAC。",
@@ -6622,6 +6752,66 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20261119-tcp-tracking",
+      "title": "机器人研究提出统一动作跟踪与轨迹生成模型",
+      "category": "机器人 / 具身",
+      "published": "2026-11-17",
+      "paperTitle": "机器人研究提出统一动作跟踪与轨迹生成模型",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "TCP4D以工具中心点位姿作为动作空间，用共享的四维场景表示统一跟踪已观察动作并生成未来轨迹。模型从单目视频和初始二维查询恢复工具中心点位姿、夹爪状态及场景信息，再结合机器人观测和语言指令预测后续动作。作者还提出跨机器人形态的数据增强方法，并分别报告RoboTwin基准成绩和两项真实世界任务上的比较结果。",
+      "why": "分析：把视频中的动作恢复与策略生成连接起来，可能为复用既有演示视频提供路径，但其适用范围取决于恢复精度和迁移后的任务表现。",
+      "relevance": "分析：对于希望复用机器人视频的研究团队，关键验证点是动作恢复误差、跨机器人迁移效果，以及增强数据在真实任务中的可靠性。",
+      "caveat": "这是arXiv预印本。摘要分别报告RoboTwin基准和真实世界任务结果，不能把基准成绩直接当作实机成功率；所给正文未说明RoboTwin的仿真配置，也未提供实机任务的完整设置和统计细节。",
+      "tags": [
+        "机器人操作",
+        "动作跟踪",
+        "跨形态迁移",
+        "预印本"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23143v1",
+          "name": "arXiv：TCP4D论文摘要"
+        }
+      ],
+      "relatedIds": [
+        "n-20261119-tcp-tracking"
+      ],
+      "type": "paper",
+      "date": "2026-11-17"
+    },
+    {
+      "id": "p-daily-20261119-stringqft",
+      "title": "理论物理教材资源连接检索、评测与Agent计算工具",
+      "category": "Agent",
+      "published": "2026-11-17",
+      "paperTitle": "理论物理教材资源连接检索、评测与Agent计算工具",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "StringQFT将量子场论弦构造教材整理为AI辅助理论物理资源，包含18卷、190章和3795页。其开卷基准收录1073个条目，其中499个支持有限答案自动检查；检索资源提供1371条关联教材来源及PDF位置的章节记录和本地词法检索器。面向Agent，资源还提供19个具有指定输入与有限定义域的计算工具，将工具调用连接到教材推导。",
+      "why": "分析：将教材出处、可检查答案和计算工具放入同一资源体系，有助于构建更便于核查推导依据的科学Agent实验。",
+      "relevance": "分析：对科学Agent与检索增强生成研究者，这类资源可用于设计来源可追踪、答案可检查的领域任务，但仍需另行验证模型表现。",
+      "caveat": "这是arXiv预印本，所给正文主要介绍资源组成及使用示例，未提供足以证明Agent科研能力提升的对照结果。训练数据准备使用的是私有示例，不能据此认定所有配套材料均已公开。",
+      "tags": [
+        "科学Agent",
+        "理论物理",
+        "检索增强生成",
+        "预印本"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.23225v1",
+          "name": "arXiv：StringQFT论文摘要"
+        }
+      ],
+      "relatedIds": [
+        "n-20261119-stringqft"
+      ],
+      "type": "paper",
+      "date": "2026-11-17"
+    },
     {
       "id": "p-daily-20261118-ena",
       "title": "ENA以动力学索引策略记忆探索缓解持续学习遗忘",
