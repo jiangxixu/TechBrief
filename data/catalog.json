@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "days": [
     {
+      "date": "2026-11-18",
+      "count": 2,
+      "title": "科技简报：策略记忆与大规模机器人模型"
+    },
+    {
       "date": "2026-11-17",
       "count": 2,
       "title": "科技简报：科学计算平台与多模态决策接口"
@@ -173,6 +178,56 @@
     }
   ],
   "news": [
+    {
+      "category": "Agent",
+      "caveat": "该来源为arXiv预印本，评估限于CartPole与HalfCheetah仿真环境，不包含实机验证。证据针对完整架构，不能将保持能力单独归因于无梯度优化，也未证明其优于其他持续学习方法。在所评估序列中，ENA在CartPole上的适应速度慢于PPO，在HalfCheetah上的回报低于SAC。",
+      "id": "n-20261118-ena",
+      "kind": "预印本研究",
+      "published": "2026-11-16",
+      "relevance": "分析：对于需要应对动力学变化的Agent，这项研究提示，策略记忆的组织与检索值得和新策略学习一并评估，不能只关注适应新环境的速度。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.21598v1",
+          "name": "arXiv：Mitigating Catastrophic Forgetting with Physics-Indexed Specialist Memory: the Evolutionary Neuroplastic Agent"
+        }
+      ],
+      "summary": "进化神经可塑性智能体ENA通过无梯度进化搜索生成小型神经网络，按检测到的动力学状态归档策略，并通过贝叶斯策略复用进行检索。在CartPole的30次重复消融实验中，完整架构在五个测试环境中的平均成功率为83.2%；在能够学会较难CartPole环境的变体中，完整架构表现出最一致的能力保持。检索规则的选择也影响了性能。",
+      "tags": [
+        "持续强化学习",
+        "策略记忆",
+        "灾难性遗忘",
+        "仿真"
+      ],
+      "title": "ENA以动力学索引策略记忆探索缓解持续学习遗忘",
+      "why": "分析：结果支持进一步研究环境识别、策略归档和检索协同缓解遗忘的可能性，但保持旧能力与快速适应之间的权衡仍需关注。",
+      "type": "news",
+      "date": "2026-11-18"
+    },
+    {
+      "category": "机器人 / 具身",
+      "caveat": "该来源为arXiv预印本。LIBERO-PRO结果属于仿真评估，充电器插入结果来自实机实验，两者不能混同。实机插入仅报告每组10次尝试，不能据此推断广泛任务上的可靠性；216毫秒为每个动作块的延迟中位数，不代表完整任务耗时。",
+      "id": "n-20261118-scalevla",
+      "kind": "预印本研究",
+      "published": "2026-11-16",
+      "relevance": "分析：对机器人策略研发而言，该研究为比较大规模视觉语言表征与较小骨干提供了参考，但选型仍需结合具体任务的实机表现和动作块延迟。",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.21607v1",
+          "name": "arXiv：ScaleVLA: Scaling Vision-Language-Action Models to 552 Billion Parameters"
+        }
+      ],
+      "summary": "ScaleVLA将552B的DeepSeek-V4.1-Flash骨干连接至可训练的动作DiT，并在统一训练设置下比较2B至552B的视觉语言模型。论文报告，使用10次示范的模型成功率为87.8%，高于使用50次示范的2B骨干模型的85.6%。在LIBERO-PRO仿真评估中，成功率达到45.1%，较小骨干最高为31.3%；实机充电器插入成功次数由4/10提高至9/10，提升主要集中在接触敏感的对齐环节。每个动作块的延迟中位数为216毫秒。",
+      "tags": [
+        "视觉语言动作模型",
+        "机器人学习",
+        "仿真评估",
+        "实机操作"
+      ],
+      "title": "ScaleVLA探索大规模视觉语言骨干对机器人策略的增益",
+      "why": "分析：统一训练设置下的比较表明，大规模骨干作为机器人策略表征基础值得进一步研究；样本效率、泛化和接触对齐应分别检验，而非由模型规模直接推定。",
+      "type": "news",
+      "date": "2026-11-18"
+    },
     {
       "category": "科技产业",
       "caveat": "来源为NVIDIA官方公告。OpenFOAM性能结果来自厂商测试，气象模型的性能与能效提升为预测值，不能推广为所有科学计算任务的表现。机架供货与超算上线时间均为计划，不代表已经交付。",
@@ -6567,6 +6622,66 @@
     }
   ],
   "papers": [
+    {
+      "id": "p-daily-20261118-ena",
+      "title": "ENA以动力学索引策略记忆探索缓解持续学习遗忘",
+      "category": "Agent",
+      "published": "2026-11-16",
+      "paperTitle": "ENA以动力学索引策略记忆探索缓解持续学习遗忘",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "进化神经可塑性智能体ENA通过无梯度进化搜索生成小型神经网络，按检测到的动力学状态归档策略，并通过贝叶斯策略复用进行检索。在CartPole的30次重复消融实验中，完整架构在五个测试环境中的平均成功率为83.2%；在能够学会较难CartPole环境的变体中，完整架构表现出最一致的能力保持。检索规则的选择也影响了性能。",
+      "why": "分析：结果支持进一步研究环境识别、策略归档和检索协同缓解遗忘的可能性，但保持旧能力与快速适应之间的权衡仍需关注。",
+      "relevance": "分析：对于需要应对动力学变化的Agent，这项研究提示，策略记忆的组织与检索值得和新策略学习一并评估，不能只关注适应新环境的速度。",
+      "caveat": "该来源为arXiv预印本，评估限于CartPole与HalfCheetah仿真环境，不包含实机验证。证据针对完整架构，不能将保持能力单独归因于无梯度优化，也未证明其优于其他持续学习方法。在所评估序列中，ENA在CartPole上的适应速度慢于PPO，在HalfCheetah上的回报低于SAC。",
+      "tags": [
+        "持续强化学习",
+        "策略记忆",
+        "灾难性遗忘",
+        "仿真"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.21598v1",
+          "name": "arXiv：Mitigating Catastrophic Forgetting with Physics-Indexed Specialist Memory: the Evolutionary Neuroplastic Agent"
+        }
+      ],
+      "relatedIds": [
+        "n-20261118-ena"
+      ],
+      "type": "paper",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "p-daily-20261118-scalevla",
+      "title": "ScaleVLA探索大规模视觉语言骨干对机器人策略的增益",
+      "category": "机器人 / 具身",
+      "published": "2026-11-16",
+      "paperTitle": "ScaleVLA探索大规模视觉语言骨干对机器人策略的增益",
+      "authors": [],
+      "venue": "arXiv 预印本",
+      "summary": "ScaleVLA将552B的DeepSeek-V4.1-Flash骨干连接至可训练的动作DiT，并在统一训练设置下比较2B至552B的视觉语言模型。论文报告，使用10次示范的模型成功率为87.8%，高于使用50次示范的2B骨干模型的85.6%。在LIBERO-PRO仿真评估中，成功率达到45.1%，较小骨干最高为31.3%；实机充电器插入成功次数由4/10提高至9/10，提升主要集中在接触敏感的对齐环节。每个动作块的延迟中位数为216毫秒。",
+      "why": "分析：统一训练设置下的比较表明，大规模骨干作为机器人策略表征基础值得进一步研究；样本效率、泛化和接触对齐应分别检验，而非由模型规模直接推定。",
+      "relevance": "分析：对机器人策略研发而言，该研究为比较大规模视觉语言表征与较小骨干提供了参考，但选型仍需结合具体任务的实机表现和动作块延迟。",
+      "caveat": "该来源为arXiv预印本。LIBERO-PRO结果属于仿真评估，充电器插入结果来自实机实验，两者不能混同。实机插入仅报告每组10次尝试，不能据此推断广泛任务上的可靠性；216毫秒为每个动作块的延迟中位数，不代表完整任务耗时。",
+      "tags": [
+        "视觉语言动作模型",
+        "机器人学习",
+        "仿真评估",
+        "实机操作"
+      ],
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/2611.21607v1",
+          "name": "arXiv：ScaleVLA: Scaling Vision-Language-Action Models to 552 Billion Parameters"
+        }
+      ],
+      "relatedIds": [
+        "n-20261118-scalevla"
+      ],
+      "type": "paper",
+      "date": "2026-11-16"
+    },
     {
       "id": "p-daily-20261116-robot-use",
       "title": "开放权重推理模型经仿真强化学习迁移至真实机器人",
