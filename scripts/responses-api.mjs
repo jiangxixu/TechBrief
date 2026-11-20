@@ -1,12 +1,20 @@
+import { callMessagesApi } from './messages-api.mjs';
+
+export function callResponsesApi(config, body, audit, dependencies) {
+  if (config.protocol === 'anthropic') return callMessagesApi(config, body, audit,
+    (request) => requestProviderJson(config, request, audit, dependencies));
+  return requestProviderJson(config, body, audit, dependencies);
+}
+
 // Bound retries to one shared deadline; never log provider bodies or credentials.
-export async function callResponsesApi(config, body, audit, { fetchImpl = fetch, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
+async function requestProviderJson(config, body, audit, { fetchImpl = fetch, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
   const signal = AbortSignal.timeout(180_000);
   for (let attempt = 1; attempt <= 2; attempt++) {
     let response;
     try {
-      response = await fetchImpl(config.responsesUrl, {
+      response = await fetchImpl(config.messagesUrl || config.responsesUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${config.apiKey}`, 'Content-Type': 'application/json' },
+        headers: { ...(config.protocol === 'anthropic' ? { 'x-api-key': config.apiKey, 'anthropic-version': '2023-06-01' } : { Authorization: `Bearer ${config.apiKey}` }), 'Content-Type': 'application/json' },
         body: JSON.stringify(body), signal
       });
       const raw = await response.text();
@@ -21,13 +29,13 @@ export async function callResponsesApi(config, body, audit, { fetchImpl = fetch,
       const code = /^[a-z_]{1,80}$/.test(details?.code || '') ? details.code : undefined;
       const type = /^[a-z_]{1,80}$/.test(details?.type || '') ? details.type : undefined;
       const classification = /overload|capacity|no available|upstream|temporar|try again|busy/i.test(raw) ? 'upstream_unavailable'
-        : /quota|credit|balance|billing/i.test(raw) ? 'quota'
+        : /quota|credit|balance|billing|额度不足|余额不足/i.test(raw) ? 'quota'
         : /rate.?limit|too many requests/i.test(raw) ? 'rate_limit'
         : /unsupported|not supported|invalid.*parameter|unknown.*parameter/i.test(raw) ? 'unsupported_request'
         : 'provider_error';
       Object.assign(call, { code, type, classification });
       const error = new Error(`Responses API returned HTTP ${response.status} (${code || type || classification})`);
-      Object.assign(error, { status: response.status, code: code || type || classification });
+      Object.assign(error, { status: response.status, code: code || (classification !== 'provider_error' ? classification : type || classification), classification });
       // This custom gateway also intermittently reports HTTP 400 for requests
       // that succeed unchanged. Retry once, excluding explicit permanent errors.
       const permanent = ['quota', 'unsupported_request'].includes(classification)

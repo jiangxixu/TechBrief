@@ -21,7 +21,7 @@ export function validateDaily(day,filename){
  must(day.schemaVersion===1,`${filename}: schemaVersion must be 1`);
  must(validDate(day.date)&&basename(filename)===day.date+'.json',`${filename}: date must match filename`);
  must(day.timezone==='Asia/Shanghai',`${filename}: timezone must be Asia/Shanghai`);
- must(day.generatedBy==='ChatGPT',`${filename}: generatedBy must be ChatGPT`);
+ must(['ChatGPT','Claude'].includes(day.generatedBy),`${filename}: generatedBy must be ChatGPT or Claude`);
  must(Array.isArray(day.news)&&day.news.length>0&&day.news.length<=10,`${filename}: require 1–10 news items; prefer 5 verified stories`);
  const seen=new Set();
  for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}

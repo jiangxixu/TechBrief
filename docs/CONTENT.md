@@ -58,10 +58,12 @@
 仓库 `Settings → Secrets and variables → Actions` 中必须存在前两个 Repository secrets；第三个为可选配置：
 
 - `OPENAI_API_KEY`：OpenAI 官方或兼容中转服务提供的密钥。
-- `OPENAI_BASE_URL`：API 基础地址，例如以 `/v1` 结尾；脚本会自动拼接 `/responses`。
+- `OPENAI_BASE_URL`：API 基础地址，例如以 `/v1` 结尾；Responses 模式自动拼接 `/responses`，Claude 模式自动拼接 `/messages`。
 - `OPENAI_MODEL`（可选）：中转服务实际支持的模型 ID；未配置时默认使用 `gpt-5.6-sol`。
 
 生成脚本会要求模型联网检索一手来源、输出结构化 JSON，再运行仓库现有校验与构建。当天文件已存在时不会覆盖；如确需重建，可在 Actions 手动运行工作流并勾选 `force_regenerate`。第三方中转服务能够看到传给它的密钥和请求内容，不应把 OpenAI 官方密钥交给不可信的中转站。
+
+Claude 模型（模型名以 `claude-` 开头）自动使用 Messages API；本地可用 `AI_API_PROTOCOL=anthropic` 或 `responses` 显式指定协议。不同协议的完整端点不可混用。Claude 日报的 `generatedBy` 为 `Claude`，历史 `ChatGPT` 标记保留。切换前应完成真实 dry-run；鉴权成功不等于令牌余额足够，也不等于服务器联网检索可用。
 
 ## 索引与专题
 
