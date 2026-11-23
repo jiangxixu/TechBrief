@@ -3,241 +3,54 @@
   "date": "2026-11-23",
   "timezone": "Asia/Shanghai",
   "generatedBy": "ChatGPT",
-  "title": "科技简报｜10条官方与研究动态",
-  "editorialNote": "目标10条，本期收录10条核验来源，包括5条官方动态与5篇研究预印本；9条为4至7天前的补充。全部保留原始发布日期，预印本不等同于同行评审。新增7条复用已有检索证据并重新核对原文，本次未额外调用付费模型API。",
+  "title": "科技简报：ChatGPT社区功能建议与大模型评估讨论",
+  "editorialNote": "目标 10 条，本期收录 2 条核验来源，当天及前一天来源核验、去重后仍不足 8 条，不用重复或无来源内容补齐。其中 0 条为研究预印本（最多 6 条），1 条为当天发布，1 条为前一天发布；不使用更早内容补数。未收录领域：无人机、机器人 / 具身、科技产业。检索未完成领域：无。来源公开日期依据出版方元数据、专用发布日期栏或实时arXiv记录；不把预印本视为同行评审。",
   "news": [
     {
-      "category": "无人机",
-      "caveat": "来源为Auterion企业公告。合资企业及德国工厂仍属拟设立安排，正文未提供投产时间或新增产能；交付记录及产品表现属于企业陈述，不能据此认定德国工厂已投产或德国军方已采购。",
-      "id": "n-20261123-drone-venture",
-      "kind": "企业公告",
-      "published": "2026-11-20",
-      "relevance": "分析：这项安排值得关注之处在于无人机制造能力的跨国布局，以及机体、航电和软件平台的协同，而非已经实现的产能增长。",
-      "sources": [
-        {
-          "url": "https://auterion.com/auterion-and-skyfall-intend-to-form-a-joint-venture-to-build-drones-for-ukraine-in-germany",
-          "name": "Auterion"
-        }
-      ],
-      "summary": "Auterion与SkyFall宣布拟成立合资企业，在德国新建工厂，为乌克兰批量制造无人机。公告称双方此前已共同向乌克兰交付超过50,000架Shrike攻击无人机。新工厂初期计划生产Shrike FPV平台，后续扩展至拦截无人机及中远程打击系统，结合SkyFall机体与Auterion航电和AuterionOS。",
-      "tags": [
-        "无人机制造",
-        "合资计划",
-        "德国",
-        "乌克兰"
-      ],
-      "title": "Auterion与SkyFall拟在德国合资生产援乌无人机",
-      "why": "分析：将生产线布局在乌克兰境外，可能降低生产设施面临空袭的风险；能否将前线反馈持续转化为制造改进，仍取决于计划落实。"
-    },
-    {
       "category": "Agent",
-      "caveat": "该来源为arXiv预印本。正文报告的是游戏环境中的智能体评测，不是人类玩家实验，也不涉及机器人实机验证；学习指标的改善不能直接等同于人类玩家觉得游戏更有趣。",
-      "id": "n-20261123-playcraft",
-      "kind": "研究预印本",
-      "published": "2026-11-19",
-      "relevance": "分析：该工作展示了将智能体的交互经历用于迭代设计的路径，对研究生成、测试与修订相结合的Agent工作流具有参考意义。",
+      "caveat": "来源是社区用户提交的功能建议，不是OpenAI产品公告；正文未证明该功能已获采纳、进入开发或上线，也未展示Agent能力更新。",
+      "id": "n-20261123-suggestion-option",
+      "kind": "社区功能提案",
+      "published": "2026-11-23",
+      "relevance": "分析：该提案与ChatGPT用户反馈及产品协作机制相关，对Agent领域仅有间接参考价值，不构成Agent技术进展。",
       "sources": [
         {
-          "url": "https://arxiv.org/abs/2611.26624v1",
-          "name": "arXiv：PlayCraft"
+          "url": "https://community.openai.com/t/about-adding-new-features-in-chatgpt/1419567",
+          "name": "OpenAI Developer Community：关于为ChatGPT添加新功能的建议"
         }
       ],
-      "summary": "PlayCraft提出交替进行游玩与修改的游戏设计框架：视觉玩家智能体观察画面、操作游戏并保留记忆，在每轮结束后报告进展、决策与反思；设计智能体据此估计玩家能力，并围绕目标学习进程修改游戏。作者在不同智能水平的玩家智能体上评测，报告多数游戏的学习增益和学习斜率高于初始版本，各智能水平下的指标宏平均也优于基线。",
+      "summary": "社区用户提议在ChatGPT中增加专门的建议入口，让用户提交功能创意，并附描述、图片、原型或可体验演示。提案还包括投票、补充改进意见、防垃圾投票、创作者署名，以及从审核到发布的进度状态。",
       "tags": [
-        "游戏设计",
-        "视觉智能体",
-        "迭代反馈",
-        "预印本"
+        "ChatGPT",
+        "社区反馈",
+        "功能提案"
       ],
-      "title": "PlayCraft用智能体游玩反馈迭代游戏设计",
-      "why": "分析：相比仅生成可运行游戏，这一方法把评估与修订纳入闭环，可能帮助设计者发现难度进程和技能成长机会上的不足。"
+      "title": "社区用户提议为ChatGPT增设功能建议与投票入口",
+      "why": "分析：若此类机制被采用，可能帮助用户集中表达需求并追踪处理进度；实际效果仍取决于平台是否采纳及如何实施。"
     },
     {
-      "category": "机器人 / 具身",
-      "caveat": "该来源为arXiv预印本。正文报告自动生成的基准数据，并另述人形机器人及真实环境实验出现相同失败模式；所提供正文未交代仿真配置、实机样本规模或实机成功率，不能把基准中的低于3%直接视为实机结果，也不能推广至所有VLA模型。",
-      "id": "n-20261123-phydex",
-      "kind": "研究预印本",
-      "published": "2026-11-19",
-      "relevance": "分析：该基准为检验机器人策略能否处理物体与环境之间的动态相互作用提供了评测方向，有助于区分操作鲁棒性不足与物理属性利用不足。",
-      "sources": [
-        {
-          "url": "https://arxiv.org/abs/2611.26565v1",
-          "name": "arXiv：PhyDEX"
-        }
-      ],
-      "summary": "PhyDEX提出投掷任务基准，要求机器人推断物体质量、质心和摩擦，将物体送至运动学工作空间之外的目标。数据集包含35,000条轨迹，覆盖不同物体与目标条件。作者评测GR00T N1.7、DynamicVLA和ForceVLA，报告成功率均低于3%；提供真实物理属性后，成功率约翻倍。作者还报告，人形机器人及真实环境实验呈现相同失败模式。",
-      "tags": [
-        "视觉语言动作模型",
-        "物理推理",
-        "机器人投掷",
-        "预印本"
-      ],
-      "title": "PhyDEX以投掷任务检验机器人模型的物理推理",
-      "why": "分析：投掷要求策略利用重力、摩擦和质量分布等因素，能够补充主要关注夹爪与物体接触的评测；结果提示，物理信息利用和投掷前的操作稳定性都值得进一步研究。"
-    },
-    {
-      "id": "n-20261123-eve-one",
-      "title": "Vercel发布eve 1.0，扩展持久化Agent与多人协作",
-      "category": "Agent",
-      "kind": "框架发布",
-      "published": "2026-11-17",
-      "summary": "Vercel宣布开源Agent框架eve 1.0正式可用。框架支持选择模型、配置工具与审批规则，并借助Workflow SDK保存执行进度以便中断后恢复；更新还涵盖多人会话、集成渠道和前端框架接入。",
-      "why": "分析：持久化执行、协作与审批机制有助于把单次演示推进为可持续运行的Agent应用。",
-      "relevance": "分析：可将其状态恢复和审批设计，与机器人或科研Agent的长任务执行流程作对照。",
-      "caveat": "这是厂商发布说明；框架提供恢复与审批能力，不代表具体应用已经满足可靠性或安全要求。",
-      "tags": [
-        "Agent框架",
-        "持久化执行",
-        "多人协作"
-      ],
-      "sources": [
-        {
-          "name": "Vercel官方博客",
-          "url": "https://vercel.com/blog/eve-is-now-generally-available"
-        }
-      ]
-    },
-    {
-      "id": "n-20261123-agent-simulation",
-      "title": "英伟达展示Agent构建机器人与工业仿真的流程",
-      "category": "科技产业",
-      "kind": "开发者案例",
-      "published": "2026-11-19",
-      "summary": "英伟达介绍开发者将前沿AI Agent与Omniverse库结合的案例，由人给出指令、审查结果并指导修改，库提供物理、渲染和传感器仿真。案例包括使用SimReady资产与Isaac Sim搭建机器人抓放场景，以及利用工程数据构建设施数字孪生。",
-      "why": "分析：让Agent协助搭建和检查仿真环境，可能减少实验准备中的重复工作。",
-      "relevance": "分析：对具身智能研究，可关注场景组装、物理检查与失败诊断如何进入自动化实验流程。",
-      "caveat": "内容来自厂商案例；完成仿真搭建不等于已验证真实机器人控制的可靠性，仍需逐项检查物理条件与执行结果。",
-      "tags": [
-        "仿真",
-        "Omniverse",
-        "Isaac Sim",
-        "开发工具"
-      ],
-      "sources": [
-        {
-          "name": "NVIDIA官方博客",
-          "url": "https://blogs.nvidia.com/blog/developers-simulation-frontier-ai-agents"
-        }
-      ]
-    },
-    {
-      "id": "n-20261123-lux-science",
-      "title": "Lux超算向科学用户开放，连接AI训练与高性能仿真",
-      "category": "科技产业",
-      "kind": "基础设施公告",
-      "published": "2026-11-16",
-      "summary": "AMD宣布，橡树岭国家实验室的Lux超级计算机已向科学用户开放。该系统由HPE构建，结合AMD EPYC处理器、Instinct MI355X GPU、Pensando网络和ROCm软件，为Genesis Mission相关科研提供AI与高性能计算资源。",
-      "why": "分析：让模型训练与科学仿真在同一设施中协同，有助于探索基于科学数据的模型与计算工作流。",
-      "relevance": "分析：可关注算力接入方式、软硬件组合，以及AI模型与传统仿真在科研流程中的接口。",
-      "caveat": "来源为厂商公告；系统开放和硬件配置不直接代表某个科研项目的实际加速效果，使用条件以实验室公布的信息为准。",
-      "tags": [
-        "科学计算",
-        "超级计算机",
-        "AMD",
-        "AI基础设施"
-      ],
-      "sources": [
-        {
-          "name": "AMD官方新闻室",
-          "url": "https://newsroom.amd.com/news/amd-powered-lux-supercomputer-opens-scientific-users"
-        }
-      ]
-    },
-    {
-      "id": "n-20261123-amd-ai-nic-hpc",
-      "title": "AMD为AI网卡增加HPC支持，以统一以太网承载MPI与模型训练",
-      "category": "科技产业",
-      "kind": "技术更新",
-      "published": "2026-11-16",
-      "summary": "AMD介绍AI NIC新增的HPC支持，通过UCX连接MPI应用，使科学仿真与AI训练使用共同的以太网基础。文章描述Pollara 400在Lux中的部署，并称部分HPC能力通过软件和固件更新加入，Libfabric支持仍在开发。",
-      "why": "分析：AI与HPC共享网络时，吞吐量之外的小消息延迟、同步和规模扩展也会影响整体效率。",
-      "relevance": "分析：适合结合多GPU训练和MPI仿真，理解网络通信瓶颈与可编程网卡的作用。",
-      "caveat": "技术和性能陈述来自厂商；测试结果受工作负载与配置影响，不能直接外推到其他集群。Libfabric支持尚未完成。",
-      "tags": [
-        "网络通信",
-        "HPC",
-        "MPI",
-        "可编程网卡"
-      ],
-      "sources": [
-        {
-          "name": "AMD官方技术博客",
-          "url": "https://amd.com/en/blogs/2026/amd-ai-nic-technology-amd-ai-nics-now-support-hpc.html"
-        }
-      ]
-    },
-    {
-      "id": "n-20261123-depth-pro-two",
-      "title": "Depth Pro 2统一图像与视频的度量深度估计",
       "category": "AI / 大模型",
-      "kind": "研究预印本",
-      "published": "2026-11-19",
-      "summary": "Depth Pro 2提出单一可扩展网络，同时处理图像与视频，并以原生分辨率预测稠密度量深度。研究针对单帧方法偏重边界清晰、多帧方法偏重时间一致性的权衡，尝试兼顾度量精度、边界和时序稳定性；作者公布了模型系列、代码与权重。",
-      "why": "分析：深度边界与时间稳定性同时改善，可能帮助下游系统建立更连续的三维感知。",
-      "relevance": "分析：可关注深度误差、边界质量与运行速度在导航和机器人感知中的取舍。",
-      "caveat": "这是arXiv预印本；摘要中的性能结论来自作者评估，真实场景适用性及具体误差仍需结合正文与代码复现核对。",
-      "tags": [
-        "深度估计",
-        "视频感知",
-        "三维视觉",
-        "预印本"
-      ],
+      "caveat": "已提供的正文仅为社区用户对文章的转述，未包含原文论证、实验数据或评测细节，不能据此确认困惑度与具体能力之间存在普遍、确定的对应关系。",
+      "id": "n-20261123-perplexity-intelligence",
+      "kind": "社区观点转述",
+      "published": "2026-11-22",
+      "relevance": "分析：该讨论与大模型预训练指标及能力评估相关，但不应将指标改善直接等同于具体任务能力已获验证。",
       "sources": [
         {
-          "name": "arXiv原论文",
-          "url": "https://arxiv.org/abs/2611.26603v1"
+          "url": "https://community.openai.com/t/perplexity-and-intelligence/1419510",
+          "name": "OpenAI Developer Community：困惑度与智能"
         }
       ],
-      "paperTitle": "Depth Pro 2: Sharp and Temporally Consistent Metric Monocular Depth"
-    },
-    {
-      "id": "n-20261123-ace-brain-execution",
-      "title": "ACE-Brain-0.7联合学习空间定位、任务判断与执行进度",
-      "category": "机器人 / 具身",
-      "kind": "研究预印本",
-      "published": "2026-11-19",
-      "summary": "ACE-Brain-0.7是结合空间定位、任务理解与进度估计的9B视觉语言模型。作者从第一视角人类视频、机器人轨迹和仿真中整理370万组问答，并微调Qwen3.5-9B；论文报告其在六个公开任务推理基准上的平均得分为76.5。",
-      "why": "分析：将任务判断与观测到的执行状态连接，可能帮助长任务中的Agent识别当前阶段和异常。",
-      "relevance": "分析：可研究视觉历史、空间指代和进度估计如何影响机器人任务规划与重新决策。",
-      "caveat": "这是arXiv预印本；所述分数是任务推理基准评估，不应直接解释为真实机器人操控成功率。",
+      "summary": "社区帖子转述了OpenAI首席科学家Jakub Pachocki关于困惑度与智能的文章观点：预训练交叉熵及其对应的困惑度或对数困惑度，可用于衡量语言模型底层智能的进展。帖子还转述称，在某些对数困惑度水平下，理论上可能引出数学定理求解等能力，并提出更低困惑度可能带来哪些新能力的问题。",
       "tags": [
-        "具身推理",
-        "视觉语言模型",
-        "进度估计",
-        "预印本"
+        "困惑度",
+        "预训练",
+        "模型评估"
       ],
-      "sources": [
-        {
-          "name": "arXiv原论文",
-          "url": "https://arxiv.org/abs/2611.26519v1"
-        }
-      ],
-      "paperTitle": "ACE-Brain-0.7: Learning Execution-Grounded Reasoning for Embodied Agents"
-    },
-    {
-      "id": "n-20261123-llm-vulnerability-survey",
-      "title": "综述提出分级框架，比较大模型漏洞研究能力与证据",
-      "category": "AI / 大模型",
-      "kind": "研究预印本",
-      "published": "2026-11-19",
-      "summary": "这篇综述提出借鉴驾驶自动化等级的自主性框架，并结合正确性、可用性与证据强度，整理LLM Agent参与漏洞发现、验证和修补的公开研究及厂商报告。作者还分析公开漏洞记录、公告与利用数据，并评估文献中提出的缓解措施。",
-      "why": "分析：将自主程度与证据质量分开衡量，有助于比较不同报告中的能力声明。",
-      "relevance": "分析：在评估代码Agent时，可以同时记录人类参与、验证方法和证据是否可复现。",
-      "caveat": "这是综述类预印本，依赖已有公开证据；统计关联不能直接证明漏洞数量变化由AI引起，也不代表所有Agent具备相同能力。",
-      "tags": [
-        "Agent评估",
-        "软件安全",
-        "证据质量",
-        "预印本"
-      ],
-      "sources": [
-        {
-          "name": "arXiv原论文",
-          "url": "https://arxiv.org/abs/2611.26601v1"
-        }
-      ],
-      "paperTitle": "SoK: Assessing the Evolution of LLM Capability in Software Vulnerability Research"
+      "title": "社区转述困惑度与语言模型智能进展的关系",
+      "why": "分析：这一讨论提示，可关注预训练指标与下游能力之间的联系；判断这种联系是否可靠，仍需原文证据与具体任务评测。"
     }
   ],
-  "targetCount": 10
+  "targetCount": 10,
+  "maxSourceAgeDays": 1
 }
