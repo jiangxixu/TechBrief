@@ -164,7 +164,7 @@ globalThis.fetch = async (url, options={}) => {
  if (String(url).includes('export.arxiv.org')) throw Error('fixture unavailable');
  if (options.method==='POST') {
   const body=JSON.parse(options.body);
-  if(body.tools) {
+  if(body.tools&&!body.instructions.startsWith('You are a strict technology news assignment editor.')) {
    if(body.text || body.tool_choice!=='required') throw Error('Discovery must require search independently of schema');
    const category=categories[searches++], source='https://openai.com/news/item-'+searches;
    const ten=scenario==='ten'||scenario==='backfill_ten';
@@ -176,7 +176,7 @@ globalThis.fetch = async (url, options={}) => {
    return Response.json(result);
   }
   if(body.instructions.startsWith('You are a strict technology news assignment editor.')) {
-   const data=JSON.parse(body.input);return Response.json(output({candidates:data.sources.map((s,i)=>({url:s.url,category:s.category,eventDate:date,eventKey:'event-'+i,eventEvidence:'Supported source fact for the new development'}))}));
+   const data=JSON.parse(body.input);if(!body.tools||body.tool_choice!=='required')throw Error('Editorial review must cross-check original announcements'); const result=output({candidates:data.sources.map((s,i)=>({url:s.url,category:s.category,eventDate:date,eventKey:'event-'+i,eventEvidence:'Supported source fact for the new development'}))});result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:data.sources.map(s=>({url:s.url}))}});return Response.json(result);
   }
   writers++;
   if(scenario==='format_retry' && writers===1) return Response.json({error:{code:'invalid_json_schema'}},{status:400});
