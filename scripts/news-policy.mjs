@@ -126,6 +126,23 @@ export function publicationDates(html, publisherUrl = '') {
   return [...dates];
 }
 
+export function articleEvidenceHtml(html, url) {
+  // This publisher places article text in a dedicated div. Read its balanced
+  // contents so related-story headlines cannot become evidence for this news.
+  if (/^(www\.)?ithome\.com$/.test(new URL(url).hostname)) {
+    const start=/<div\b[^>]*id=["']paragraph["'][^>]*>/i.exec(html);
+    if(start){
+      const bodyStart=start.index+start[0].length;let depth=1;
+      const tags=/<\/?div\b[^>]*>/gi;tags.lastIndex=bodyStart;
+      for(let m;(m=tags.exec(html));){depth+=/^<\/div/i.test(m[0])?-1:1;if(!depth)return html.slice(bodyStart,m.index);}
+      throw Error('Incomplete publisher article body');
+    }
+    throw Error('Missing publisher article body');
+  }
+  return html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
+    || html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || html;
+}
+
 export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate = false) {
   if (!primaryUrl(candidate.url)) throw Error('Source host not in primary publisher allowlist');
   let url = candidate.url;
@@ -158,8 +175,7 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
   if (dates.length !== 1) throw Error('Missing or conflicting publication metadata');
   if (!deriveDate && candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
   if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > MAX_SOURCE_AGE_DAYS) throw Error('Source outside today-or-yesterday publication window');
-  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
-    || html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || html;
+  const article = articleEvidenceHtml(html,url);
   const evidence = article.replace(/<(script|style|nav|footer|dialog|form)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24000);
   const title = candidate.title || html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -242,6 +258,7 @@ export function sourceBackfillCandidates(searches, history, attempted = new Set(
       try {
         const url = canonicalUrl(raw), u = new URL(url);
         if (seen.has(url) || !primaryUrl(url) || u.hostname === 'arxiv.org' || /\.(pdf|png|jpe?g|gif|svg|zip)$/i.test(u.pathname)) continue;
+        if (/\/(tag|tags|category|categories|archive|list|newsletters|events|help|docs|topics)(\/|$)/i.test(u.pathname)) continue;
         if (u.pathname.split('/').filter(Boolean).length < 2) continue;
         urls.push(url);
       } catch {}

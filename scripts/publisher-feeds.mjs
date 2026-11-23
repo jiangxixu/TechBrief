@@ -12,7 +12,7 @@ export function feedCategory(title) {
   if (/机器人|具身|外骨骼|\b(robot\w*|embodied|humanoid)\b/i.test(title)) return '机器人 / 具身';
   if (/智能体|编程助手|\b(agent\w*|Claude Code|Copilot)\b/i.test(title)) return 'Agent';
   if (/大模型|人工智能|\b(AI|LLM|GPT|Claude|Gemini|DeepSeek|OpenAI|Anthropic)\b/i.test(title)) return 'AI / 大模型';
-  if (/芯片|半导体|处理器|量子|超算|航天|火箭|智驾|自动驾驶|\b(chip\w*|semiconductor|quantum|processor|spacecraft|GPU|CPU|Intel|NVIDIA|AMD)\b/i.test(title)) return '科技产业';
+  if (/芯片|半导体|处理器|量子|超算|航天|火箭|智驾|自动驾驶|服务器|数据中心|漏洞|网络安全|浏览器|操作系统|主板|内存|显卡|液冷|机械键盘|\b(chip\w*|semiconductor|quantum|processor|spacecraft|GPU|CPU|Intel|NVIDIA|AMD|security|cyber\w*|browser|Linux|Windows|server\w*)\b/i.test(title)) return '科技产业';
   return '';
 }
 export function parsePublisherFeed(xml, date) {

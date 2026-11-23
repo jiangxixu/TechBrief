@@ -2,5 +2,5 @@
   "date": "2026-11-23",
   "dryRun": true,
   "reuseSearchRunId": 45101738670,
-  "reason": "Reuse same-day discovery evidence for editorial filtering of stale, irrelevant and duplicate stories before publication."
+  "reason": "Review complete bounded publisher evidence pool with fresh RSS discovery, reusing the same five searches."
 }

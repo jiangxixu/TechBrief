@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parsePublisherFeed, fetchPublisherFeeds } from './publisher-feeds.mjs';
-import { primaryUrl, publicationDates, verifyPage, curateVerifiedPool } from './news-policy.mjs';
+import { primaryUrl, publicationDates, verifyPage, curateVerifiedPool, articleEvidenceHtml } from './news-policy.mjs';
 
 test('editorial newsrooms are allowed but community areas and lookalikes are rejected', async () => {
   for (const url of ['https://ithome.com/1/030/769.htm','https://techcrunch.com/2026/11/23/news','https://apnews.com/article/news']) assert.ok(primaryUrl(url));
@@ -47,4 +47,11 @@ test('editorial approvals require exact source evidence, fresh event date and re
  for(const patch of [{eventDate:'2026-11-18'},{eventEvidence:'A fabricated new event that is absent from the source'},{url:'https://ithome.com/1/030/000.htm'},{category:'entertainment'}]) assert.equal(curateVerifiedPool([{...decision,...patch}],[source],[],'2026-11-23').selected.length,0);
  const other={...source,title:'Another report of the same deployment',url:'https://theverge.com/news/robot'};
  assert.equal(curateVerifiedPool([decision,{...decision,url:other.url}],[source,other],[],'2026-11-23').selected.length,1);
+});
+
+
+test('article evidence excludes recommendations and nested unrelated page sections', () => {
+ const html='<nav>menu</nav><div id="paragraph"><p>Real article fact</p><div><p>nested detail</p></div></div><div>Related false event</div>';
+ assert.equal(articleEvidenceHtml(html,'https://ithome.com/1/030/769.htm'),'<p>Real article fact</p><div><p>nested detail</p></div>');
+ assert.throws(()=>articleEvidenceHtml('<div>Not an article</div>','https://ithome.com/1/030/769.htm'),/Missing publisher article body/);
 });

@@ -164,7 +164,7 @@ async function generate() {
   const history = await recentNews(date);
   const pool = [];
   const attemptedUrls = new Set();
-  const feeds = process.env.REUSE_SEARCH_AUDIT ? {sources:[],feeds:[]} : await fetchPublisherFeeds(date);
+  const feeds = await fetchPublisherFeeds(date);
   audit.publisherFeeds = feeds.feeds;
   const publisherHints = {
     'Agent': 'Microsoft, Google, Anthropic, OpenAI, LangChain, CrewAI, Vercel, Replit, AWS',
@@ -190,7 +190,7 @@ async function generate() {
       if (!CATEGORIES.includes(search.category) || !search.calls?.some(c => c.action === 'search')) throw Error('Invalid reused search provenance');
       for (const url of [...(search.sourceUrls || []), ...(search.feedUrls || [])]) provenUrls.add(canonicalUrl(url));
     }
-    audit.searches = prior.searches;
+    audit.searches = prior.searches.map(s=>({...s,feedUrls:[...new Set([...(s.feedUrls||[]),...feeds.sources.filter(n=>n.category===s.category).map(n=>n.url)])]}));
     audit.reusedSearchRunId = prior.runId;
     for (const candidate of prior.selected || []) {
       if (new URL(candidate.url).hostname === 'arxiv.org') continue;
@@ -262,9 +262,9 @@ async function generate() {
   }
   // Reuse unused URLs from the SAME five search responses. This is publisher
   // fetching and metadata verification, not another paid discovery request.
-  if (selectCandidates(pool, history, date).length < TARGET_STORIES) {
+  { // Build the full bounded evidence pool BEFORE editorial review, even if ten unreviewed URLs exist.
     audit.currentStage = 'publisher-backfill';
-    const backfill = sourceBackfillCandidates(audit.searches.map(s=>({...s,sourceUrls:[...(s.sourceUrls||[]),...(s.feedUrls||[])]})), history, attemptedUrls);
+    const backfill = sourceBackfillCandidates(audit.searches.map(s=>({...s,sourceUrls:[...(s.feedUrls||[]),...(s.sourceUrls||[])]})), history, attemptedUrls);
     audit.publisherBackfill = { attempted: backfill.length, verified: 0 };
     for (let start = 0; start < backfill.length; start += 3) {
       const batch = backfill.slice(start, start + 3);
