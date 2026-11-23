@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-16",
+  "date": "2026-11-23",
   "dryRun": false,
-  "reason": "Publish today's edition after validating the new Responses gateway with a complete local dry-run."
+  "reason": "User requested one formal regeneration using today-or-yesterday sources only; no preview."
 }
