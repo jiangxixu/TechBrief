@@ -29,7 +29,7 @@ const itemSchema = {
   }
 };
 
-export function responseSchema(date, count = 5) {
+export function responseSchema(date, count = 10) {
   return {
     type: 'object',
     additionalProperties: false,

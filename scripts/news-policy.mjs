@@ -1,6 +1,9 @@
 import { validDate } from '../core.js';
 
 export const CATEGORIES = ['Agent', '无人机', '机器人 / 具身', '科技产业', 'AI / 大模型'];
+export const TARGET_STORIES = 10;
+export const MAX_ARXIV_STORIES = 6;
+export const DISCOVERY_CANDIDATES = 8;
 // Only primary publisher hosts may be fetched. Extend deliberately as needed.
 const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'blog.google', 'research.google', 'microsoft.com', 'nvidia.com', 'huggingface.co',
@@ -11,7 +14,8 @@ const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'fortemtech.com', 'pdw.ai', 'palladyneai.com', 'github.blog', 'crewai.com',
   'minimax.io', 'deepseek.com', 'inceptionlabs.ai', 'reflection.ai',
   'sensetime.com', 'synaptics.com', 'robinsonheli.com', 'openrobotics.org',
-  'mistral.ai', 'meta.ai', 'github.github.com', 'zoom.com'];
+  'mistral.ai', 'meta.ai', 'github.github.com', 'zoom.com',
+  'vercel.com', 'wpi.edu', 'amd.com', 'ibm.com', 'apple.com', 'replit.com'];
 
 export function canonicalUrl(raw) {
   const u = new URL(raw);
@@ -135,9 +139,13 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
   if (dates.length !== 1) throw Error('Missing or conflicting publication metadata');
   if (!deriveDate && candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
   if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > 7) throw Error('Source outside 7-day publication window');
-  const evidence = html.replace(/<(script|style|nav|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
+    || html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || html;
+  const evidence = article.replace(/<(script|style|nav|footer|dialog|form)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24000);
-  return { ...candidate, url: canonicalUrl(url), published: dates[0], evidence,
+  const title = candidate.title || html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!title) throw Error('Source page has no article title');
+  return { ...candidate, title, url: canonicalUrl(url), published: dates[0], evidence,
     dateBasis: new URL(url).hostname === 'nvidianews.nvidia.com' ? 'NVIDIA newsroom article publication header' : 'publisher publication metadata' };
 }
 
@@ -152,21 +160,57 @@ export function selectCandidates(pool, history, date) {
   const add = n => {
     const url = canonicalUrl(n.url), key = titleKey(n.title);
     const isPaper = new URL(url).hostname === 'arxiv.org';
-    if (seenUrls.has(url) || seenTitles.has(key) || (isPaper && papers >= 2)) return;
+    if (selected.length >= TARGET_STORIES || seenUrls.has(url) || seenTitles.has(key) || (isPaper && papers >= MAX_ARXIV_STORIES)) return;
     selected.push(n); seenUrls.add(url); seenTitles.add(key); if (isPaper) papers++;
   };
-  // Prefer 0–3 days across domains; older items are clearly labelled supplements.
-  for (const window of [3, 7]) {
-    for (const category of CATEGORIES) {
-      if (selected.some(n => n.category === category)) continue;
-      for (const n of eligible.filter(n => n.category === category && ageDays(n.published, date) <= window)) {
-        const before = selected.length; add(n); if (selected.length > before) break;
+  const isPaper = n => new URL(canonicalUrl(n.url)).hostname === 'arxiv.org';
+  const balanced = predicate => {
+    for (const limit of [1, 2]) for (const category of CATEGORIES) {
+      if (selected.filter(n => n.category === category).length >= limit) continue;
+      for (const n of eligible.filter(n => n.category === category && predicate(n))) {
+        const before = selected.length;
+        add(n);
+        if (selected.length > before) break;
       }
-      if (selected.length === 5) return selected;
+      if (selected.length === TARGET_STORIES) return;
+    }
+  };
+  // Prefer publisher news, roughly two per domain. Fill gaps with clearly
+  // labelled research, retaining a cap and the original seven-day window.
+  for (const window of [3, 7]) balanced(n => !isPaper(n) && ageDays(n.published, date) <= window);
+  for (const window of [3, 7]) balanced(n => isPaper(n) && ageDays(n.published, date) <= window);
+  for (const paper of [false, true]) for (const n of eligible) {
+    if (selected.length === TARGET_STORIES) break;
+    if (isPaper(n) === paper) add(n);
+  }
+  return selected;
+}
+
+// Tool-returned publisher URLs can be verified directly without another model
+// request. Never treat a URL from model prose as equivalent tool provenance.
+export function sourceBackfillCandidates(searches, history, attempted = new Set(), perCategory = 8) {
+  const seen = new Set([...attempted, ...history.flatMap(n => (n.sources || []).map(s => canonicalUrl(s.url)))]);
+  const candidates = [];
+  for (const search of searches) {
+    if (!CATEGORIES.includes(search.category) || !search.calls?.some(c => c.action === 'search')) continue;
+    const urls = [];
+    for (const raw of search.sourceUrls || []) {
+      try {
+        const url = canonicalUrl(raw), u = new URL(url);
+        if (seen.has(url) || !primaryUrl(url) || u.hostname === 'arxiv.org' || /\.(pdf|png|jpe?g|gif|svg|zip)$/i.test(u.pathname)) continue;
+        if (u.pathname.split('/').filter(Boolean).length < 2) continue;
+        urls.push(url);
+      } catch {}
+    }
+    urls.sort((a, b) => Number(/news|blog|release|announcement/.test(b)) - Number(/news|blog|release|announcement/.test(a)));
+    let added = 0;
+    for (const url of urls) {
+      if (seen.has(url)) continue;
+      seen.add(url); candidates.push({ category: search.category, url });
+      if (++added >= perCategory) break;
     }
   }
-  for (const n of eligible) { if (selected.length === 5) break; add(n); }
-  return selected;
+  return candidates;
 }
 
 export function assertGroundedEdition(edition, selected) {
