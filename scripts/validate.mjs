@@ -24,8 +24,9 @@ export function validateDaily(day,filename){
  must(day.generatedBy==='ChatGPT',`${filename}: generatedBy must be ChatGPT`);
  must(Array.isArray(day.news)&&day.news.length>0&&day.news.length<=10,`${filename}: require 1–10 verified news items; target 10`);
  if(day.targetCount!==undefined)must(Number.isInteger(day.targetCount)&&day.targetCount>=1&&day.targetCount<=10&&day.news.length<=day.targetCount,`${filename}: invalid targetCount`);
+ if(day.maxSourceAgeDays!==undefined)must(day.maxSourceAgeDays===1,`${filename}: invalid freshness policy`);
  const seen=new Set();
- for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}
+ for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);if(day.maxSourceAgeDays===1)must((Date.parse(day.date)-Date.parse(n.published))/86400000<=1,`${filename}: source must be published today or yesterday`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}
 }
 function arxivId(item){
  const source=(item.sources||[]).find(s=>{try{return new URL(s.url).hostname==='arxiv.org';}catch{return false;}});
@@ -68,6 +69,6 @@ export async function readContent(){
  for(const t of topics){validateItem(t,t.id);must(validDate(t.date),'topic date required');}
  const typedPapers=papers.map(p=>({...p,type:'paper',date:p.published})),typedTopics=topics.map(t=>({...t,type:'topic'}));
  const all=[...news,...typedPapers,...typedTopics],ids=new Set();for(const i of all){must(!ids.has(i.id),'duplicate id '+i.id);ids.add(i.id);}for(const i of all)for(const id of i.relatedIds||[])must(ids.has(id),`${i.id}: unknown related id ${id}`);
- return {schemaVersion:1,days:days.map(d=>({date:d.date,count:d.news.length,title:d.title||'每日科技简报',...(d.targetCount?{targetCount:d.targetCount}:{}),editorialNote:d.editorialNote||''})),news,papers:typedPapers,topics:typedTopics};
+ return {schemaVersion:1,days:days.map(d=>({date:d.date,count:d.news.length,title:d.title||'每日科技简报',...(d.targetCount?{targetCount:d.targetCount}:{}),...(d.maxSourceAgeDays!==undefined?{maxSourceAgeDays:d.maxSourceAgeDays}:{}),editorialNote:d.editorialNote||''})),news,papers:typedPapers,topics:typedTopics};
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){try{const c=await readContent();console.log(`Validated ${c.days.length} editions, ${c.news.length} news, ${c.papers.length} papers, ${c.topics.length} topics.`);}catch(e){console.error(e.message);process.exitCode=1;}}

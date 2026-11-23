@@ -2,8 +2,10 @@ import { validDate } from '../core.js';
 
 export const CATEGORIES = ['Agent', '无人机', '机器人 / 具身', '科技产业', 'AI / 大模型'];
 export const TARGET_STORIES = 10;
+// Calendar publication dates: edition day or the previous day, never a stale fallback.
+export const MAX_SOURCE_AGE_DAYS = 1;
 export const MAX_ARXIV_STORIES = 6;
-export const DISCOVERY_CANDIDATES = 8;
+export const DISCOVERY_CANDIDATES = 12;
 // Only primary publisher hosts may be fetched. Extend deliberately as needed.
 const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'blog.google', 'research.google', 'microsoft.com', 'nvidia.com', 'huggingface.co',
@@ -138,7 +140,7 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
   const dates = publicationDates(html, url);
   if (dates.length !== 1) throw Error('Missing or conflicting publication metadata');
   if (!deriveDate && candidate.published !== dates[0]) throw Error('Model date does not match source publication metadata');
-  if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > 7) throw Error('Source outside 7-day publication window');
+  if (ageDays(dates[0], date) < 0 || ageDays(dates[0], date) > MAX_SOURCE_AGE_DAYS) throw Error('Source outside today-or-yesterday publication window');
   const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
     || html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || html;
   const evidence = article.replace(/<(script|style|nav|footer|dialog|form)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
@@ -153,7 +155,7 @@ export function selectCandidates(pool, history, date) {
   const seenUrls = new Set(history.flatMap(n => (n.sources || []).map(s => canonicalUrl(s.url))));
   const seenTitles = new Set(history.map(n => titleKey(n.title)));
   const eligible = pool.filter(n => CATEGORIES.includes(n.category) && n.evidence &&
-    ageDays(n.published, date) >= 0 && ageDays(n.published, date) <= 7)
+    ageDays(n.published, date) >= 0 && ageDays(n.published, date) <= MAX_SOURCE_AGE_DAYS)
     .sort((a, b) => ageDays(a.published, date) - ageDays(b.published, date));
   const selected = [];
   let papers = 0;
@@ -175,20 +177,21 @@ export function selectCandidates(pool, history, date) {
       if (selected.length === TARGET_STORIES) return;
     }
   };
-  // Prefer publisher news, roughly two per domain. Fill gaps with clearly
-  // labelled research, retaining a cap and the original seven-day window.
-  for (const window of [3, 7]) balanced(n => !isPaper(n) && ageDays(n.published, date) <= window);
-  for (const window of [3, 7]) balanced(n => isPaper(n) && ageDays(n.published, date) <= window);
-  for (const paper of [false, true]) for (const n of eligible) {
-    if (selected.length === TARGET_STORIES) break;
-    if (isPaper(n) === paper) add(n);
+  // Freshness outranks publisher type and domain balance. Never relax dates
+  // to fill ten; use other domains when one domain has no fresh news.
+  for (const age of [0, 1]) {
+    for (const paper of [false, true]) balanced(n => isPaper(n) === paper && ageDays(n.published, date) === age);
+    for (const paper of [false, true]) for (const n of eligible) {
+      if (selected.length === TARGET_STORIES) break;
+      if (isPaper(n) === paper && ageDays(n.published, date) === age) add(n);
+    }
   }
   return selected;
 }
 
 // Tool-returned publisher URLs can be verified directly without another model
 // request. Never treat a URL from model prose as equivalent tool provenance.
-export function sourceBackfillCandidates(searches, history, attempted = new Set(), perCategory = 8) {
+export function sourceBackfillCandidates(searches, history, attempted = new Set(), perCategory = DISCOVERY_CANDIDATES) {
   const seen = new Set([...attempted, ...history.flatMap(n => (n.sources || []).map(s => canonicalUrl(s.url)))]);
   const candidates = [];
   for (const search of searches) {

@@ -4,7 +4,8 @@ import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promi
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { responseSchema } from './daily-schema.mjs';
-import { TARGET_STORIES, MAX_ARXIV_STORIES, sourceBackfillCandidates, canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, verifyDiscoveredPage, selectCandidates, assertGroundedEdition, assembleEdition, CATEGORIES } from './news-policy.mjs';
+import { validateDaily } from './validate.mjs';
+import { DISCOVERY_CANDIDATES, TARGET_STORIES, MAX_ARXIV_STORIES, sourceBackfillCandidates, canonicalUrl, primaryUrl, ageDays, searchEvidence, publicationDates, verifyPage, verifyDiscoveredPage, selectCandidates, assertGroundedEdition, assembleEdition, CATEGORIES } from './news-policy.mjs';
 
 test('Schema defaults to ten stories and can describe an honestly smaller edition', () => {
   const walk = schema => {
@@ -109,7 +110,7 @@ test('publisher backfill uses only tool URLs, excludes history, unsafe hosts and
   const history=[{sources:[{url:'https://amd.com/news/seen'}]}];
   assert.deepEqual(sourceBackfillCandidates([search],history,new Set(['https://openai.com/news/attempted'])),[{category:'Agent',url:'https://vercel.com/blog/new'}]);
   assert.deepEqual(sourceBackfillCandidates([{...search,calls:[]}],[]),[]);
-  assert.equal(sourceBackfillCandidates([{...search,sourceUrls:Array.from({length:20},(_,i)=>'https://vercel.com/blog/item-'+i)}],[]).length,8);
+  assert.equal(sourceBackfillCandidates([{...search,sourceUrls:Array.from({length:20},(_,i)=>'https://vercel.com/blog/item-'+i)}],[]).length,DISCOVERY_CANDIDATES);
 });
 
 test('direct tool URL verification derives date and title from publisher HTML', async () => {
@@ -117,12 +118,12 @@ test('direct tool URL verification derives date and title from publisher HTML', 
     async()=>new Response('<title>Official release</title><meta property="article:published_time" content="2026-10-12"><article>Facts</article>',{headers:{'content-type':'text/html'}}),true);
   assert.equal(verified.title,'Official release'); assert.equal(verified.published,'2026-10-12');
 });
-test('selection rejects stale/future/duplicate stories and prefers recent over supplements', () => {
+test('selection rejects older sources even when fresh sources are exhausted', () => {
   const fresh = candidate('Agent', 'fresh'), older = candidate('Agent', 'older', '2026-10-09');
   const history = [{ title: '历史中文标题', sources: [{ url: fresh.url + '?tracking=1' }] }];
   const pool = [older, fresh, candidate('无人机', 'future', '2026-10-14'), candidate('无人机', 'stale', '2026-10-01')];
   assert.equal(selectCandidates(pool, [], '2026-10-13')[0].title, 'fresh');
-  assert.deepEqual(selectCandidates(pool, history, '2026-10-13').map(n => n.title), ['older']);
+  assert.deepEqual(selectCandidates(pool, history, '2026-10-13').map(n => n.title), []);
 });
 test('writer cannot introduce sources, dates, categories or duplicate events', () => {
   const c = candidate('Agent', 'x');
@@ -145,7 +146,7 @@ test('provider envelope drift is repaired only for application metadata and sour
 });
 
 // Full script in an isolated fixture repo: no network, credentials, or real daily writes.
-for (const scenario of ['normal', 'ten', 'backfill_ten', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_opaque', 'reuse_recover_opaque', 'reuse_wrong_date']) {
+for (const scenario of ['normal', 'ten', 'backfill_ten', 'stale_backfill', 'opaque', 'no_search', 'wrong_date', 'format_retry', 'existing', 'dry_run', 'reuse', 'reuse_opaque', 'reuse_recover_opaque', 'reuse_wrong_date']) {
   test(`generation integration: ${scenario}`, async () => {
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
@@ -168,7 +169,7 @@ globalThis.fetch = async (url, options={}) => {
    const category=categories[searches++], source='https://openai.com/news/item-'+searches;
    const ten=scenario==='ten'||scenario==='backfill_ten';
    const sources=ten?[source+'-a',source+'-b']:[source];
-   const candidates=scenario==='backfill_ten'||(!ten&&searches>2)?[]:sources.map((url,i)=>({title:'story-'+searches+'-'+i,category,published:date,url}));
+   const candidates=scenario==='backfill_ten'||scenario==='stale_backfill'||(!ten&&searches>2)?[]:sources.map((url,i)=>({title:'story-'+searches+'-'+i,category,published:date,url}));
    const result=output({candidates});
    const toolSources=scenario==='opaque'?['https://api.shep-api.com/v1/media/assets/token']:(!ten&&searches>2)?['https://openai.com/']:sources;
    if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:toolSources.map(url=>({url}))}});
@@ -179,7 +180,7 @@ globalThis.fetch = async (url, options={}) => {
   const selected=JSON.parse(body.input.split('\\nJSON结构：')[0]).sources;
   return Response.json(output({schemaVersion:1,date,timezone:'Asia/Shanghai',generatedBy:'ChatGPT',title:'Fixture',editorialNote:'Fixture',news:selected.map((s,i)=>({id:'n-'+date.replaceAll('-','')+'-item-'+i,title:s.title,category:s.category,kind:'动态',published:s.published,summary:'Source fact',why:'Analysis',relevance:'Analysis',caveat:'Limit',tags:['test'],sources:[{name:'Official',url:s.url}]}))}));
  }
- return new Response('<title>'+String(url)+'</title><meta property="article:published_time" content="'+(scenario==='wrong_date'?'2000-01-01':date)+'"><article>Source fact</article>',{headers:{'content-type':'text/html'}});
+ return new Response('<title>'+String(url)+'</title><meta property="article:published_time" content="'+(scenario==='wrong_date'||scenario==='stale_backfill'?'2000-01-01':date)+'"><article>Source fact</article>',{headers:{'content-type':'text/html'}});
 };
 `;
       await writeFile(resolve(dir, 'mock.mjs'), mock);
@@ -200,9 +201,10 @@ globalThis.fetch = async (url, options={}) => {
       }
       const run = spawnSync(process.execPath, ['--import', './mock.mjs', 'scripts/generate-daily.mjs'], { cwd: dir, env: { ...process.env, OPENAI_API_KEY: 'fixture-not-secret', OPENAI_BASE_URL: 'https://fixture.example/v1', OPENAI_MODEL: 'fixture', FORCE_REGENERATE: 'false', DRY_RUN: String(scenario === 'dry_run'), GITHUB_STEP_SUMMARY: '', REUSE_SEARCH_AUDIT:scenario.startsWith('reuse')?'prior.json':'', REUSE_SEARCH_RUN_ID:'42' }, encoding: 'utf8' });
       const audit = JSON.parse(await readFile(resolve(dir, 'reports/generation.json')));
-      if (['no_search', 'wrong_date', 'reuse_wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
+      if (['no_search', 'wrong_date', 'stale_backfill', 'reuse_wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
       else if (scenario === 'ten' || scenario === 'backfill_ten') {
         assert.equal(run.status,0,run.stderr); assert.equal(audit.status,'published'); assert.equal(audit.selected.length,10); assert.equal(audit.targetCount,10); assert.equal(audit.shortfallCount,0); assert.equal(audit.apiCalls.length,6);
+        const edition=JSON.parse(await readFile(resolve(dir,'data/daily/'+audit.date+'.json'))); assert.equal(edition.maxSourceAgeDays,1); assert.equal(edition.news.every(n=>ageDays(n.published,audit.date)<=1),true);
         if(scenario==='backfill_ten') assert.equal(audit.publisherBackfill.verified,10);
       }
       else if (scenario === 'existing') { assert.equal(run.status, 0); assert.equal(audit.status, 'skipped_existing'); assert.equal(audit.apiCalls.length, 0); }
@@ -210,3 +212,30 @@ globalThis.fetch = async (url, options={}) => {
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 }
+
+
+test('today outranks yesterday regardless of publisher type or category quotas', () => {
+  const yesterday=Array.from({length:15},(_,i)=>candidate(CATEGORIES[i%5],'y-'+i));
+  const today=Array.from({length:10},(_,i)=>candidate('Agent','t-'+i,'2026-10-13',i<2));
+  const selected=selectCandidates([...yesterday,...today],[],'2026-10-13');
+  assert.equal(selected.length,10);
+  assert.ok(selected.every(n=>n.published==='2026-10-13'));
+});
+
+test('calendar boundaries reject two-day-old publisher and research padding', async () => {
+  const pool=[candidate('Agent','today','2026-11-01'),candidate('无人机','yesterday','2026-10-31'),
+    ...[2,3,4,5,7].flatMap(age=>[false,true].map(paper=>candidate('AI / 大模型',age+'-'+paper,'2026-10-'+(32-age),paper)))];
+  assert.deepEqual(selectCandidates(pool,[],'2026-11-01').map(n=>n.title),['today','yesterday']);
+  const old={...candidate('Agent','old','2026-10-30')};
+  const page=async()=>new Response('<title>Old article</title><meta property="article:published_time" content="2026-10-30"><article>Facts</article>',{headers:{'content-type':'text/html'}});
+  await assert.rejects(verifyPage(old,'2026-11-01',page),/today-or-yesterday/);
+  await assert.rejects(verifyPage({...old,published:undefined},'2026-11-01',page,true),/today-or-yesterday/);
+});
+
+test('strict edition freshness is validated while old editions remain readable', () => {
+  const item={...candidate('Agent','old','2026-10-09'),id:'n-test',summary:'fact',why:'analysis',relevance:'analysis',caveat:'limit',tags:['test'],sources:[{name:'Official',url:'https://openai.com/news/old'}]};
+  const day={schemaVersion:1,date:'2026-10-13',timezone:'Asia/Shanghai',generatedBy:'ChatGPT',news:[item]};
+  assert.doesNotThrow(()=>validateDaily(day,'2026-10-13.json'));
+  assert.throws(()=>validateDaily({...day,maxSourceAgeDays:1},'2026-10-13.json'),/today or yesterday/);
+  assert.doesNotThrow(()=>validateDaily({...day,maxSourceAgeDays:1,news:[{...item,published:'2026-10-12'}]},'2026-10-13.json'));
+});
