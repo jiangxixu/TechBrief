@@ -1,5 +1,6 @@
 {
   "date": "2026-11-23",
   "dryRun": true,
-  "reason": "User authorized one paid preview to find ten fresh editorial news stories, excluding communities and old news."
+  "reuseSearchRunId": 45101738670,
+  "reason": "Reuse same-day discovery evidence for editorial filtering of stale, irrelevant and duplicate stories before publication."
 }

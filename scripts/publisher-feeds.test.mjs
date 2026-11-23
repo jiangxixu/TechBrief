@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parsePublisherFeed, fetchPublisherFeeds } from './publisher-feeds.mjs';
-import { primaryUrl, publicationDates, verifyPage } from './news-policy.mjs';
+import { primaryUrl, publicationDates, verifyPage, curateVerifiedPool } from './news-policy.mjs';
 
 test('editorial newsrooms are allowed but community areas and lookalikes are rejected', async () => {
   for (const url of ['https://ithome.com/1/030/769.htm','https://techcrunch.com/2026/11/23/news','https://apnews.com/article/news']) assert.ok(primaryUrl(url));
@@ -36,4 +36,15 @@ test('failed publisher feeds remain visible in audit while other feeds survive',
   const result=await fetchPublisherFeeds('2026-11-23',async url=>{if(url.includes('ithome'))return new Response('<rss/>');throw Error('offline');});
   assert.equal(result.feeds.filter(f=>f.status==='fulfilled').length,1);
   assert.equal(result.feeds.filter(f=>f.status==='rejected').length,5);
+});
+
+
+test('editorial approvals require exact source evidence, fresh event date and real source URL', () => {
+ const evidence='The company announced a new robot deployment on November 23.';
+ const source={title:'Robot deployment',url:'https://ithome.com/1/030/769.htm',published:'2026-11-23',category:'AI / 大模型',evidence};
+ const decision={url:source.url,category:'机器人 / 具身',eventDate:'2026-11-23',eventKey:'robot-deployment',eventEvidence:evidence};
+ assert.equal(curateVerifiedPool([decision],[source],[],'2026-11-23').selected[0].category,'机器人 / 具身');
+ for(const patch of [{eventDate:'2026-11-18'},{eventEvidence:'A fabricated new event that is absent from the source'},{url:'https://ithome.com/1/030/000.htm'},{category:'entertainment'}]) assert.equal(curateVerifiedPool([{...decision,...patch}],[source],[],'2026-11-23').selected.length,0);
+ const other={...source,title:'Another report of the same deployment',url:'https://theverge.com/news/robot'};
+ assert.equal(curateVerifiedPool([decision,{...decision,url:other.url}],[source,other],[],'2026-11-23').selected.length,1);
 });

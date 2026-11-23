@@ -36,8 +36,8 @@ export function canonicalUrl(raw) {
 
 export function primaryUrl(raw) {
   const u = new URL(canonicalUrl(raw));
-  if (/(^|\.)(community|communities|forum|forums|discuss|discussion|discourse|quan|lapin|dyn)\./i.test(u.hostname)
-    || /\/(community|forum|forums|discuss|comments)(\/|$)/i.test(u.pathname)) return false;
+  if (/(^|\.)(community|communities|techcommunity|forum|forums|discuss|discussion|discourse|quan|lapin|dyn)\./i.test(u.hostname)
+    || /\/(community|forum|forums|discuss|comments|replies|civis)(\/|$)/i.test(u.pathname)) return false;
   return [...HOSTS, ...NEWSROOM_HOSTS].some(h => u.hostname === h || u.hostname.endsWith('.' + h));
 }
 
@@ -171,6 +171,7 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
 export function selectCandidates(pool, history, date) {
   const seenUrls = new Set(history.flatMap(n => (n.sources || []).map(s => canonicalUrl(s.url))));
   const seenTitles = new Set(history.map(n => titleKey(n.title)));
+  const seenEvents = new Set(history.map(n => n.eventKey).filter(Boolean));
   const eligible = pool.filter(n => CATEGORIES.includes(n.category) && n.evidence &&
     ageDays(n.published, date) >= 0 && ageDays(n.published, date) <= MAX_SOURCE_AGE_DAYS)
     .sort((a, b) => ageDays(a.published, date) - ageDays(b.published, date));
@@ -179,8 +180,9 @@ export function selectCandidates(pool, history, date) {
   const add = n => {
     const url = canonicalUrl(n.url), key = titleKey(n.title);
     const isPaper = new URL(url).hostname === 'arxiv.org';
-    if (selected.length >= TARGET_STORIES || seenUrls.has(url) || seenTitles.has(key) || (isPaper && papers >= MAX_ARXIV_STORIES)) return;
+    if (selected.length >= TARGET_STORIES || seenUrls.has(url) || seenTitles.has(key) || (n.eventKey && seenEvents.has(n.eventKey)) || (isPaper && papers >= MAX_ARXIV_STORIES)) return;
     selected.push(n); seenUrls.add(url); seenTitles.add(key); if (isPaper) papers++;
+    if (n.eventKey) seenEvents.add(n.eventKey);
   };
   const isPaper = n => new URL(canonicalUrl(n.url)).hostname === 'arxiv.org';
   const balanced = predicate => {
@@ -204,6 +206,28 @@ export function selectCandidates(pool, history, date) {
     }
   }
   return selected;
+}
+
+// The editor may approve only independently fetched evidence. A fresh article
+// about an old event is not a fresh event; require an in-window development
+// and an exact quote supporting that development before the writer sees it.
+export function curateVerifiedPool(decisions, pool, history, date) {
+  if (!Array.isArray(decisions) || decisions.length > 40) throw Error('Invalid editorial review');
+  const byUrl = new Map(pool.map(n=>[canonicalUrl(n.url),n]));
+  const accepted=[], rejected=[];
+  for (const decision of decisions) {
+    let source;
+    try { source=byUrl.get(canonicalUrl(decision.url)); } catch {}
+    const quote=String(decision.eventEvidence||'').trim();
+    if (!source || !primaryUrl(source.url) || !CATEGORIES.includes(decision.category)
+      || ageDays(decision.eventDate,date)<0 || ageDays(decision.eventDate,date)>MAX_SOURCE_AGE_DAYS
+      || quote.length<12 || quote.length>600 || !source.evidence.includes(quote)
+      || !/^[a-z0-9-]{3,100}$/.test(decision.eventKey||'')) {
+      rejected.push({url:decision.url,reason:'Editorial review lacks a fresh, relevant, grounded development'});continue;
+    }
+    accepted.push({...source,category:decision.category,eventDate:decision.eventDate,eventEvidence:quote,eventKey:decision.eventKey});
+  }
+  return {selected:selectCandidates(accepted,history,date),rejected};
 }
 
 // Tool-returned publisher URLs can be verified directly without another model

@@ -70,7 +70,7 @@ test('NVIDIA newsroom date adapter reads only the publisher article header', () 
 });
 test('page verification rejects date mismatch, missing metadata and unsafe redirects', async () => {
   const candidate = { title: 'Example', url: 'https://openai.com/news/a', published: '2026-10-12', category: 'Agent' };
-  const page = date => async () => new Response(`<meta property="article:published_time" content="${date}"><article>Source fact</article>`, { headers: { 'content-type': 'text/html' } });
+  const page = date => async () => new Response(`<meta property="article:published_time" content="${date}"><article>Supported source fact for the new development</article>`, { headers: { 'content-type': 'text/html' } });
   assert.equal((await verifyPage(candidate, '2026-10-13', page('2026-10-12'))).published, '2026-10-12');
   assert.equal((await verifyPage({ ...candidate, published: undefined }, '2026-10-13', page('2026-10-12'), true)).published, '2026-10-12');
   await assert.rejects(verifyPage(candidate, '2026-10-13', page('2026-10-11')), /does not match/);
@@ -175,12 +175,15 @@ globalThis.fetch = async (url, options={}) => {
    if(scenario!=='no_search') result.output.unshift({type:'web_search_call',status:'completed',action:{type:'search',sources:toolSources.map(url=>({url}))}});
    return Response.json(result);
   }
+  if(body.instructions.startsWith('You are a strict technology news assignment editor.')) {
+   const data=JSON.parse(body.input);return Response.json(output({candidates:data.sources.map((s,i)=>({url:s.url,category:s.category,eventDate:date,eventKey:'event-'+i,eventEvidence:'Supported source fact for the new development'}))}));
+  }
   writers++;
   if(scenario==='format_retry' && writers===1) return Response.json({error:{code:'invalid_json_schema'}},{status:400});
   const selected=JSON.parse(body.input.split('\\nJSON结构：')[0]).sources;
   return Response.json(output({schemaVersion:1,date,timezone:'Asia/Shanghai',generatedBy:'ChatGPT',title:'Fixture',editorialNote:'Fixture',news:selected.map((s,i)=>({id:'n-'+date.replaceAll('-','')+'-item-'+i,title:s.title,category:s.category,kind:'动态',published:s.published,summary:'Source fact',why:'Analysis',relevance:'Analysis',caveat:'Limit',tags:['test'],sources:[{name:'Official',url:s.url}]}))}));
  }
- return new Response('<title>'+String(url)+'</title><meta property="article:published_time" content="'+(scenario==='wrong_date'||scenario==='stale_backfill'?'2000-01-01':date)+'"><article>Source fact</article>',{headers:{'content-type':'text/html'}});
+ return new Response('<title>'+String(url)+'</title><meta property="article:published_time" content="'+(scenario==='wrong_date'||scenario==='stale_backfill'?'2000-01-01':date)+'"><article>Supported source fact for the new development</article>',{headers:{'content-type':'text/html'}});
 };
 `;
       await writeFile(resolve(dir, 'mock.mjs'), mock);
@@ -203,12 +206,12 @@ globalThis.fetch = async (url, options={}) => {
       const audit = JSON.parse(await readFile(resolve(dir, 'reports/generation.json')));
       if (['no_search', 'wrong_date', 'stale_backfill', 'reuse_wrong_date'].includes(scenario)) { assert.equal(run.status, 1); assert.equal(audit.status, 'failed'); }
       else if (scenario === 'ten' || scenario === 'backfill_ten') {
-        assert.equal(run.status,0,run.stderr); assert.equal(audit.status,'published'); assert.equal(audit.selected.length,10); assert.equal(audit.targetCount,10); assert.equal(audit.shortfallCount,0); assert.equal(audit.apiCalls.length,6);
+        assert.equal(run.status,0,run.stderr); assert.equal(audit.status,'published'); assert.equal(audit.selected.length,10); assert.equal(audit.targetCount,10); assert.equal(audit.shortfallCount,0); assert.equal(audit.apiCalls.length,7);
         const edition=JSON.parse(await readFile(resolve(dir,'data/daily/'+audit.date+'.json'))); assert.equal(edition.maxSourceAgeDays,1); assert.equal(edition.news.every(n=>ageDays(n.published,audit.date)<=1),true);
         if(scenario==='backfill_ten') assert.equal(audit.publisherBackfill.verified,10);
       }
       else if (scenario === 'existing') { assert.equal(run.status, 0); assert.equal(audit.status, 'skipped_existing'); assert.equal(audit.apiCalls.length, 0); }
-      else { assert.equal(run.status, 0, run.stderr); assert.equal(audit.status, scenario === 'dry_run' ? 'validated_partial' : 'published_partial'); assert.equal(audit.selected.length, 2); assert.equal(audit.searches.length, 5); if (scenario==='reuse') { assert.equal(audit.apiCalls.length,1); assert.equal(audit.reusedSearchRunId,'42'); } if (scenario==='format_retry') assert.equal(audit.formatRetry, 'invalid_json_schema'); if(scenario==='dry_run') { const preview = JSON.parse(await readFile(resolve(dir, 'reports/edition.preview.json'))); assert.equal(preview.news.length, 2); const { readdir } = await import('node:fs/promises'); assert.deepEqual(await readdir(resolve(dir,'data/daily')), []); } }
+      else { assert.equal(run.status, 0, run.stderr); assert.equal(audit.status, scenario === 'dry_run' ? 'validated_partial' : 'published_partial'); assert.equal(audit.selected.length, 2); assert.equal(audit.searches.length, 5); if (scenario==='reuse') { assert.equal(audit.apiCalls.length,2); assert.equal(audit.reusedSearchRunId,'42'); } if (scenario==='format_retry') assert.equal(audit.formatRetry, 'invalid_json_schema'); if(scenario==='dry_run') { const preview = JSON.parse(await readFile(resolve(dir, 'reports/edition.preview.json'))); assert.equal(preview.news.length, 2); const { readdir } = await import('node:fs/promises'); assert.deepEqual(await readdir(resolve(dir,'data/daily')), []); } }
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 }
