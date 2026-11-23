@@ -1,3 +1,4 @@
+import { primaryUrl } from './news-policy.mjs';
 import {readFile,readdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -25,8 +26,9 @@ export function validateDaily(day,filename){
  must(Array.isArray(day.news)&&day.news.length>0&&day.news.length<=10,`${filename}: require 1–10 verified news items; target 10`);
  if(day.targetCount!==undefined)must(Number.isInteger(day.targetCount)&&day.targetCount>=1&&day.targetCount<=10&&day.news.length<=day.targetCount,`${filename}: invalid targetCount`);
  if(day.maxSourceAgeDays!==undefined)must(day.maxSourceAgeDays===1,`${filename}: invalid freshness policy`);
+ if(day.sourcePolicy!==undefined)must(day.sourcePolicy==='editorial-news-v1',`${filename}: invalid source policy`);
  const seen=new Set();
- for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);if(day.maxSourceAgeDays===1)must((Date.parse(day.date)-Date.parse(n.published))/86400000<=1,`${filename}: source must be published today or yesterday`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}
+ for(const n of day.news){validateItem(n,filename+'/'+n.id);must(!seen.has(n.id),`${filename}: duplicate id ${n.id}`);seen.add(n.id);must(validDate(n.published)&&n.published<=day.date,`${filename}: source date must not be later than edition date`);if(day.maxSourceAgeDays===1)must((Date.parse(day.date)-Date.parse(n.published))/86400000<=1,`${filename}: source must be published today or yesterday`);if(day.sourcePolicy==='editorial-news-v1')must(n.sources.every(s=>primaryUrl(s.url)),`${filename}: community or unapproved news source`);for(const k of ['why','relevance','caveat'])must(text(n[k]),`${filename}: missing ${k}`);}
 }
 function arxivId(item){
  const source=(item.sources||[]).find(s=>{try{return new URL(s.url).hostname==='arxiv.org';}catch{return false;}});

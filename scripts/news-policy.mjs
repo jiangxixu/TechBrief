@@ -6,7 +6,12 @@ export const TARGET_STORIES = 10;
 export const MAX_SOURCE_AGE_DAYS = 1;
 export const MAX_ARXIV_STORIES = 6;
 export const DISCOVERY_CANDIDATES = 12;
-// Only primary publisher hosts may be fetched. Extend deliberately as needed.
+export const NEWSROOM_HOSTS = ['techcrunch.com', 'theverge.com', 'arstechnica.com',
+  'techradar.com', 'tomshardware.com', 'technologyreview.com', 'wired.com',
+  'reuters.com', 'apnews.com', 'axios.com', 'ithome.com', 'ithome.com.tw',
+  'jiqizhixin.com', 'qbitai.com', 'scmp.com', 'roboticsandautomationnews.com',
+  'therobotreport.com', 'dronelife.com', 'dronedj.com', 'technode.com'];
+// Publisher allowlist is not enough: user-generated areas are excluded below.
 const HOSTS = ['arxiv.org', 'openai.com', 'anthropic.com', 'deepmind.google',
   'blog.google', 'research.google', 'microsoft.com', 'nvidia.com', 'huggingface.co',
   'dji.com', 'px4.io', 'ardupilot.org', 'skydio.com', 'auterion.com',
@@ -31,7 +36,14 @@ export function canonicalUrl(raw) {
 
 export function primaryUrl(raw) {
   const u = new URL(canonicalUrl(raw));
-  return HOSTS.some(h => u.hostname === h || u.hostname.endsWith('.' + h));
+  if (/(^|\.)(community|communities|forum|forums|discuss|discussion|discourse|quan|lapin|dyn)\./i.test(u.hostname)
+    || /\/(community|forum|forums|discuss|comments)(\/|$)/i.test(u.pathname)) return false;
+  return [...HOSTS, ...NEWSROOM_HOSTS].some(h => u.hostname === h || u.hostname.endsWith('.' + h));
+}
+
+export function sourceType(raw) {
+  const host = new URL(canonicalUrl(raw)).hostname;
+  return NEWSROOM_HOSTS.some(h => host === h || host.endsWith('.' + h)) ? 'newsroom reporting' : 'official publisher';
 }
 
 export function ageDays(published, date) {
@@ -106,6 +118,11 @@ export function publicationDates(html, publisherUrl = '') {
       if (month) add(`${match[3]}-${String(month).padStart(2, '0')}-${match[2].padStart(2, '0')}`);
     }
   }
+  // IT Home's article publication header, never its footer or related links.
+  if (publisherUrl && /^(www\.)?ithome\.com$/.test(new URL(publisherUrl).hostname)
+    && /^\/\d+\/\d+\/\d+\.htm$/.test(new URL(publisherUrl).pathname)) {
+    for (const m of html.matchAll(/<span\b[^>]*id=["']pubtime_baidu["'][^>]*>\s*(\d{4})\/(\d{2})\/(\d{2})\s+\d{1,2}:\d{2}:\d{2}\s*<\/span>/gi)) add(`${m[1]}-${m[2]}-${m[3]}`);
+  }
   return [...dates];
 }
 
@@ -147,8 +164,8 @@ export async function verifyPage(candidate, date, fetchImpl = fetch, deriveDate 
     .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24000);
   const title = candidate.title || html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   if (!title) throw Error('Source page has no article title');
-  return { ...candidate, title, url: canonicalUrl(url), published: dates[0], evidence,
-    dateBasis: new URL(url).hostname === 'nvidianews.nvidia.com' ? 'NVIDIA newsroom article publication header' : 'publisher publication metadata' };
+  return { ...candidate, title, url: canonicalUrl(url), published: dates[0], evidence, sourceType: sourceType(url),
+    dateBasis: /^(www\.)?ithome\.com$/.test(new URL(url).hostname) ? 'IT Home article publication header' : new URL(url).hostname === 'nvidianews.nvidia.com' ? 'NVIDIA newsroom article publication header' : 'publisher publication metadata' };
 }
 
 export function selectCandidates(pool, history, date) {

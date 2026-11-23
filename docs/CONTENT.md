@@ -83,3 +83,10 @@
 ## 首期记录
 
 2026-09-20 是依据一手来源重新核验的首期整理，不是此前聊天消息的逐字回放。此前提及的“Agentic AI Networking for Heterogeneous Unmanned Aerial Systems in Low-Altitude Wireless Networks”未找到足以核验的对应原论文，因此没有沿用，改为已核验的 2026-09-13 多无人机研究。没有导入未取得原文的其他历史简报。
+
+
+## 新闻来源与社区隔离（2026-11-23）
+
+允许官方公告和正式编辑部报道，包括IT之家、iThome台湾、TechCrunch、The Verge、Ars Technica、TechRadar、Tom’s Hardware、Reuters、AP、Axios、机器之心、量子位、The Robot Report、DroneLife等白名单。主域名白名单不能覆盖社区子域：community、forums、discuss、quan等及论坛/评论路径均拒绝，在抓取前和重定向后检查。新日报带 `sourcePolicy: editorial-news-v1`，发布校验再次拒绝社区或未批准来源；旧日报保持可读。
+
+六个公开RSS/Atom订阅源用于发现候选，并记录成功/失败。标题过滤促销、传闻和汇总，发布时间仅接受当天/前一天；候选交给原有五个领域检索做相关性、实质新进展及事件去重筛选，不能将一篇新报道中的旧事件冒充新事件。RSS不是最终证据，必须另抓原文验证日期和正文。IT之家日期适配只读其文章专用 `pubtime_baidu` 栏，不读取页脚/相关推荐日期。媒体报道在摘要中归因媒体，并保留原文及证据边界。原有每天02:00一次正式生成的计划不变；本次用户单独授权额外付费预览，日常不增加预览。

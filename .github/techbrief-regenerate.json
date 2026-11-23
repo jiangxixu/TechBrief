@@ -1,5 +1,5 @@
 {
   "date": "2026-11-23",
-  "dryRun": false,
-  "reason": "User requested one formal regeneration using today-or-yesterday sources only; no preview."
+  "dryRun": true,
+  "reason": "User authorized one paid preview to find ten fresh editorial news stories, excluding communities and old news."
 }

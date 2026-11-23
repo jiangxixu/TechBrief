@@ -151,7 +151,7 @@ for (const scenario of ['normal', 'ten', 'backfill_ten', 'stale_backfill', 'opaq
     const dir = await mkdtemp(resolve('.generation-test-'));
     try {
       await mkdir(resolve(dir, 'scripts')); await mkdir(resolve(dir, 'data/daily'), { recursive: true });
-      for (const file of ['core.js', 'package.json', ...['generate-daily.mjs', 'responses-api.mjs', 'api-config.mjs', 'validate.mjs', 'news-policy.mjs', 'daily-schema.mjs'].map(n => 'scripts/' + n)]) await copyFile(file, resolve(dir, file));
+      for (const file of ['core.js', 'package.json', ...['generate-daily.mjs', 'publisher-feeds.mjs', 'responses-api.mjs', 'api-config.mjs', 'validate.mjs', 'news-policy.mjs', 'daily-schema.mjs'].map(n => 'scripts/' + n)]) await copyFile(file, resolve(dir, file));
       const mock = `
 import { readFile } from 'node:fs/promises';
 const categories = ${JSON.stringify(CATEGORIES)};
