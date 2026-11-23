@@ -184,13 +184,13 @@ export function assertGroundedEdition(edition, selected) {
 // Provider proxies may accept text.format but return their own envelope.
 // Edition metadata and display source labels are application-owned, not facts
 // for the model to invent. News facts/dates/categories/URLs stay untouched.
-export function assembleEdition(candidate, date, selected) {
+export function assembleEdition(candidate, date, selected, generatedBy = 'ChatGPT') {
   const byUrl = new Map(selected.map(n => [canonicalUrl(n.url), n]));
   const news = (candidate.news || []).map(n => ({ ...n, sources: (n.sources || []).map(s => {
     const verified = byUrl.get(canonicalUrl(s.url));
     return { url: s.url, name: s.name || (verified ? new URL(verified.url).hostname : '') };
   }) }));
-  return { schemaVersion: 1, date, timezone: 'Asia/Shanghai', generatedBy: 'ChatGPT',
+  return { schemaVersion: 1, date, timezone: 'Asia/Shanghai', generatedBy,
     title: candidate.title || `${date}科技简报：${news.length}条核验来源`,
     editorialNote: candidate.editorialNote || '来源及覆盖度见核验记录。', news };
 }

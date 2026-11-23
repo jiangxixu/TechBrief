@@ -51,7 +51,7 @@ if(r.view==='history'){const selected=r.params.get('category')||'',historySort=r
 if(!list&&r.view!=='history')list=empty(r.view==='saved'?'还没有收藏内容':'没有找到相关内容',r.view==='saved'?'点击文章右上角的星标，把值得读的内容留在这里。':'试试更短的关键词，或调整分类与时间范围。',r.view!=='saved');
 $('#view-controls').innerHTML=controls;
 $('#results').innerHTML=r.view==='today'?`<div class="section-label">本期精选<span>${filtered.length} 条 · 按类别筛选</span></div><div class="feed">${list}</div>`:`${prefix}<div class="${layout}">${list}</div>`;
-$('#results').setAttribute('aria-busy','false');$('#foot-status').textContent=`TechBrief · 由 ChatGPT 整理 · 最新收录 ${latest||'暂无'}`;updateNotice();
+$('#results').setAttribute('aria-busy','false');$('#foot-status').textContent=`TechBrief · 由 AI 整理 · 最新收录 ${latest||'暂无'}`;updateNotice();
 document.querySelectorAll('.thumb').forEach(img=>img.addEventListener('error',()=>img.remove(),{once:true}));
 }
 function openReader(id){const item=allItems().find(x=>x.id===id);if(!item)return;activeReader=id;returnFocus=document.activeElement;const image=imageUrl(item),linked=related(item);let body=`<div class="card-top"><span class="badge ${badgeClass(item)}">${esc(item.category)}</span>${dateMeta(item)}${saveButton(item)}</div><h2 id="reader-title">${esc(item.title)}</h2>${item.paperTitle&&item.paperTitle!==item.title?`<p class="reader-meta">${esc(item.paperTitle)}</p>`:''}${item.authors?.length?`<p class="reader-meta">${esc(item.authors.join('、'))}</p>`:''}${item.summary?`<p>${esc(item.summary)}</p>`:`<p class="reader-meta">该条目从过去30天的聊天简报中恢复；原对话没有保留下可核验的完整摘要。</p>`}`;

@@ -29,7 +29,7 @@ const itemSchema = {
   }
 };
 
-export function responseSchema(date, count = 5) {
+export function responseSchema(date, count = 5, generatedBy = 'ChatGPT') {
   return {
     type: 'object',
     additionalProperties: false,
@@ -38,7 +38,7 @@ export function responseSchema(date, count = 5) {
       schemaVersion: { type: 'integer', enum: [1] },
       date: { type: 'string', enum: [date] },
       timezone: { type: 'string', enum: ['Asia/Shanghai'] },
-      generatedBy: { type: 'string', enum: ['ChatGPT'] },
+      generatedBy: { type: 'string', enum: [generatedBy] },
       title: { type: 'string', minLength: 1 },
       editorialNote: { type: 'string', minLength: 1 },
       news: { type: 'array', minItems: count, maxItems: count, items: itemSchema }
