@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-24",
+  "timezone": "Asia/Shanghai",
+  "generatedBy": "ChatGPT",
+  "title": "科技简报｜个人助理、模型更新与AI产业治理",
+  "editorialNote": "目标 10 条，本期收录 10 条核验来源。其中 0 条为研究预印本（最多 6 条），9 条为当天发布，1 条为前一天发布；不使用更早内容补数。未收录领域：无人机、机器人 / 具身。检索未完成领域：无。来源包括官方公告和正式媒体报道（逐条标注）；已排除论坛和社区帖子。公开日期依据出版方元数据、专用发布日期栏或实时arXiv记录；不把预印本视为同行评审。",
+  "news": [
+    {
+      "category": "Agent",
+      "caveat": "能力描述来自报道转述的官方介绍及商店页面，并非独立实测；公测采用邀请制，不能据此认定已向所有用户开放。",
+      "id": "n-20261124-xiaodou",
+      "kind": "产品公测",
+      "published": "2026-11-24",
+      "relevance": "分析：对关注个人助理产品的团队，值得观察其授权边界、服务覆盖与实际任务完成能力。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/329.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，豆包宣布旗下AI个人助理“小豆”开启邀请制公测，用户凭邀请码体验并获得一定免费额度。产品通过对话交互，在用户明确指令与授权范围内协助处理日常事务，所列能力包括信息查询、日程待办、生活服务、购物售后及办公辅助。相关能力与体验未来将逐步在豆包App上线。",
+      "tags": [
+        "个人助理",
+        "邀请制公测",
+        "豆包"
+      ],
+      "title": "豆包个人助理“小豆”开启邀请制公测",
+      "why": "分析：产品将信息问答与事务处理放在同一入口，体现个人助理向执行型服务延伸的方向。",
+      "eventDate": "2026-11-24",
+      "eventKey": "doubao-xiaodou-invitation-public-beta"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "这是对前一日公告的报道；正文中的融资规模与估值涉及知情人士消息及市场测算，不应视为公司正式披露。",
+      "id": "n-20261124-zhihu-deepseek",
+      "kind": "投资披露",
+      "published": "2026-11-24",
+      "relevance": "分析：对产业投资观察者，基金间接持股与直接投资的区别是判断参与方式的重要边界。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/339.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，知乎于11月23日发布自愿公告，披露其参投的天津砺思星深股权投资合伙企业已通过中间主体间接投资DeepSeek，取得低个位数百分比股权。知乎董事会认为，该投资与拓宽人工智能及科技企业投资渠道、加深对相关技术和商业模式的理解具有战略一致性。",
+      "tags": [
+        "知乎",
+        "DeepSeek",
+        "间接投资"
+      ],
+      "title": "知乎披露通过参投基金间接投资DeepSeek",
+      "why": "分析：这项披露呈现了内容平台通过基金参与人工智能企业投资的路径，但不能据此推断双方已有产品合作。",
+      "eventDate": "2026-11-23",
+      "eventKey": "zhihu-discloses-indirect-deepseek-investment"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "模型改进属于报道转述的官方说明，正文未提供独立评测；推送始于当地时间11月23日，旧模型退役仍是后续安排。",
+      "id": "n-20261124-gpt-sol",
+      "kind": "模型上线",
+      "published": "2026-11-24",
+      "relevance": "分析：相关订阅用户及依赖旧模型的团队需要关注推送情况与退役安排，评估工作流适配。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/271.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，OpenAI宣布GPT-6.2 Sol登陆ChatGPT聊天页面，并表示已于当地时间11月23日开始向Plus、Pro、Business和Enterprise订阅用户推送。官方介绍称，新模型改进了复杂请求处理、图像细节识别及联网比较能力。GPT-5.6 Sol与GPT-5.6 Terra将按各自适用平台于12月23日退役。",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "模型退役"
+      ],
+      "title": "GPT-6.2 Sol扩展至ChatGPT聊天页面",
+      "why": "分析：模型更新与旧版本退役同步推进，使能力升级与迁移管理成为用户需要共同考虑的问题。",
+      "eventDate": "2026-11-23",
+      "eventKey": "openai-gpt-6-2-chatgpt-chat-rollout"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "报道涉及前一日宣布的交易，收购对象是技术，不能扩大表述为收购整个公司；亚马逊未披露交易金额或财务条款。",
+      "id": "n-20261124-amazon-decart",
+      "kind": "技术收购",
+      "published": "2026-11-24",
+      "relevance": "分析：对云服务和AI基础设施团队，值得关注软件优化能否改善自研芯片的使用成本与迁移体验。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/262.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，亚马逊于前一天宣布收购Decart的AI优化技术，并邀请其联合创始人及员工加入。Decart的软件引擎用于提升AI系统运行速度，并支持在不同厂商的AI芯片间切换。亚马逊表示，相关技术将用于优化AI推理性能和自研芯片。",
+      "tags": [
+        "亚马逊",
+        "Decart",
+        "AI芯片",
+        "推理优化"
+      ],
+      "title": "亚马逊收购Decart的AI优化技术",
+      "why": "分析：这项交易显示，围绕AI芯片的竞争不仅涉及硬件，也涉及模型运行与适配的软件能力。",
+      "eventDate": "2026-11-23",
+      "eventKey": "amazon-decart-ai-optimization-technology-acquisition"
+    },
+    {
+      "category": "AI / 大模型",
+      "caveat": "相关行为属于诉讼指控，并非法院认定。来源正文对被诉主体使用了“SpaceXSI”和“SpaceX”不同表述，具体法律主体仍需核对诉讼文件。",
+      "id": "n-20261124-grok-lawsuits",
+      "kind": "诉讼报道",
+      "published": "2026-11-24",
+      "relevance": "分析：生成式图像服务提供者应关注安全措施、产品宣传与消费者保护责任之间的关系。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/270.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，美国弗吉尼亚州和俄勒冈州已就Grok相关问题提起诉讼，指控运营方未能阻止生成儿童性虐待图像，并在宣传安全功能时误导消费者。两州要求法院判令赔偿损失并停止违反州法律的行为。报道指相关公司未立即回应置评请求。",
+      "tags": [
+        "Grok",
+        "消费者保护",
+        "AI安全"
+      ],
+      "title": "美国两州就Grok安全防护问题提起诉讼",
+      "why": "分析：此案将生成内容安全与消费者保护联系起来，提示安全承诺本身也可能成为法律争议的焦点。",
+      "eventDate": "2026-11-23",
+      "eventKey": "oregon-virginia-grok-consumer-protection-lawsuits"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "有关限制效果及浏览器切换情况的判断来自联名信主张；正文未显示欧盟委员会已因此启动调查或作出裁决。",
+      "id": "n-20261124-ios-browsers",
+      "kind": "监管倡议",
+      "published": "2026-11-24",
+      "relevance": "分析：浏览器开发者及依赖Web订阅业务的企业，可关注规则执行是否带来实际可用的分发选择。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/265.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家转述Appleinsider前一天的报道，Mozilla、Shopify等企业和民间组织向欧盟委员会发出联名信，敦促调查iPhone浏览器竞争问题。联名信认为，苹果虽已允许欧盟地区浏览器使用其他引擎，但技术和法律要求仍使厂商难以从WebKit切换，并加深企业对App Store的依赖。",
+      "tags": [
+        "苹果",
+        "浏览器引擎",
+        "欧盟",
+        "WebKit"
+      ],
+      "title": "Mozilla等敦促欧盟调查苹果浏览器引擎限制",
+      "why": "分析：争议焦点在于形式上的开放能否转化为开发者实际可用的选择，而不只是规则是否已经修改。",
+      "eventDate": "2026-11-23",
+      "eventKey": "open-web-advocacy-ios-browser-enforcement-letter"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "本条新进展是任务发布会公布安排，发射、对接及在轨实验均尚属计划，不能表述为已经完成。",
+      "id": "n-20261124-shenzhou",
+      "kind": "航天任务预告",
+      "published": "2026-11-24",
+      "relevance": "分析：关注载人航天的读者可跟踪发射执行、联合实验及后续乘组轮换，而非将预告等同于任务成果。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/274.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，神舟二十四号载人飞行任务新闻发布会公布，飞船瞄准北京时间11月25日8时18分发射。乘组由汤洪波、武毅和巴基斯坦航天员穆罕默德·齐尚·阿里组成，汤洪波担任指令长。任务计划开展中外航天员联合飞行，巴基斯坦航天员将在轨承担中巴合作空间科学实验任务。",
+      "tags": [
+        "神舟二十四号",
+        "载人航天",
+        "国际合作"
+      ],
+      "title": "神舟二十四号公布乘组，瞄准次日发射",
+      "why": "分析：外籍航天员参与任务，为观察中国空间站国际合作的具体执行方式提供了窗口。",
+      "eventDate": "2026-11-24",
+      "eventKey": "shenzhou-24-mission-crew-and-launch-announcement"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "这是前一天宣布的早期测试版本，官方承认可能存在网站无法访问及程序崩溃问题，不能据此认定已具备成熟浏览器的兼容性。",
+      "id": "n-20261124-ladybird",
+      "kind": "软件测试",
+      "published": "2026-11-24",
+      "relevance": "分析：网站开发者和安全研究者可关注兼容性与安全测试，普通用户则需留意早期版本的稳定性边界。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/279.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，Ladybird于当地时间前一天宣布，其基于自主研发内核的浏览器进入alpha测试阶段，向公众提供macOS与Linux早期版本。项目方表示浏览器已具备核心功能，同时邀请网站开发者和安全专家参与测试、提供反馈。",
+      "tags": [
+        "Ladybird",
+        "浏览器",
+        "自主内核"
+      ],
+      "title": "Ladybird浏览器开放公众早期测试",
+      "why": "分析：自主浏览器内核进入公众测试，为浏览器技术路线的多样性提供了新的观察对象。",
+      "eventDate": "2026-11-23",
+      "eventKey": "ladybird-first-public-alpha"
+    },
+    {
+      "category": "科技产业",
+      "caveat": "来源主要介绍共同体成立及白皮书主张，未提供具体保险产品条款、承保案例或风险定价成效，不能视为相关难题已经解决。",
+      "id": "n-20261124-ai-insurance",
+      "kind": "产业风险治理",
+      "published": "2026-11-24",
+      "relevance": "分析：AI企业可关注未来保险供给与自身风险管理需求是否匹配，但实际保障范围仍需以具体合同为准。",
+      "sources": [
+        {
+          "url": "https://ithome.com/1/031/315.htm",
+          "name": "IT之家"
+        }
+      ],
+      "summary": "据IT之家报道，11月23日在深圳举行的活动上，福田区13家财险机构共同发起成立“人工智能产业保险共同体”，旨在应对大模型产业链的承保难题。现场同时发布《人工智能产业风险治理白皮书（2026）》，围绕算力、模型与应用产业链梳理风险，并提出结合保险、服务与科技的治理方案。",
+      "tags": [
+        "人工智能",
+        "保险",
+        "风险治理",
+        "深圳"
+      ],
+      "title": "深圳成立人工智能产业保险共同体",
+      "why": "分析：保险机构开始围绕AI产业链组织风险研究，有助于观察技术风险如何进入商业承保与治理框架。",
+      "eventDate": "2026-11-23",
+      "eventKey": "shenzhen-ai-industry-risk-governance-whitepaper-2026"
+    },
+    {
+      "category": "Agent",
+      "caveat": "来源为产品方介绍，未提供独立效果验证。PR Steward不负责批准或合并；批准受团队策略约束，相关使用可能产生额外费用，部分企业配置不支持该产品。",
+      "id": "n-20261124-claude-ship",
+      "kind": "产品测试发布",
+      "published": "2026-11-23",
+      "relevance": "分析：工程团队可重点评估审批策略、人工介入条件、分支保护和费用上限，而非直接将代理批准等同于可靠交付。",
+      "sources": [
+        {
+          "url": "https://claude.com/resources/articles/introducing-claude-ship",
+          "name": "Claude官方"
+        }
+      ],
+      "summary": "Claude官方宣布Claude Ship进入测试阶段，面向Team和Enterprise套餐的GitHub代码仓库提供服务。产品结合已正式可用的Code Review，以及测试中的PR Steward和Claude Approvals，分别处理代码审查、修复反馈及按团队策略作出批准决定。团队可按仓库配置功能，审批策略可先以仅观察模式运行。",
+      "tags": [
+        "Claude Ship",
+        "编程Agent",
+        "代码审查",
+        "审批策略"
+      ],
+      "title": "Claude Ship测试版串联代码审查、修复与策略审批",
+      "why": "分析：其关注点从代码生成延伸到提交后的交付流程，团队治理规则因此成为代理自动化的重要组成部分。",
+      "eventDate": "2026-11-23",
+      "eventKey": "anthropic-claude-ship-public-beta"
+    }
+  ],
+  "targetCount": 10,
+  "maxSourceAgeDays": 1,
+  "sourcePolicy": "editorial-news-v1"
+}
