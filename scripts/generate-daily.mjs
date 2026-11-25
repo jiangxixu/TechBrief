@@ -148,6 +148,14 @@ function safeFailure(error) {
 }
 
 async function generate() {
+  let projectStatus;
+  try { projectStatus = JSON.parse(await readFile(resolve(root, '.github/techbrief-project-status.json'), 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  if (projectStatus?.paused === true) {
+    audit.status = 'paused';
+    console.log('TechBrief is paused; no feeds, searches or model API calls were run.');
+    return;
+  }
   await mkdir(dailyDir, { recursive: true });
   if (!force) {
     try {

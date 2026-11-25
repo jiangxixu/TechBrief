@@ -1,5 +1,9 @@
 # TechBrief · 每日科技简报
 
+> **项目已于2026-11-25按用户要求停用。** 所有GitHub Actions工作流已移至 `.github/disabled-workflows/`，每天自动生成、索引维护和自动部署均已停止。生成脚本读取 `.github/techbrief-project-status.json` 的 `paused: true` 后直接退出，不抓取订阅源、不检索、不调用付费模型。代码、历史简报及已经发布的静态网站保留。下文的运行与发布步骤是恢复前的历史说明。
+
+恢复时，须将状态改为 `paused: false`，并按需把工作流移回 `.github/workflows/`；不要在未恢复授权时重跑历史付费生成任务。
+
 由 ChatGPT 整理内容的个人科技阅读网站，聚焦 AI、Agent、机器人与无人机。网站为纯静态页面，无浏览器端模型调用和运行时 npm 依赖；日报由 GitHub Actions 调用模型 API 检索与生成。
 
 ## 已实现
